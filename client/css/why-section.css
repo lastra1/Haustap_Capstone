@@ -1,0 +1,58 @@
+/* Why Choose Us Section */
+.why-section {
+    background: #c6f8fc;
+    padding: 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 48px;
+    max-width: 3000px;
+}
+
+.why-left {
+    max-width: 340px;
+    margin-right: 48px;
+}
+
+.why-btn {
+    background: #fff;
+    color: #3dbfc3;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 22px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 18px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #3dbfc340;
+}
+
+.why-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 18px;
+    line-height: 1.2;
+}
+
+.why-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 48px;
+    max-width: 520px;
+}
+
+.why-feature {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.why-feature-title {
+    font-weight: bold;
+    font-size: 1.08em;
+}
+
+.why-feature-desc {
+    font-size: 0.98em;
+    color: #444;
+}
