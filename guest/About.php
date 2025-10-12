@@ -5,33 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About HausTap</title>
   <link rel="stylesheet" href="css/about.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-
-  <!-- HEADER -->
-  <header>
-    <div class="header">
-    <img src="image/logo.png" alt="HausTap" class="logo-img">
+<div class="header">
+    <img src="images/logo.png" alt="HausTap" class="logo-img">
     <nav class="nav">
-      <a href="#" >Home</a>
+      <a href="#" class="active">Home</a>
       <a href="#">Services</a>
       <a href="#">Bookings</a>
-      <a href="#" class="active">About</a>
+      <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>
-     <div class="header-right">
+   <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services">
         <i class="fa fa-search"></i>
       </div>
-      <a href="#" class="account-link">
-        <i class="fa fa-user account-icon"></i>
-        My Account
+      
+      <div class="signup-link">
+        <a href="#">Sign up</a>
+        
+      </div>
+      <span>|</span>
+      <div class="login-link"><a href="#">Login</a></div>
+
+    </div>
       </a>
     </div>
   </div>
-    </div>
-  </header>
 
   <!-- ABOUT SECTION -->
   <section class="about">
@@ -126,7 +128,7 @@
 
       <!-- Center Section -->
       <div class="footer-center">
-        <img src="image/logo.png" alt="HausTap Logo" />
+        <img src="images/logo.png" alt="HausTap Logo" />
         <p>Your space. Your peace. Your Glow</p>
       </div>
 

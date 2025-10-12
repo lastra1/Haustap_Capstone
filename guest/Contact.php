@@ -7,25 +7,28 @@
   <link rel="stylesheet" href="css/contact.css" />
 </head>
 <body>
-  <!-- HEADER -->
- <div class="header">
-    <img src="image/logo.png" alt="HausTap" class="logo-img">
+  <div class="header">
+    <img src="images/logo.png" alt="HausTap" class="logo-img">
     <nav class="nav">
-      <a href="#">Home</a>
+      <a href="#" class="active">Home</a>
       <a href="#">Services</a>
       <a href="#">Bookings</a>
       <a href="#">About</a>
-      <a href="#" class="active">Contact</a>
+      <a href="#">Contact</a>
     </nav>
-    <div class="header-right">
+   <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services">
         <i class="fa fa-search"></i>
       </div>
-      <a href="#" class="account-link">
-        <i class="fa fa-user account-icon"></i>
-        My Account
-      </a>
+      
+      <div class="signup-link">
+        <a href="#">Sign up</a>
+        
+      </div>
+      <span>|</span>
+      <div class="login-link"><a href="#">Login</a></div>
+
     </div>
   </div>
 
