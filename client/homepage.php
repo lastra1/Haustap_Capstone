@@ -3,13 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Haustap | Home Services</title>
-  <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/hero.css">
-  <link rel="stylesheet" href="css/categories.css">
-  <link rel="stylesheet" href="css/promotions.css">
-  <link rel="stylesheet" href="css/why-section.css">
-  <link rel="stylesheet" href="css/testimonials.css">
-  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/homepage.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
   </style>
 </head>
@@ -43,38 +38,38 @@
       <button class="hero-btn">Get Started</button>
     </div>
     <div class="hero-img">
-      <img src="C:\Users\user\Pictures\thesis\images\hero.png" alt="Home Service Team">
+      <img src="images/hero.png" alt="Home Service Team">
     </div>
   </div>
   <div class="section-title">CATEGORY</div>
   <div class="category-grid">
     <div class="category-card">
-      <img src="C:\Users\user\Pictures\thesis\images\cleaning.png" alt="Cleaning Services">
+      <img src="images/cleaning.png" alt="Cleaning Services">
       <div class="category-card-title">Cleaning Services</div>
       <div class="category-card-desc">Professional cleaning for homes, offices, and more. Book trusted cleaners for sparkling results.</div>
     </div>
     <div class="category-card">
-      <img src="C:\Users\user\Pictures\thesis\images\outdoor.png" alt="Outdoor Services">
+      <img src="images/outdoor.png" alt="Outdoor Services">
       <div class="category-card-title">Outdoor Services</div>
       <div class="category-card-desc">Gardening, landscaping, and outdoor maintenance to keep your surroundings beautiful and safe.</div>
     </div>
     <div class="category-card">
-      <img src="C:\Users\user\Pictures\thesis\images\repair.png" alt="Home Repairs">
+      <img src="images/repair.png" alt="Home Repairs">
       <div class="category-card-title">Home Repairs</div>
       <div class="category-card-desc">Quick and reliable repair services for plumbing, electrical, and general home maintenance.</div>
     </div>
     <div class="category-card">
-      <img src="C:\Users\user\Pictures\thesis\images\beauty service.png" alt="Beauty Services">
+      <img src="images/beauty service.png" alt="Beauty Services">
       <div class="category-card-title">Beauty Services</div>
       <div class="category-card-desc">Pamper yourself with at-home beauty treatments from certified professionals.</div>
     </div>
     <div class="category-card">
-      <img src="C:\Users\user\Pictures\thesis\images\wellness.png" alt="Wellness Services">
+      <img src="images/wellness.png" alt="Wellness Services">
       <div class="category-card-title">Wellness Services</div>
       <div class="category-card-desc">Enjoy massage, therapy, and wellness sessions in the comfort of your home.</div>
     </div>
     <div class="category-card">
-      <img src="C:\Users\user\Pictures\thesis\images\tech.png" alt="Tech & Gadget Services">
+      <img src="images/tech.png" alt="Tech & Gadget Services">
       <div class="category-card-title">Tech & Gadget Services</div>
       <div class="category-card-desc">Get help with device setup, troubleshooting, and smart home installations.</div>
     </div>
@@ -83,7 +78,7 @@
     <div class="promotions-title">PROMOTIONS<br>Get a Sparkling Home At A Special Promotion!</div>
     <div class="promotions-grid">
       <div class="promo-card">
-        <img src="C:\Users\user\Pictures\thesis\images\100-voucher.png" alt="Welcome Voucher">
+        <img src="images/100-voucher.png" alt="Welcome Voucher">
         <div class="promo-card-content">
           <div class="promo-card-title">WELCOME VOUCHER</div>
           <div class="promo-card-desc">AND GET P100 OFF<br>New here? Book your first service today and enjoy P100 off as our welcome gift!</div>
@@ -92,7 +87,7 @@
         </div>
       </div>
       <div class="promo-card">
-        <img src="C:\Users\user\Pictures\thesis\images\10pesos-voucher.png" alt="Referral Bonus">
+        <img src="images/10pesos-voucher.png" alt="Referral Bonus">
         <div class="promo-card-content">
           <div class="promo-card-title">REFERRAL BONUS</div>
           <div class="promo-card-desc">AND GET P10 VOUCHER<br>Share Homi with friends! Once your friend completes first booking you earn P10 vouchers.</div>
@@ -101,7 +96,7 @@
         </div>
       </div>
       <div class="promo-card">
-        <img src="C:\Users\user\Pictures\thesis\images\50pesos-voucher.png" alt="Loyalty Bonus">
+        <img src="images/50pesos-voucher.png" alt="Loyalty Bonus">
         <div class="promo-card-content">
           <div class="promo-card-title">UNLOCK YOUR LOYALTY BONUS</div>
           <div class="promo-card-desc">AND GET P50 VOUCHER<br>After 5 completed bookings, enjoy a P50 voucher as a thank you for staying with Homi!</div>

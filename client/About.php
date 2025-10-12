@@ -5,31 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About HausTap</title>
   <link rel="stylesheet" href="css/about.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
   <!-- HEADER -->
-  <header>
-    <div class="header">
-    <img src="C:\Users\user\Pictures\thesis\images\logo.png" alt="HausTap" class="logo-img">
+   <header class="header">
+    <img src="images/logo.png" alt="HausTap" class="logo-img" />
     <nav class="nav">
-      <a href="#" >Home</a>
-      <a href="#">Services</a>
+      <a href="#">Home</a>
+      <a href="#" class="active">Services</a>
       <a href="#">Bookings</a>
-      <a href="#" class="active">About</a>
+      <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>
     <div class="header-right">
       <div class="search-box">
-        <input type="text" placeholder="Search services">
-        <span class="search-icon">&#128269;</span>
+        <input type="text" placeholder="Search services" />
+        <i class="fa fa-search"></i>
       </div>
       <a href="#" class="account-link">
-        <span class="account-icon">&#128100;</span>
-        My Account
+        <i class="fa fa-user account-icon"></i> My Account
       </a>
-    </div>
-  </div>
     </div>
   </header>
 

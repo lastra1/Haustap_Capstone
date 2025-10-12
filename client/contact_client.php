@@ -133,7 +133,7 @@
 
       <!-- Center Section -->
       <div class="footer-center">
-        <img src="C:\Users\user\Pictures\thesis\images\logo.png" alt="HausTap Logo" />
+        <img src="images/logo.png" alt="HausTap Logo" />
         <p>Your space. Your peace. Your Glow</p>
       </div>
 

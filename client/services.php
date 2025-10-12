@@ -5,27 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - Homi</title>
     <link rel="stylesheet" href="css/services.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <header class="header">
-        <img src="images/logo.png" alt="Homi" class="logo">
-        <nav class="nav">
-            <a href="index.html">Home</a>
-            <a href="services.html" class="active">Services</a>
-            <a href="bookings.html">Bookings</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-         <div class="header-right">
+  <header class="header">
+    <img src="images/logo.png" alt="HausTap" class="logo-img" />
+    <nav class="nav">
+      <a href="#">Home</a>
+      <a href="#" class="active">Services</a>
+      <a href="#">Bookings</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="header-right">
       <div class="search-box">
-        <input type="text" placeholder="Search services">
+        <input type="text" placeholder="Search services" />
         <i class="fa fa-search"></i>
       </div>
       <a href="#" class="account-link">
-        <i class="fa fa-user account-icon"></i>
-        My Account
+        <i class="fa fa-user account-icon"></i> My Account
       </a>
-    </header>
+    </div>
+  </header>
 
     <main class="main-content">
         <div class="services-header">
@@ -43,7 +44,7 @@
 
         <div class="services-grid">
             <div class="service-card">
-                <img src="C:\Users\user\Pictures\thesis\images\cleaning.png" alt="Cleaning Services" class="service-image">
+                <img src="images/cleaning.png" alt="Cleaning Services" class="service-image">
                 <div class="service-content">
                     <h2 class="service-title">Cleaning Services</h2>
                     <p class="service-description">Professional and reliable cleaning to keep your space at its best. Expert cleaning services from our trusted professionals.</p>
@@ -51,7 +52,7 @@
             </div>
 
             <div class="service-card">
-                <img src="C:\Users\user\Pictures\thesis\images\outdoor.png" alt="Outdoor Services" class="service-image">
+                <img src="images/outdoor.png" alt="Outdoor Services" class="service-image">
                 <div class="service-content">
                     <h2 class="service-title">Outdoor Services</h2>
                     <p class="service-description">Expert gardening and outdoor care services to make your outdoor space beautiful and well-maintained.</p>
@@ -59,7 +60,7 @@
             </div>
 
             <div class="service-card">
-                <img src="C:\Users\user\Pictures\thesis\images\repair.png" alt="Home Repairs" class="service-image">
+                <img src="images/repair.png" alt="Home Repairs" class="service-image">
                 <div class="service-content">
                     <h2 class="service-title">Home Repairs</h2>
                     <p class="service-description">Quick and reliable repairs for plumbing, electrical, and other home maintenance needs.</p>
@@ -67,7 +68,7 @@
             </div>
 
             <div class="service-card">
-                <img src="C:\Users\user\Pictures\thesis\images\beauty service.png" alt="Beauty Services" class="service-image">
+                <img src="images/beauty service.png" alt="Beauty Services" class="service-image">
                 <div class="service-content">
                     <h2 class="service-title">Beauty Services</h2>
                     <p class="service-description">Pamper yourself at home with salon-quality beauty services from certified professionals.</p>
@@ -75,7 +76,7 @@
             </div>
 
             <div class="service-card">
-                <img src="C:\Users\user\Pictures\thesis\images\wellness.png" alt="Wellness Services" class="service-image">
+                <img src="images/wellness.png" alt="Wellness Services" class="service-image">
                 <div class="service-content">
                     <h2 class="service-title">Wellness Services</h2>
                     <p class="service-description">Enjoy relaxing wellness and self-care services in the comfort of your home.</p>
@@ -83,7 +84,7 @@
             </div>
 
             <div class="service-card">
-                <img src="C:\Users\user\Pictures\thesis\images\tech.png" alt="Tech & Gadget Services" class="service-image">
+                <img src="images/tech.png" alt="Tech & Gadget Services" class="service-image">
                 <div class="service-content">
                     <h2 class="service-title">Tech & Gadget Services</h2>
                     <p class="service-description">Get expert help with device setup, repairs, and smart home installations.</p>
