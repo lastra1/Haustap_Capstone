@@ -26,13 +26,14 @@ header {
   justify-content: center;
   align-items: center;
   padding: 40px 0 20px 0;
+ 
 }
 
 .tablet {
-  background: #d9d9d9;
-  padding: 25px;
+  background: #dee1e0;
+  padding: 50px;
   border-radius: 15px;
-  box-shadow: 4px 6px 5px rgba(0,0,0,0.3);
+  box-shadow: #d9d9d9 10px 10px 6px;
 }
 
 .tablet-screen {
@@ -104,22 +105,23 @@ header {
 /* Pagination */
 .pagination {
   text-align: center;
-  margin: 20px 0 50px 0;
+  margin-top: 40px;
+  margin-bottom: 50px;
 }
 
-.pagination a {
-  text-decoration: none;
-  color: #333;
+.pagination button {
+  background: white;
   border: 1px solid #ccc;
-  padding: 5px 10px;
-  margin: 0 3px;
-  border-radius: 3px;
-  font-size: 13px;
+  margin: 0 4px;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.pagination a.active {
-  background: #333;
-  color: #fff;
+.pagination .active {
+  background: cyan;
+  color: rgb(10, 10, 10);
+  border-color: #009999;
 }
 
 /* ===== FOOTER ===== */
@@ -226,7 +228,7 @@ footer {
 .footer-bottom {
   text-align: center;
   font-weight: 600;
-  margin-top: 25px;
+  margin-top: 40px;
   border-top: 1px solid #d1d1d1;
   padding-top: 10px;
   font-size: 14px;
