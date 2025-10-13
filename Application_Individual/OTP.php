@@ -23,17 +23,16 @@
         <button type="submit">Verify</button>
       </div>
     </div>
-    <div class="pagination">
+    <div class="nav-buttons">
       <button>&lt;</button>
       <button>1</button>
       <button>2</button>
       <button>3</button>
-      <button class="active">4</button>
+      <button>4</button>
       <button>&gt;</button>
     </div>
-</main>
-
-  <!-- FOOTER -->
+  </div>
+    <!-- FOOTER -->
   <footer>
     <div class="footer-content">
       <!-- Left Section -->
@@ -76,4 +75,4 @@
     <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
   </footer>
 </body>
-</html> 
+</html>
