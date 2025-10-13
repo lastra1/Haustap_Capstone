@@ -36,20 +36,21 @@
     </div>
   </section>
 
-  <!-- Pagination -->
   <div class="pagination">
-    <a href="#">&lt;</a>
-    <a href="#" class="active">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">&gt;</a>
-  </div>
+      <button>&lt;</button>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button class="active">4</button>
+      <button>&gt;</button>
+    </div>
+</main>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer>
-    <div class="footer-sections">
-      <div class="footer-about">
+    <div class="footer-content">
+      <!-- Left Section -->
+      <div class="footer-left">
         <h4>ABOUT HausTap</h4>
         <ul>
           <li><a href="#">About Us</a></li>
@@ -61,29 +62,31 @@
         </ul>
       </div>
 
+      <!-- Center Section -->
       <div class="footer-center">
-        <img src="image/logo.png" alt="HausTap Logo" class="footer-logo">
-        <p>Your space. Your peace. Your glow.</p>
+        <img src="image/logo.png" alt="HausTap Logo" />
+        <p>Your space. Your peace. Your Glow</p>
       </div>
 
+      <!-- Right Section -->
       <div class="footer-right">
         <h4>FOLLOW US</h4>
         <ul>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Twitter</a></li>
+          <li><i class="fab fa-facebook-f"></i> Facebook</li>
+          <li><i class="fab fa-instagram"></i> Instagram</li>
+          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
-        <div class="footer-contact">
-          Address: Abc Road 12345<br>
-          Philippines<br>
-          Phone: +65 949 9226 246<br>
-          Email: HAUSTAP_PH@gmail.com
+        <div class="contact-info">
+          <p>
+            Address: Abc Road 12345<br />
+            Philippines<br />
+            Phone: +65 949 9226 246<br />
+            Email: HAUSTAP_PH@gmail.com
+          </p>
         </div>
       </div>
     </div>
-
-    <p class="copyright">© 2025 HausTap. All Rights Reserved.</p>
+    <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
   </footer>
-
 </body>
 </html>
