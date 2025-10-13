@@ -58,11 +58,9 @@
     </div>
   </section>
 
- <!-- FOOTER -->
   <footer>
-    <div class="footer-content">
-      <!-- Left Section -->
-      <div class="footer-left">
+    <div class="footer-container">
+      <div class="footer-col">
         <h4>ABOUT HausTap</h4>
         <ul>
           <li><a href="#">About Us</a></li>
@@ -74,31 +72,31 @@
         </ul>
       </div>
 
-      <!-- Center Section -->
-      <div class="footer-center">
-        <img src="image/logo.png" alt="HausTap Logo" />
-        <p>Your space. Your peace. Your Glow</p>
+      <div class="footer-logo">
+        <img src="image/logo.png" alt="HausTap Logo">
+        <p>Your space. Your peace. Your glow.</p>
       </div>
 
-      <!-- Right Section -->
-      <div class="footer-right">
+      <div class="footer-col">
         <h4>FOLLOW US</h4>
         <ul>
-          <li><i class="fab fa-facebook-f"></i> Facebook</li>
-          <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Twitter</a></li>
         </ul>
-        <div class="contact-info">
-          <p>
-            Address: Abc Road 12345<br />
-            Philippines<br />
-            Phone: +65 949 9226 246<br />
-            Email: HAUSTAP_PH@gmail.com
-          </p>
-        </div>
+        <p class="address">
+          Address: Abe Road 12345<br>
+          Philippines<br>
+          Phone: +65 849 9228 246<br>
+          Email: HAUSTAP.PH@gmail.com
+        </p>
       </div>
     </div>
-    <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
+
+    <div class="footer-bottom">
+      <p>© 2025 HausTap. All Rights Reserved.</p>
+    </div>
   </footer>
+
 </body>
-</html> 
+</html>

@@ -9,9 +9,8 @@
   </style>
 </head>
 <body>
-  <div class="header">
+   <div class="header">
     <img src="images/logo.png" alt="HausTap" class="logo-img">
-    
     <nav class="nav">
       <a href="#" class="active">Home</a>
       <a href="#">Services</a>
@@ -19,32 +18,24 @@
       <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>
-
-    <!-- Right side (Search + Auth Links) -->
-    <div class="header-right">
+   <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services">
         <i class="fa fa-search"></i>
       </div>
-
-      <!-- Added spacing handled by CSS below -->
-      <div class="auth-links">
-        <div class="signup-link">
-          <a href="#">Sign up</a>
-        </div>
-        <span>|</span>
-        <div class="login-link">
-          <a href="#">Login</a>
-        </div>
+      
+      <div class="signup-link">
+        <a href="#">Sign up</a>
+        
       </div>
-    </div>
-  </div>
+      <span>|</span>
+      <div class="login-link"><a href="#">Login</a></div>
 
     </div>
   </div>
   <div class="hero">
     <div class="hero-text">
-      <div class="hero-title">Everything you need to feel at home –<br>in every way</div>
+      <div class="hero-title">Everything you need to feel at home–<br>in every way</div>
       <div class="hero-desc">We provide you the best people to take care of you.</div>
       <button class="hero-btn">Get Started</button>
     </div>
@@ -216,11 +207,11 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4> <br>
+        <h4>FOLLOW US</h4>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          
+          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
         <div class="contact-info">
           <p>
