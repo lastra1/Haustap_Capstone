@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Cleaning Services | Homi</title>
-  <link rel="stylesheet" href="css/indoor-cleaning.css">
+  <link rel="stylesheet" href="css/indoor-services.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <header class="header">
@@ -28,6 +29,7 @@
         <i class="fa fa-user account-icon"></i>
         My Account
       </a>
+      </div>
   </header>
   <main>
     <h1 class="main-title">Cleaning Services</h1>
