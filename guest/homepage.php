@@ -86,33 +86,42 @@
     </div>
   </div>
   <div class="promotions-section">
-    <div class="promotions-title">PROMOTIONS<br>Get a Sparkling Home At A Special Promotion!</div>
+    <div class="promotions-title">PROMOTIONS</div>
     <div class="promotions-grid">
       <div class="promo-card">
-        <img src="images/100-voucher.png" alt="Welcome Voucher">
         <div class="promo-card-content">
-          <div class="promo-card-title">WELCOME VOUCHER</div>
-          <div class="promo-card-desc">AND GET P100 OFF<br>New here? Book your first service today and enjoy P100 off as our welcome gift!</div>
+          <div class="promo-card-title">WELCOME<br>VOUCHER</div>
+          <div class="promo-amount">AND GET ₱100 OFF</div>
+          <div class="promo-card-desc">New here? Book your first service today<br>and enjoy P100 off as our welcome gift!</div>
           <button class="promo-card-btn">Book now</button>
           <div class="promo-card-conditions">Conditions: First-time users only</div>
         </div>
-      </div>
-      <div class="promo-card">
-        <img src="images/10pesos-voucher.png" alt="Referral Bonus">
-        <div class="promo-card-content">
-          <div class="promo-card-title">REFERRAL BONUS</div>
-          <div class="promo-card-desc">AND GET P10 VOUCHER<br>Share Homi with friends! Once your friend completes first booking you earn P10 vouchers.</div>
-          <button class="promo-card-btn">Book now</button>
-          <div class="promo-card-conditions">Conditions: Friend must use your code and complete booking</div>
+        <div class="promo-image">
+          <img src="images/cleaning_voucher.png" alt="Cleaning Tools">
         </div>
       </div>
       <div class="promo-card">
-        <img src="images/50pesos-voucher.png" alt="Loyalty Bonus">
         <div class="promo-card-content">
-          <div class="promo-card-title">UNLOCK YOUR LOYALTY BONUS</div>
-          <div class="promo-card-desc">AND GET P50 VOUCHER<br>After 5 completed bookings, enjoy a P50 voucher as a thank you for staying with Homi!</div>
+          <div class="promo-card-title">REFERRAL<br>BONUS</div>
+          <div class="promo-amount">AND GET ₱10 VOUCHER</div>
+          <div class="promo-card-desc">Share HausTap with friends! Once your friend<br>completes their booking you earn P10 voucher</div>
+          <button class="promo-card-btn">Book now</button>
+          <div class="promo-card-conditions">Conditions: Friend must use your referral code and complete booking</div>
+        </div>
+        <div class="promo-image">
+          <img src="images/cleaning_voucher.png" alt="Cleaning Tools">
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-card-content">
+          <div class="promo-card-title">UNLOCK YOUR<br>LOYALTY BONUS</div>
+          <div class="promo-amount">AND GET ₱50 VOUCHER</div>
+          <div class="promo-card-desc">After 5 completed bookings, enjoy a<br>₱50 voucher as a thank you for staying<br>with HausTap!</div>
           <button class="promo-card-btn">Book now</button>
           <div class="promo-card-conditions">Conditions: Must be completed within 2 months</div>
+        </div>
+        <div class="promo-image">
+          <img src="images/cleaning_voucher.png" alt="Cleaning Tools">
         </div>
       </div>
     </div>

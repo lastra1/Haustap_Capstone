@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact - HausTap</title>
   <link rel="stylesheet" href="css/contact.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
   <div class="header">
@@ -49,15 +50,15 @@
       <div class="tab-content connect-tab">
         <div class="social-icons">
           <div class="social-card">
-            <img src="C:\Users\user\Pictures\thesis\images\facebook.png" alt="Facebook">
+            <img src="images/facebook.png" alt="Facebook">
             <a href="#">Facebook page</a>
           </div>
           <div class="social-card">
-            <img src="C:\Users\user\Pictures\thesis\images\instagram.png" alt="Instagram">
+            <img src="images/instagram.png" alt="Instagram">
             <a href="#">Instagram page</a>
           </div>
           <div class="social-card">
-            <img src="C:\Users\user\Pictures\thesis\images\twitter.png" alt="X">
+            <img src="images/twitter.png" alt="X">
             <a href="#">X</a>
           </div>
         </div>
@@ -94,7 +95,7 @@
 
       <!-- Center Section -->
       <div class="footer-center">
-        <img src="image/logo.png" alt="HausTap Logo" />
+        <img src="images/logo.png" alt="HausTap Logo" />
         <p>Your space. Your peace. Your Glow</p>
       </div>
 

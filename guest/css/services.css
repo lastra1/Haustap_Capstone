@@ -2,7 +2,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+           font-family: Georgia, 'Times New Roman', Times, serif;
         }
 
         body {
@@ -60,7 +60,7 @@
   align-items: center;
   background: #f5f5f5;
   border-radius: 30px;
-  padding: 4px 12px;
+  padding: 10px 20px;
   box-shadow: 7px 5px rgba(0,0,0,0.15);
 }
 
@@ -70,7 +70,7 @@
   outline: none;
   font-size: 15px;
   padding: 6px 0;
-  width: 120px;
+  width: 150px;
 }
 
 .search-box i {
@@ -78,20 +78,26 @@
   color: #888;
 }
 
+/* SIGN UP / LOGIN LINKS */
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .signup-link a,
 .login-link a {
-  color: black;          
-  text-decoration: none; 
-  font-weight: 500;      
-  font-family: inherit;   
+  color: black;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: inherit;
 }
 
 .signup-link a:hover,
 .login-link a:hover {
-  color: rgb(28, 228, 228);      
-  text-decoration: underline; 
+  color: rgb(28, 228, 228);
+  text-decoration: underline;
 }
-
 
 
         /* Main Content */
