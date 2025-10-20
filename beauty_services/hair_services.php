@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/hair_services.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -25,8 +26,9 @@
         <input type="text" placeholder="Search services" />
         <i class="fa fa-search"></i>
       </div>
-      <a href="#" class="account-link">
-        <i class="fa fa-user account-icon"></i> My Account
+      <a href="#" class="icon-button account-link">
+        <i class="bi bi-person-circle"></i>
+        <span>My Account</span>
       </a>
     </div>
   </header>

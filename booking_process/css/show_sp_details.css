@@ -2,6 +2,7 @@ body{
   --accent: #009999;
   --card-bg: #ffffff;
   --icon-size: 22px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 /* page centering (if header/footer exist, you can remove full-height centering) */

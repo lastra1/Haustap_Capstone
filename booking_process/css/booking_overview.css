@@ -1,6 +1,6 @@
 /* ===== GENERAL STYLES ===== */
 body {
-  font-family: 'Montserrat', Arial, sans-serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   background: #ffffff;
   margin: 0;
   color: #222;
@@ -74,19 +74,40 @@ body {
   color: #888;
 }
 
-.account-link {
+.icon-button {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
   color: #222;
-  text-decoration: none;
   font-size: 16px;
   font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.account-icon {
-  font-size: 20px;
-  color: cyan;
+.icon-button i {
+  font-size: 25px;
+  color: #131313;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.icon-button:hover i,
+.icon-button:hover span {
+  color: rgb(30, 228, 228);
+}
+
+.icon-button:hover i {
+  transform: scale(1.15);
+}
+
+.account-link {
+  text-decoration: none;
+}
+
+.account-link i {
+  font-size: 25px;
 }
 
 /* ===== MAIN TITLE ===== */
