@@ -1,11 +1,11 @@
 body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f9f9f9; /* Change page background here */
-  color: #333; /* Default text color */
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background-color: #f9f9f9; 
+  color: #333; 
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px; /* Full viewport height */
+  height: 100px; 
   margin: 50vh;
 }
 

@@ -1,9 +1,10 @@
+
 .account-referral {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding: 40px 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   background-color: #f9f9f9;
 }
 
@@ -56,8 +57,8 @@
   background-color: #fff;
   border: #636363 solid 1px;
   box-shadow: #666666 0px 4px 4px;
-  padding: 25px 50px;
-  border-radius: 6px;
+  padding: 25px 130px;
+  border-radius: 10px;
   text-align: center;
 }
 
@@ -71,12 +72,13 @@
 /* --- Copy Button --- */
 .copy-btn {
   background-color: #fff;
-  color: #00b3b3;
-  border: 1px solid #333333;
+  color: #050505;
+  border: 2px solid #333333;
   box-shadow: #333333 0px 4px 4px;
-  padding: 8px 20px;
+  font-weight: bold;
+  padding: 8px 70px;
   font-size: 13px;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
@@ -117,21 +119,20 @@
 }
 
 .submit-btn {
-  background-color: cyan;
-  color: black;
-  border: 1px solid #333333;
-  padding: 8px 25px;
+  background-color: #3dc1c6;
+  font-weight: bold;
+  padding: 8px 70px;
   font-size: 14px;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s;
   display: block;
   margin: 0 auto;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .submit-btn:hover {
-  background-color: cyan;
-  border: 1px solid #333333;
+  background-color: #3dc1c6;
   color: black;
   transform: scale3d(1.05, 1.05, 1);
 }
