@@ -2,62 +2,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Homi Services</title>
-    <link rel="stylesheet" href="css/application services.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HausTap - What Services do you offer?</title>
+    <link rel="stylesheet" href="css/application.css">
 </head>
 <body>
-    <header>
-        <img src="image/logo.png" alt="Homi Logo" style="height:100px; margin:32px 0 0 32px;">
-    </header>
-    <main>
-        <section class="service-form-container">
-            <form class="service-form">
-                <h2>What Services do you offer?</h2>
-                <div class="services-grid">
-                    <div class="service-group">
-                        <strong>Cleaning Services</strong>
-                        <div><input type="checkbox" > Home cleaning</div>
-                        <div><input type="checkbox"> AC cleaning</div>
+     <div class="header">
+    <img src="image/logo.png" alt="HausTap" class="logo-img">
+    </div>
+
+    <div class="main-container">
+        <div class="services-card">
+            <h1>What Services do you offer?</h1>
+            
+            <div class="services-grid">
+                <div>
+                    <div class="service-category">
+                        <h2>Cleaning Services</h2>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="home-cleaning">
+                            <label for="home-cleaning">Home cleaning</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ac-cleaning">
+                            <label for="ac-cleaning">AC cleaning</label>
+                        </div>
                     </div>
-                    <div class="service-group">
-                        <strong>Beauty Services</strong>
-                        <div><input type="checkbox"> Hair Services</div>
-                        <div><input type="checkbox"> Nail Care</div>
-                        <div><input type="checkbox"> Make-up</div>
-                        <div><input type="checkbox"> Lashes</div>
+
+                    <div class="service-category">
+                        <h2>Indoor Services</h2>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="carpentry">
+                            <label for="carpentry">Carpentry</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="plumbing">
+                            <label for="plumbing">Plumbing</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="electrical">
+                            <label for="electrical">Electrical</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="appliance-repair">
+                            <label for="appliance-repair">Appliance Repair</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="pest-control-indoor">
+                            <label for="pest-control-indoor">Pest Control</label>
+                        </div>
                     </div>
-                    <div class="service-group">
-                        <strong>Outdoor Services</strong>
-                        <div><input type="checkbox"> Gardening & Landscaping</div>
-                        <div><input type="checkbox"> Pest Control</div>
-                    </div>
-                    <div class="service-group">
-                        <strong>Wellness Services</strong>
-                        <div><input type="checkbox"> Massage</div>
-                    </div>
-                    <div class="service-group">
-                        <strong>Home Repairs</strong>
-                        <div><input type="checkbox"> Carpentry</div>
-                        <div><input type="checkbox"> Plumbing</div>
-                        <div><input type="checkbox"> Electrical</div>
-                        <div><input type="checkbox"> Appliance Repair</div>
-                    </div>
-                    <div class="service-group">
-                        <strong>Tech & Gadget Services</strong>
-                        <div><input type="checkbox"> Massage</div>
+
+                    <div class="service-category">
+                        <h2>Outdoor Services</h2>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="gardening">
+                            <label for="gardening">Gardening & Landscaping</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="pest-control-outdoor">
+                            <label for="pest-control-outdoor">Pest Control</label>
+                        </div>
                     </div>
                 </div>
-            </form>
-            <div class="pagination">
-                <button>&lt;</button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>&gt;</button>
+
+                <div>
+                    <div class="service-category">
+                        <h2>Beauty Services</h2>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hair-services">
+                            <label for="hair-services">Hair Services</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="nail-care">
+                            <label for="nail-care">Nail Care</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="makeup">
+                            <label for="makeup">Make-up</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lashes">
+                            <label for="lashes">Lashes</label>
+                        </div>
+                    </div>
+
+                    <div class="service-category">
+                        <h2>Tech & Gadget Services</h2>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="mobile-phone">
+                            <label for="mobile-phone">Mobile Phone</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="laptop-desktop">
+                            <label for="laptop-desktop">Laptop & Desktop PC</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tablet-ipad">
+                            <label for="tablet-ipad">Tablet & Ipad</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="game-console">
+                            <label for="game-console">Game & Console</label>
+                        </div>
+                    </div>
+
+                    <div class="service-category">
+                        <h2>Wellness Services</h2>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="massage">
+                            <label for="massage">Massage</label>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
-    </main>
+        </div>
+
+        <div class="pagination">
+            <button>&lt;</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            <button>&gt;</button>
+        </div>
+    </div>
+
     <!-- FOOTER -->
   <footer>
     <div class="footer-content">
@@ -82,11 +152,11 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
+          
         </ul>
         <div class="contact-info">
           <p>
