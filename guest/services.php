@@ -11,8 +11,8 @@
    <div class="header">
     <img src="images/logo.png" alt="HausTap" class="logo-img">
     <nav class="nav">
-      <a href="#" class="active">Home</a>
-      <a href="#">Services</a>
+      <a href="#">Home</a>
+      <a href="#" class="active">Services</a>
       <a href="#">Bookings</a>
       <a href="#">About</a>
       <a href="#">Contact</a>

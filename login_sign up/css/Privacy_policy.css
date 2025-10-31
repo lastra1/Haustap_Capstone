@@ -1,0 +1,203 @@
+ body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f0f9ff 0%, #e0e7ed 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+        }
+        .header-logo {
+            width: 150px;
+            height: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .last-updated {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .intro {
+            color: #333;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .section-content {
+            color: #555;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .section-content ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .section-content li {
+            margin-bottom: 5px;
+        }
+
+        .note {
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .back-btn {
+            display: block;
+            width: 100px;
+            margin: 30px auto 0;
+            padding: 12px;
+            background: #4fc3c8;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #3fb0b5;
+        }
+
+        .footer {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            padding: 40px 20px 20px;
+            background: #d5d9dd;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-center {
+            text-align: center;
+        }
+
+        .footer-logo {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .social-links {
+            list-style: none;
+        }
+
+        .social-links li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .social-icon {
+            width: 16px;
+            height: 16px;
+            fill: #333;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #bbb;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .contact-info {
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .contact-info {
+                text-align: left;
+            }
+        }

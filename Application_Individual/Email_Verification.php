@@ -21,17 +21,62 @@
         <h2>Email Verification</h2>
         <p>We have sent a One-Time Password (OTP) to your registered email address. Please enter the code below to verify your email.</p>
 
-        <form class="verify-form">
+        <form class="verify-form" id="verificationForm">
           <label>Enter Email</label>
           <input type="email" placeholder="Enter your email" required>
 
           <label>Enter OTP</label>
-          <input type="text" placeholder="Enter OTP" required>
+          <input type="text" placeholder="Enter OTP" maxlength="6" required>
+          
+          <div class="timer-container">
+            <span id="timer">05:00</span>
+          </div>
 
-          <a href="#" class="resend">Resend OTP</a>
+          <a href="#" class="resend" id="resendBtn">Resend OTP</a>
 
           <button type="submit" class="verify-btn">Verify</button>
         </form>
+
+        <script>
+          // Timer functionality
+          function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            var interval = setInterval(function () {
+              minutes = parseInt(timer / 60, 10);
+              seconds = parseInt(timer % 60, 10);
+
+              minutes = minutes < 10 ? "0" + minutes : minutes;
+              seconds = seconds < 10 ? "0" + seconds : seconds;
+
+              display.textContent = minutes + ":" + seconds;
+
+              if (--timer < 0) {
+                clearInterval(interval);
+                display.textContent = "00:00";
+                document.getElementById('resendBtn').style.opacity = "1";
+                document.getElementById('resendBtn').style.pointerEvents = "auto";
+              }
+            }, 1000);
+          }
+
+          window.onload = function () {
+            var fiveMinutes = 60 * 5,
+            display = document.getElementById('timer');
+            startTimer(fiveMinutes, display);
+            
+            // Initially disable resend button
+            document.getElementById('resendBtn').style.opacity = "0.5";
+            document.getElementById('resendBtn').style.pointerEvents = "none";
+            
+            // Resend button click handler
+            document.getElementById('resendBtn').addEventListener('click', function(e) {
+              e.preventDefault();
+              this.style.opacity = "0.5";
+              this.style.pointerEvents = "none";
+              startTimer(fiveMinutes, display);
+            });
+          };
+        </script>
       </div>
     </div>
   </section>

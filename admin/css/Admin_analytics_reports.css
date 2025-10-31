@@ -1,0 +1,185 @@
+/* === GLOBAL === */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #e5e5e5;
+  color: #333;
+}
+
+/* === LAYOUT === */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* === SIDEBAR === */
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #f7f7f7;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo img {
+  width: 150px;
+  margin-bottom: -30px;
+}
+
+.menu {
+  list-style: none;
+  width: 100%;
+  padding: 20px 5px;
+}
+
+.menu li {
+  padding: 12px 25px;
+  font-weight: 600;
+  color: #222;
+  cursor: pointer;
+}
+
+.menu li.active {
+  background-color: #3ac4c4;
+  color: white;
+  border-radius: 8px;
+  margin: 5px 15px;
+}
+
+.menu li:hover {
+  background-color: #e0f7f7;
+  border-radius: 8px;
+}
+
+/* === MAIN === */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === HEADER === */
+.topbar {
+  background: #00c2cb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  color: black;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn.admin {
+  background: white;
+  color: #333;
+}
+
+.btn.logout {
+  background: #ff3b30;
+  color: white;
+}
+
+/* === DASHBOARD SECTIONS === */
+.dashboard {
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.top-section {
+  display: flex;
+  gap: 20px;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.chart-card h3 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.chart-card p.sub {
+  color: gray;
+  margin: 0 0 10px 0;
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  height: 260px !important;
+}
+
+/* Side cards */
+.side-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 240px;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.stats-card h4 {
+  margin: 0 0 10px 0;
+}
+
+.stats-card .blue {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.stats-card .green {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.stats-card.rating h2 {
+  color: #ffb400;
+  font-size: 1.6em;
+}
+
+/* Bottom charts */
+.bottom-section {
+  display: flex;
+  gap: 20px;
+}
+
+.chart-card.half {
+  flex: 1;
+}
+
+@media (max-width: 1000px) {
+  .top-section, .bottom-section {
+    flex-direction: column;
+  }
+  .side-cards {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+}

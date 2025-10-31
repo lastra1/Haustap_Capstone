@@ -5,30 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact - HausTap</title>
   <link rel="stylesheet" href="css/contact.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-  <div class="header">
+ <div class="header">
     <img src="images/logo.png" alt="HausTap" class="logo-img">
+    
     <nav class="nav">
-      <a href="#" class="active">Home</a>
+      <a href="#">Home</a>
       <a href="#">Services</a>
       <a href="#">Bookings</a>
       <a href="#">About</a>
-      <a href="#">Contact</a>
+      <a href="#" class="active">Contact</a>
     </nav>
-   <div class="header-right">
+
+    <!-- Right side (Search + Auth Links) -->
+    <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services">
         <i class="fa fa-search"></i>
       </div>
-      
-      <div class="signup-link">
-        <a href="#">Sign up</a>
-        
-      </div>
-      <span>|</span>
-      <div class="login-link"><a href="#">Login</a></div>
 
+      <!-- Added spacing handled by CSS below -->
+      <div class="auth-links">
+        <div class="signup-link">
+          <a href="#">Sign up</a>
+        </div>
+        <span>|</span>
+        <div class="login-link">
+          <a href="#">Login</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -49,15 +56,15 @@
       <div class="tab-content connect-tab">
         <div class="social-icons">
           <div class="social-card">
-            <img src="C:\Users\user\Pictures\thesis\images\facebook.png" alt="Facebook">
+            <img src="images/facebook.png" alt="Facebook">
             <a href="#">Facebook page</a>
           </div>
           <div class="social-card">
-            <img src="C:\Users\user\Pictures\thesis\images\instagram.png" alt="Instagram">
+            <img src="images/instagram.png" alt="Instagram">
             <a href="#">Instagram page</a>
           </div>
           <div class="social-card">
-            <img src="C:\Users\user\Pictures\thesis\images\twitter.png" alt="X">
+            <img src="images/twitter.png" alt="X">
             <a href="#">X</a>
           </div>
         </div>
@@ -94,7 +101,7 @@
 
       <!-- Center Section -->
       <div class="footer-center">
-        <img src="image/logo.png" alt="HausTap Logo" />
+        <img src="images/logo.png" alt="HausTap Logo" />
         <p>Your space. Your peace. Your Glow</p>
       </div>
 

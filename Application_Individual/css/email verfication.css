@@ -17,7 +17,7 @@ header {
 }
 
 .logo {
-  width: 90px;
+  width: 130px;
 }
 
 /* Tablet Section */
@@ -80,8 +80,23 @@ header {
   font-size: 13px;
 }
 
+.timer-container {
+  text-align: center;
+  margin: 5px 0;
+}
+
+#timer {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  background-color: #fcfcfc;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
 .verify-form .resend {
-  text-align: right;
+  text-align: center;
   font-size: 11px;
   color: #333;
   text-decoration: none;

@@ -10,28 +10,32 @@
 <body>
 <div class="header">
     <img src="images/logo.png" alt="HausTap" class="logo-img">
+    
     <nav class="nav">
-      <a href="#" class="active">Home</a>
+      <a href="#" >Home</a>
       <a href="#">Services</a>
       <a href="#">Bookings</a>
-      <a href="#">About</a>
+      <a href="#" class="active">About</a>
       <a href="#">Contact</a>
     </nav>
-   <div class="header-right">
+
+    <!-- Right side (Search + Auth Links) -->
+    <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services">
         <i class="fa fa-search"></i>
       </div>
-      
-      <div class="signup-link">
-        <a href="#">Sign up</a>
-        
-      </div>
-      <span>|</span>
-      <div class="login-link"><a href="#">Login</a></div>
 
-    </div>
-      </a>
+      <!-- Added spacing handled by CSS below -->
+      <div class="auth-links">
+        <div class="signup-link">
+          <a href="#">Sign up</a>
+        </div>
+        <span>|</span>
+        <div class="login-link">
+          <a href="#">Login</a>
+        </div>
+      </div>
     </div>
   </div>
 

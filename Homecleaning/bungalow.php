@@ -6,12 +6,11 @@
   <title>Type of Cleaning | Homi</title>
   <link rel="stylesheet" href="css/indoor-cleaning.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <a href="#"><img src="image/logo.png" alt="Haustap Logo"></a>
-    </div>
+  <div class="header">
+    <img src="image/logo.png" alt="HausTap" class="logo-img">
     <nav class="nav">
       <a href="#">Home</a>
       <a href="#">Services</a>
@@ -19,7 +18,7 @@
       <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>
-     <div class="header-right">
+   <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services">
         <i class="fa fa-search"></i>
@@ -28,68 +27,73 @@
         <i class="fa fa-user account-icon"></i>
         My Account
       </a>
-  </header>
+    </div>
+      </a>
+    </div>
+  </div>
   <main>
     <h1 class="main-title">Type of Cleaning</h1>
-    <button class="cleaning-type-btn">Bungalow</button>
-    <div class="cleaning-cards-container">
-      <div class="cleaning-cards-row">
-        <div class="cleaning-card">
-          <input type="radio" name="cleaning" class="cleaning-radio" id="basic-cleaning">
+    <button class="subcategory-btn">Bungalow</button>
+    <div class="services-container">
+      <div class="service-grid">
+        <div class="service-card">
+          <input type="radio" name="cleaning" id="basic-cleaning">
           <label for="basic-cleaning" class="radio-label"></label>
-          <div class="cleaning-title">Basic Cleaning – 1 Cleaner</div>
-          <div class="cleaning-price">₱1,000</div>
-          <div class="cleaning-inclusions-title">Inclusions:</div>
-          <ul class="cleaning-inclusions">
-            <li>Living Room: walls, mop, dusting furniture, trash removal</li>
-            <li>Bedroom: bed making, sweeping, dusting, trash removal</li>
-            <li>Hallways: mop & sweep, remove cobwebs</li>
-            <li>Windows & Mirrors: quick wipe</li>
-          </ul>
+          <div class="service-content">
+            <h3>Basic Cleaning – 2 Cleaner</h3>
+            <div class="price">₱1,500</div>
+            <p><strong>Inclusions:</strong></p>
+            <ul>
+              <li>Living room & bedrooms: sweeping, mopping, dusting</li>
+              <li>Mirrors & windows: wipe</li>
+              <li>Trash removal</li>
+            </ul>
+          </div>
         </div>
-        <div class="cleaning-card">
-          <input type="radio" name="cleaning" class="cleaning-radio" id="standard-cleaning">
+        <div class="service-card">
+          <input type="radio" name="cleaning" id="standard-cleaning">
           <label for="standard-cleaning" class="radio-label"></label>
-          <div class="cleaning-title">Standard Cleaning – 2 Cleaners</div>
-          <div class="cleaning-price">₱2,000</div>
-          <div class="cleaning-inclusions-title">Inclusions:</div>
-          <ul class="cleaning-inclusions">
-            <li>All Basic Cleaning tasks plus:</li>
-            <li>Kitchen: wipe countertops, sink cleaning, stove top degrease, trash removal</li>
-            <li>Bathrooms: scrub toilet, sink, shower, floor disinfecting</li>
-            <li>Furniture: cleaning under/behind furniture</li>
-            <li>Windows & Mirrors: full wipe & polish</li>
-          </ul>
+          <div class="service-content">
+            <h3>Standard Cleaning – 2-3 Cleaners</h3>
+            <div class="price">₱2,500</div>
+            <p><strong>Inclusions:</strong></p>
+            <ul>
+              <li>All Basic tasks:</li>
+              <li>Kitchen deep wipe & sink scrubbing</li>
+              <li>Bathroom: toilet, shower, sink, disinfect floors</li>
+              <li>Clean under beds & sofa</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="cleaning-cards-row">
-        <div class="cleaning-card wide">
-          <input type="radio" name="cleaning" class="cleaning-radio" id="deep-cleaning">
+      <div class="service-grid">
+        <div class="service-card wide">
+          <input type="radio" name="cleaning" id="deep-cleaning">
           <label for="deep-cleaning" class="radio-label"></label>
-          <div class="cleaning-title">Deep Cleaning – 3 Cleaners</div>
-          <div class="cleaning-price">₱3,000</div>
-          <div class="cleaning-inclusions-title">Inclusions:</div>
-          <ul class="cleaning-inclusions">
-            <li>All Standard Cleaning tasks plus:</li>
-            <li>Flooring: scrubbing tiles/grout, polishing if applicable</li>
-            <li>Appliances: behind refrigerator, oven, washing machine</li>
-            <li>Carpets/Rugs: vacuum or shampoo</li>
-            <li>Disinfection: doorknobs, switches, high-touch surfaces</li>
-          </ul>
+          <div class="service-content">
+            <h3>Deep Cleaning – 3 Cleaners</h3>
+            <div class="price">₱4,000</div>
+            <p><strong>Inclusions:</strong></p>
+            <ul>
+              <li>All Standard tasks</li>
+              <li>Tile grout scrubbinge</li>
+              <li>Behind appliances cleaning</li>
+              <li>Carpet shampoo/vacuum</li>
+              <li>Disinfection of high-touch areas</li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="cleaning-note">Cleaning materials are provided by the client</div>
-      <nav class="pagination">
-        <ul>
-          <li><a href="#">«</a></li>
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li><a href="#">»</a></li>
-        </ul>
-      </nav>
+       <div class="pagination">
+      <button>&lt;</button>
+      <button class="active">1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>5</button>
+      <button>&gt;</button>
+    </div>
     </div>
   </main>
   <!-- FOOTER -->
