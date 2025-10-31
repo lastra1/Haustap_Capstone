@@ -215,24 +215,11 @@ body {
   margin: 10px 0 8px;
 }
 
-.dropdown-content label {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 13px;
-  margin-bottom: 6px;
-  cursor: pointer;
-}
-
 .filter-date {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-top: 10px;
-}
-
-.filter-date label {
-  font-size: 12px;
 }
 
 .filter-date input[type="date"] {
@@ -243,20 +230,6 @@ body {
   width: 150px;
 }
 
-/* Apply button */
-.apply-btn {
-  margin-top: 12px;
-  background: #fff;
-  border: 1px solid #333;
-  border-radius: 6px;
-  padding: 6px 20px;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.apply-btn:hover {
-  background: #f0f0f0;
-}
 /* Table */
 .table-container {
   background: #fff;
@@ -289,7 +262,6 @@ body {
   color: #ffc107;
 }
 
-/* Status Labels */
 .status {
   padding: 5px 10px;
   border-radius: 20px;
@@ -349,16 +321,8 @@ body {
   font-weight: 600;
   margin-top: 5px;
 }
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  font-size: 0.9em;
-  color: #333;
-}
 
-/* Modal Overlay */
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -372,7 +336,6 @@ body {
   align-items: center;
 }
 
-/* Modal Box */
 .modal-content {
   background: #fff;
   padding: 25px 30px;
@@ -394,15 +357,6 @@ body {
   font-size: 14px;
 }
 
-.modal-content strong {
-  font-weight: 600;
-  color: #222;
-}
-
-.modal-content .stars {
-  color: #ffc107;
-}
-
 .close-btn {
   position: absolute;
   top: 10px;
@@ -412,7 +366,6 @@ body {
   color: #777;
 }
 
-/* Buttons */
 .modal-actions {
   display: flex;
   justify-content: space-between;

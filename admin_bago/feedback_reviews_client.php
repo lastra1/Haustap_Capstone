@@ -51,8 +51,8 @@
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab active">Service Provider</button>
-        <button class="tab">Client</button>
+        <button class="tab">Service Provider</button>
+        <button class="tab active">Client</button>
       </div>
 
       <!-- Search and Filter -->

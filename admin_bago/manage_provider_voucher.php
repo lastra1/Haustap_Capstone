@@ -24,7 +24,6 @@
           <li>Manage Bookings</li>
           <li>Job Status Monitor</li>
           <li>Analytics & Report</li>
-          <li>Finance & Transactions</li>
           <li>Subscription Management</li>
           <li>Feedback & Reviews</li>
           <li>System Settings</li>
