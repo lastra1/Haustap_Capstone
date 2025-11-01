@@ -9,13 +9,13 @@
 </head>
 <body>
    <div class="header">
-    <img src="images/logo.png" alt="HausTap" class="logo-img">
+    <a href="homepage.php" class="logo-link"><img src="images/logo.png" alt="HausTap" class="logo-img"></a>
     <nav class="nav">
-      <a href="#" class="active">Home</a>
-      <a href="#">Services</a>
-      <a href="#">Bookings</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
+      <a href="homepage.php" class="active">Home</a>
+      <a href="services.php">Services</a>
+      <a href="/bookings/booking.php">Bookings</a>
+      <a href="About.php">About</a>
+      <a href="Contact.php">Contact</a>
     </nav>
    <div class="header-right">
       <div class="search-box">
@@ -24,11 +24,10 @@
       </div>
       
       <div class="signup-link">
-        <a href="#">Sign up</a>
-        
+        <a href="/login_sign up/sign up.php">Sign up</a>
       </div>
       <span>|</span>
-      <div class="login-link"><a href="#">Login</a></div>
+      <div class="login-link"><a href="/login_sign up/login.php">Login</a></div>
 
     </div>
       </a>
@@ -124,11 +123,10 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
         <div class="contact-info">
           <p>

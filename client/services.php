@@ -9,20 +9,20 @@
 </head>
 <body>
   <header class="header">
-    <img src="images/logo.png" alt="HausTap" class="logo-img" />
+    <a href="homepage.php" class="logo-link"><img src="images/logo.png" alt="HausTap" class="logo-img" /></a>
     <nav class="nav">
-      <a href="#">Home</a>
-      <a href="#" class="active">Services</a>
-      <a href="#">Bookings</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
+      <a href="homepage.php">Home</a>
+      <a href="services.php" class="active">Services</a>
+      <a href="/bookings/booking.php">Bookings</a>
+      <a href="About.php">About</a>
+      <a href="contact_client.php">Contact</a>
     </nav>
     <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services" />
         <i class="fa fa-search"></i>
       </div>
-      <a href="#" class="account-link">
+      <a href="/my_account/my_account.php" class="account-link">
         <i class="fa fa-user account-icon"></i> My Account
       </a>
     </div>
@@ -117,11 +117,10 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
         <div class="contact-info">
           <p>

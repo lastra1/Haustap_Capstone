@@ -82,11 +82,10 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
         <div class="contact-info">
           <p>
@@ -101,4 +100,4 @@
     <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
   </footer>
 </body>
-</html> 
+</html>

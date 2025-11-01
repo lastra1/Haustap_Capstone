@@ -78,7 +78,7 @@
       </div>
 
       <div class="footer-col">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><a href="#">Facebook</a></li>
           <li><a href="#">Instagram</a></li>

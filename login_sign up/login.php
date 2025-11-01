@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Log In | HausTap</title>
   <link rel="stylesheet" href="css/login.css">
+  <script src="config.js"></script>
 </head>
 <body>
   <div class="container">
@@ -47,11 +48,10 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
         <div class="contact-info">
           <p>
@@ -65,5 +65,41 @@
     </div>
     <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
   </footer>
+  <script>
+    (function() {
+      const form = document.querySelector('.login-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        try {
+          const base = window.API_BASE_URL || 'http://127.0.0.1:8001/auth';
+          const res = await fetch(`${base}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            console.error('Login failed:', data);
+            alert(data.message || 'Login failed');
+            return;
+          }
+
+          // Align token key with Expo app for consistency
+          localStorage.setItem('auth_token', data.token);
+          // Redirect to homepage without changing UI layout
+          window.location.href = '../guest/homepage.php';
+        } catch (err) {
+          console.error('Network error:', err);
+          alert('Network error. Please try again.');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

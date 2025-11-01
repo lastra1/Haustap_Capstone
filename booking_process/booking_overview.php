@@ -13,20 +13,20 @@
 <body>
   <!-- HEADER -->
   <header class="header">
-    <img src="images/logo.png" alt="HausTap" class="logo-img" />
+    <a href="/client/homepage.php" class="logo-link"><img src="images/logo.png" alt="HausTap" class="logo-img" /></a>
     <nav class="nav">
-      <a href="#">Home</a>
-      <a href="#">Services</a>
-      <a href="#" class="active">Bookings</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
+      <a href="/client/homepage.php">Home</a>
+      <a href="/client/services.php">Services</a>
+      <a href="/bookings/booking.php" class="active">Bookings</a>
+      <a href="/client/About.php">About</a>
+      <a href="/client/contact_client.php">Contact</a>
     </nav>
     <div class="header-right">
       <div class="search-box">
         <input type="text" placeholder="Search services" />
         <i class="fa fa-search"></i>
       </div>
-      <a href="#" class="icon-button account-link">
+      <a href="/my_account/my_account.php" class="icon-button account-link">
         <i class="bi bi-person-circle"></i>
         <span>My Account</span>
       </a>
@@ -138,11 +138,10 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
         <div class="contact-info">
           <p>

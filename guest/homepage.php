@@ -10,14 +10,14 @@
 </head>
 <body>
   <div class="header">
-    <img src="images/logo.png" alt="HausTap" class="logo-img">
+    <a href="homepage.php" class="logo-link"><img src="images/logo.png" alt="HausTap" class="logo-img"></a>
     
     <nav class="nav">
-      <a href="#" class="active">Home</a>
-      <a href="#">Services</a>
-      <a href="#">Bookings</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
+      <a href="homepage.php" class="active">Home</a>
+      <a href="services.php">Services</a>
+      <a href="/bookings/booking.php">Bookings</a>
+      <a href="About.php">About</a>
+      <a href="Contact.php">Contact</a>
     </nav>
 
     <!-- Right side (Search + Auth Links) -->
@@ -30,11 +30,11 @@
       <!-- Added spacing handled by CSS below -->
       <div class="auth-links">
         <div class="signup-link">
-          <a href="#">Sign up</a>
+          <a href="/login_sign up/sign up.php">Sign up</a>
         </div>
         <span>|</span>
         <div class="login-link">
-          <a href="#">Login</a>
+          <a href="/login_sign up/login.php">Login</a>
         </div>
       </div>
     </div>

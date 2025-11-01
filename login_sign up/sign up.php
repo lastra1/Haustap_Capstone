@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Sign Up | HausTap</title>
   <link rel="stylesheet" href="css/sign up.css">
+  <script src="config.js"></script>
 </head>
 <body>
   <div class="container">
@@ -75,11 +76,10 @@
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
         <div class="contact-info">
           <p>
@@ -93,5 +93,62 @@
     </div>
     <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
   </footer>
+  <script>
+    (function() {
+      const form = document.querySelector('.signup-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const mobile = document.getElementById('mobile').value.trim();
+
+        const birthMonth = document.getElementById('birthMonth').value;
+        const birthDay = document.getElementById('birthDay').value;
+        const birthYear = document.getElementById('birthYear').value;
+
+        const payload = {
+          firstName,
+          lastName,
+          email,
+          password,
+          confirmPassword,
+          mobile,
+          birthMonth,
+          birthDay,
+          birthYear
+        };
+
+        try {
+          const base = window.API_BASE_URL || 'http://127.0.0.1:8001/auth';
+          const res = await fetch(`${base}/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await res.json();
+          if (res.status === 201) {
+            // Align token key with Expo app for consistency
+            localStorage.setItem('auth_token', data.token);
+            // Redirect to homepage without changing UI layout
+            window.location.href = '../guest/homepage.php';
+            return;
+          }
+
+          console.error('Registration failed:', data);
+          alert('Registration failed. Please check your details.');
+        } catch (err) {
+          console.error('Network error:', err);
+          alert('Network error. Please try again.');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

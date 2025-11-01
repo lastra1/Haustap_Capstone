@@ -8,13 +8,13 @@
 </head>
 <body>
   <div class="header">
-    <img src="images/logo.png" alt="HausTap" class="logo-img">
+    <a href="homepage.php" class="logo-link"><img src="images/logo.png" alt="HausTap" class="logo-img"></a>
     <nav class="nav">
-      <a href="#" class="active">Home</a>
-      <a href="#">Services</a>
-      <a href="#">Bookings</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
+      <a href="homepage.php" class="active">Home</a>
+      <a href="services.php">Services</a>
+      <a href="/bookings/booking.php">Bookings</a>
+      <a href="About.php">About</a>
+      <a href="Contact.php">Contact</a>
     </nav>
    <div class="header-right">
       <div class="search-box">
@@ -23,11 +23,10 @@
       </div>
       
       <div class="signup-link">
-        <a href="#">Sign up</a>
-        
+        <a href="/login_sign up/sign up.php">Sign up</a>
       </div>
       <span>|</span>
-      <div class="login-link"><a href="#">Login</a></div>
+      <div class="login-link"><a href="/login_sign up/login.php">Login</a></div>
 
     </div>
   </div>
@@ -72,10 +71,25 @@
           <p>Address: 29 San Pedro, Laguna City of Sta Rosa, Laguna</p>
           <p>If you have any questions or feedback, feel free to reach out!</p>
         </div>
-      </div>
+  </div>
     </div>
   </section>
 
+
+  <script>
+    // Tab switching functionality
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        contents[index].classList.add('active');
+      });
+    });
+  </script>
   <!-- FOOTER -->
   <footer>
     <div class="footer-content">
@@ -94,19 +108,18 @@
 
       <!-- Center Section -->
       <div class="footer-center">
-        <img src="image/logo.png" alt="HausTap Logo" />
+        <img src="images/logo.png" alt="HausTap Logo" />
         <p>Your space. Your peace. Your Glow</p>
       </div>
 
       <!-- Right Section -->
       <div class="footer-right">
-        <h4>FOLLOW US</h4>
+        <h4>FOLLOW US</h4> <br>
         <ul>
           <li><i class="fab fa-facebook-f"></i> Facebook</li>
           <li><i class="fab fa-instagram"></i> Instagram</li>
-          <li><i class="fab fa-twitter"></i> Twitter</li>
         </ul>
-        <div class="contact-information">
+        <div class="contact-info">
           <p>
             Address: Abc Road 12345<br />
             Philippines<br />
@@ -118,20 +131,5 @@
     </div>
     <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
   </footer>
-
-  <script>
-    // Tab switching functionality
-    const tabs = document.querySelectorAll('.tab');
-    const contents = document.querySelectorAll('.tab-content');
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        contents[index].classList.add('active');
-      });
-    });
-  </script>
 </body>
 </html>
