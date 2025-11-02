@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Log In | HausTap</title>
   <link rel="stylesheet" href="css/login.css">
-  <script src="config.js"></script>
 </head>
 <body>
   <div class="container">
@@ -76,8 +75,7 @@
         const password = document.getElementById('password').value;
 
         try {
-          const base = window.API_BASE_URL || 'http://127.0.0.1:8001/auth';
-          const res = await fetch(`${base}/login`, {
+          const res = await fetch('http://127.0.0.1:8001/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -90,8 +88,7 @@
             return;
           }
 
-          // Align token key with Expo app for consistency
-          localStorage.setItem('auth_token', data.token);
+          localStorage.setItem('haustap_token', data.token);
           // Redirect to homepage without changing UI layout
           window.location.href = '../guest/homepage.php';
         } catch (err) {

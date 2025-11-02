@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Sign Up | HausTap</title>
   <link rel="stylesheet" href="css/sign up.css">
-  <script src="config.js"></script>
 </head>
 <body>
   <div class="container">
@@ -125,8 +124,7 @@
         };
 
         try {
-          const base = window.API_BASE_URL || 'http://127.0.0.1:8001/auth';
-          const res = await fetch(`${base}/register`, {
+          const res = await fetch('http://127.0.0.1:8001/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -134,8 +132,7 @@
 
           const data = await res.json();
           if (res.status === 201) {
-            // Align token key with Expo app for consistency
-            localStorage.setItem('auth_token', data.token);
+            localStorage.setItem('haustap_token', data.token);
             // Redirect to homepage without changing UI layout
             window.location.href = '../guest/homepage.php';
             return;
