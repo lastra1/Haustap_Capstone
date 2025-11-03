@@ -9,39 +9,7 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <a href="homepage.php" class="logo-link"><img src="images/logo.png" alt="HausTap" class="logo-img"></a>
-    
-    <nav class="nav">
-      <a href="homepage.php" class="active">Home</a>
-      <a href="services.php">Services</a>
-      <a href="/bookings/booking.php">Bookings</a>
-      <a href="About.php">About</a>
-      <a href="Contact.php">Contact</a>
-    </nav>
-
-    <!-- Right side (Search + Auth Links) -->
-    <div class="header-right">
-      <div class="search-box">
-        <input type="text" placeholder="Search services">
-        <i class="fa fa-search"></i>
-      </div>
-
-      <!-- Added spacing handled by CSS below -->
-      <div class="auth-links">
-        <div class="signup-link">
-          <a href="/login_sign up/sign up.php">Sign up</a>
-        </div>
-        <span>|</span>
-        <div class="login-link">
-          <a href="/login_sign up/login.php">Login</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-    </div>
-  </div>
+  <?php include '../utils/header.php'; ?>
   <div class="hero">
     <div class="hero-text">
       <div class="hero-title">Everything you need to feel at home –<br>in every way</div>
@@ -53,38 +21,7 @@
     </div>
   </div>
   <div class="section-title">CATEGORY</div>
-  <div class="category-grid">
-    <div class="category-card">
-      <img src="images/cleaning.png" alt="Cleaning Services">
-      <div class="category-card-title">Cleaning Services</div>
-      <div class="category-card-desc">Professional cleaning for homes, offices, and more. Book trusted cleaners for sparkling results.</div>
-    </div>
-    <div class="category-card">
-      <img src="images/outdoor.png" alt="Outdoor Services">
-      <div class="category-card-title">Outdoor Services</div>
-      <div class="category-card-desc">Gardening, landscaping, and outdoor maintenance to keep your surroundings beautiful and safe.</div>
-    </div>
-    <div class="category-card">
-      <img src="images/repair.png" alt="Home Repairs">
-      <div class="category-card-title">Home Repairs</div>
-      <div class="category-card-desc">Quick and reliable repair services for plumbing, electrical, and general home maintenance.</div>
-    </div>
-    <div class="category-card">
-      <img src="images/beauty service.png" alt="Beauty Services">
-      <div class="category-card-title">Beauty Services</div>
-      <div class="category-card-desc">Pamper yourself with at-home beauty treatments from certified professionals.</div>
-    </div>
-    <div class="category-card">
-      <img src="images/wellness.png" alt="Wellness Services">
-      <div class="category-card-title">Wellness Services</div>
-      <div class="category-card-desc">Enjoy massage, therapy, and wellness sessions in the comfort of your home.</div>
-    </div>
-    <div class="category-card">
-      <img src="images/tech.png" alt="Tech & Gadget Services">
-      <div class="category-card-title">Tech & Gadget Services</div>
-      <div class="category-card-desc">Get help with device setup, troubleshooting, and smart home installations.</div>
-    </div>
-  </div>
+  <div id="categories-container" class="category-grid"></div>
   <div class="promotions-section">
     <div class="promotions-title">PROMOTIONS<br>Get a Sparkling Home At A Special Promotion!</div>
     <div class="promotions-grid">
@@ -192,47 +129,6 @@
       </div>
     </div>
   </div>
-   <!-- FOOTER -->
-  <footer>
-    <div class="footer-content">
-      <!-- Left Section -->
-      <div class="footer-left">
-        <h4>ABOUT HausTap</h4>
-        <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Policies</a></li>
-          <li><a href="#">Our Sitemap</a></li>
-          <li><a href="#">Our Services</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Testimonials</a></li>
-        </ul>
-      </div>
-
-      <!-- Center Section -->
-      <div class="footer-center">
-        <img src="images/logo.png" alt="HausTap Logo" />
-        <p>Your space. Your peace. Your Glow</p>
-      </div>
-
-      <!-- Right Section -->
-      <div class="footer-right">
-        <h4>FOLLOW US</h4> <br>
-        <ul>
-          <li><i class="fab fa-facebook-f"></i> Facebook</li>
-          <li><i class="fab fa-instagram"></i> Instagram</li>
-          
-        </ul>
-        <div class="contact-info">
-          <p>
-            Address: Abc Road 12345<br />
-            Philippines<br />
-            Phone: +65 949 9226 246<br />
-            Email: HAUSTAP_PH@gmail.com
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
-  </footer>
+  <?php include '../utils/footer.php'; ?>
 </body>
 </html>

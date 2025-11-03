@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash; 
+
 
 class AuthController extends Controller
 {
@@ -52,22 +54,31 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-        if (!Auth::attempt($credentials)) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials'
             ], 401);
         }
 
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $token = $user->createToken('web')->plainTextToken;
+        $token = $user->createToken('api-token')->plainTextToken;
+
+       if ($request->has('fcm_token')) {
+            $user->fcm_token = $request->fcm_token;
+            $user->save();
+        }
 
         return response()->json([
             'success' => true,
-            'token' => $token,
+            'access_token' => $token,
+            'token_type' => 'Bearer',
             'user' => $user
         ]);
     }
@@ -87,4 +98,17 @@ class AuthController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    // public function updateFcmToken(Request $request)
+    // {
+    //     $request->validate([
+    //         'fcm_token' => 'required|string',
+    //     ]);
+
+    //     $user = $request->user();
+    //     $user->fcm_token = $request->fcm_token;
+    //     $user->save();
+
+    //     return response()->json(['message' => 'FCM token updated']);
+    // }
 }

@@ -19,7 +19,7 @@
       <a href="#" class="forgot">Forgot Password?</a>
       <button type="submit">Log In</button>
       <div class="signup-link">
-        New to HausTap? <a href="#">Sign Up</a>
+        New to HausTap? <a href="sign up.php">Sign Up</a>
       </div>
     </form>
   </div>
@@ -75,7 +75,11 @@
         const password = document.getElementById('password').value;
 
         try {
-          const res = await fetch('http://127.0.0.1:8001/auth/login', {
+          const res = await fetch("<?php
+                                  include '../utils/config.php';
+                                  echo API_AUTH_ENDPOINT;
+                                  ?>", 
+          {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -87,8 +91,8 @@
             alert(data.message || 'Login failed');
             return;
           }
-
-          localStorage.setItem('haustap_token', data.token);
+          localStorage.setItem('haustap_token', data.access_token);
+          localStorage.setItem('haustap_user', JSON.stringify(data.user));
           // Redirect to homepage without changing UI layout
           window.location.href = '../guest/homepage.php';
         } catch (err) {

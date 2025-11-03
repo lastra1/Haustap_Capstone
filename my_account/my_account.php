@@ -12,27 +12,7 @@
 </head>
 
 <body>
-  <!-- HEADER -->
-<header class="header">
-  <img src="images/logo.png" alt="HausTap" class="logo-img" />
-  <nav class="nav">
-    <a href="#">Home</a>
-    <a href="#">Services</a>
-    <a href="#">Bookings</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
-  </nav>
-<div class="header-right">
-  <div class="icon-button notification-box">
-    <i class="fa-regular fa-bell"></i>
-  </div>
-
-  <a href="#" class="icon-button account-link">
-    <i class="bi bi-person-circle"></i>
-    <span>My Account</span>
-  </a>
-</div>
-</header>
+  <?php include '../utils/header.php'; ?>
 
   <main class="account-page">
   <div class="account-container">
@@ -68,7 +48,7 @@
     <li><i class="fa-solid fa-circle-info"></i> About us</li>
   </ul>
 
-  <button class="logout-btn">Log out</button>
+  <button class="logout-btn" id="logout-btn">Log out</button>
 </nav>
     </aside>
 
@@ -123,48 +103,6 @@
     </section>
   </div>
 </main>
-
-   <!-- FOOTER -->
-  <footer>
-    <div class="footer-content">
-      <!-- Left Section -->
-      <div class="footer-left">
-        <h4>ABOUT HausTap</h4>
-        <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Policies</a></li>
-          <li><a href="#">Our Sitemap</a></li>
-          <li><a href="#">Our Services</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Testimonials</a></li>
-        </ul>
-      </div>
-
-      <!-- Center Section -->
-      <div class="footer-center">
-        <img src="images/logo.png" alt="HausTap Logo" />
-        <p>Your space. Your peace. Your Glow</p>
-      </div>
-
-      <!-- Right Section -->
-      <div class="footer-right">
-        <h4>FOLLOW US</h4> <br>
-        <ul>
-          <li><i class="fab fa-facebook-f"></i> Facebook</li>
-          <li><i class="fab fa-instagram"></i> Instagram</li>
-          
-        </ul>
-        <div class="contact-info">
-          <p>
-            Address: Abc Road 12345<br />
-            Philippines<br />
-            Phone: +65 949 9226 246<br />
-            Email: HAUSTAP_PH@gmail.com
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">2025 HausTap. All Rights Reserved.</div>
-  </footer>
+<?php include '../utils/footer.php'; ?>
 </body>
 </html>

@@ -13,29 +13,7 @@
 
 </head>
 <body>
-
-  <!-- Header -->
-   <div class="header">
-    <img src="images/logo.png" alt="HausTap" class="logo-img">
-    <nav class="nav">
-      <a href="#">Home</a>
-      <a href="#">Services</a>
-      <a href="#" class="active">Bookings</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-    </nav>
-    <div class="header-right">
-      <div class="search-box">
-        <input type="text" placeholder="Search services">
-        <i class="fa fa-search"></i>
-      </div>
-      <<a href="#" class="icon-button account-link">
-        <i class="bi bi-person-circle"></i>
-        <span>My Account</span>
-      </a>
-    </div>
-  </div>
-  
+  <?php include '../utils/header.php'; ?> 
   <!-- tabs -->
   <div class="mytabs">
     <input type="radio" id="tabpending" name="mytabs" checked="checked">
