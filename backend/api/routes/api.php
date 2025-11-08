@@ -10,6 +10,10 @@ use App\Http\Controllers\Provider\ProviderController;
 use App\Http\Controllers\Auth\PasswordController;
 
 // Stateless API endpoints (no CSRF)
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 Route::post('/auth/otp/send', [OtpController::class, 'send']);
 Route::post('/auth/otp/verify', [OtpController::class, 'verify']);
 Route::post('/auth/register', [PasswordController::class, 'register']);
