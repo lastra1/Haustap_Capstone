@@ -9,7 +9,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "server": "ts-node server.ts"
+    "server": "ts-node server.ts",
+    "build:android:client": "eas build -p android --profile client",
+    "build:android:provider": "eas build -p android --profile provider"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
