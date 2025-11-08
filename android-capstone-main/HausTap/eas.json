@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 3.15.0"
+  },
+  "build": {
+    "client": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_USER_MODE": "client"
+      }
+    },
+    "provider": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_USER_MODE": "provider"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
