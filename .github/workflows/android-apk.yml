@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build-apk:
@@ -91,3 +93,48 @@ jobs:
           allowUpdates: true
           artifacts: apk-artifacts/**/*.apk
           artifactErrorsFailBuild: true
+
+  publish-pages:
+    needs: build-apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download APK artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: haustap-*-debug-apk
+          merge-multiple: true
+          path: apk-artifacts
+
+      - name: Create index page with download links
+        run: |
+          mkdir -p apk-artifacts
+          cat > apk-artifacts/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Haustap Android APKs</title>
+            <style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;padding:24px;max-width:700px;margin:auto}h1{margin-top:0}a{color:#0b5fff;text-decoration:none}a:hover{text-decoration:underline}code{background:#f2f4f7;padding:2px 6px;border-radius:4px}</style>
+          </head>
+          <body>
+            <h1>Haustap Android Debug APKs</h1>
+            <p>Direct download links:</p>
+            <ul>
+              <li><a href="./haustap-client-debug.apk">Client Debug APK</a></li>
+              <li><a href="./haustap-provider-debug.apk">Provider Debug APK</a></li>
+            </ul>
+            <p>API base: <code>http://26.242.103.174:8001</code></p>
+            <p>If a link doesn’t start downloading, refresh the page after a minute.</p>
+          </body>
+          </html>
+          HTML
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apk-artifacts
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
