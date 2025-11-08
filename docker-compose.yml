@@ -4,6 +4,7 @@ services:
     container_name: haustap_web
     depends_on:
       - db
+      - api
     ports:
       - "8088:80"
     volumes:
@@ -46,6 +47,25 @@ services:
       - ADMINER_DEFAULT_SERVER=db
     ports:
       - "8080:8080"
+    restart: unless-stopped
+
+  api:
+    build: ./docker/api
+    container_name: haustap_api
+    depends_on:
+      - db
+    ports:
+      - "8001:8001"
+    working_dir: /var/www
+    environment:
+      - TZ=Asia/Manila
+    volumes:
+      - ./backend/api:/var/www
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
 volumes:
