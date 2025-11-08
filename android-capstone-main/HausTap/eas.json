@@ -8,7 +8,8 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_USER_MODE": "client"
+        "EXPO_PUBLIC_USER_MODE": "client",
+        "EXPO_PUBLIC_API_BASE": "http://26.242.103.174:8001"
       }
     },
     "provider": {
@@ -16,7 +17,8 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_USER_MODE": "provider"
+        "EXPO_PUBLIC_USER_MODE": "provider",
+        "EXPO_PUBLIC_API_BASE": "http://26.242.103.174:8001"
       }
     }
   },
