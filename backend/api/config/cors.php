@@ -10,10 +10,17 @@ return [
         'http://127.0.0.1:5001',
         'http://localhost:8081',
         'http://127.0.0.1:8081',
+        'http://localhost:8082',
+        'http://127.0.0.1:8082',
+        // Allow Expo web served from the server IP during development
+        'http://26.242.103.174:8082',
+        'http://26.242.103.174:8081',
     ],
     'allowed_origins_patterns' => [
         '/^http:\/\/localhost:\d+$/',
         '/^http:\/\/127\.0\.0\.1:\d+$/',
+        // Allow any IPv4 host with any port (dev convenience)
+        '/^http:\/\/\d{1,3}(?:\.\d{1,3}){3}:\d+$/',
     ],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],

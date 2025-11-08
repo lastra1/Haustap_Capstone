@@ -1,0 +1,34 @@
+{
+    "records": [
+        {
+            "email": "otp.test+web@example.com",
+            "code": "678170",
+            "expires": 1762554352533
+        },
+        {
+            "email": "new.user+otp@local.test",
+            "code": "794700",
+            "expires": 1762554420001
+        },
+        {
+            "email": "qa.otp.email+dev@example.com",
+            "code": "209440",
+            "expires": 1762554677095
+        },
+        {
+            "email": "haustap4024@gmail.com",
+            "code": "856603",
+            "expires": 1762555383610
+        },
+        {
+            "email": "markjoshuapunzalan2@gmail.com",
+            "code": "259269",
+            "expires": 1762560823830
+        },
+        {
+            "email": "markjoshupunzalan2@gmail.com",
+            "code": "543725",
+            "expires": 1762562262635
+        }
+    ]
+}

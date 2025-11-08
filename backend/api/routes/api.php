@@ -6,12 +6,23 @@ use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AdminSettingsController;
 use App\Http\Controllers\Auth\ModeController;
+use App\Http\Controllers\Provider\ProviderController;
+use App\Http\Controllers\Auth\PasswordController;
 
 // Stateless API endpoints (no CSRF)
 Route::post('/auth/otp/send', [OtpController::class, 'send']);
 Route::post('/auth/otp/verify', [OtpController::class, 'verify']);
+Route::post('/auth/register', [PasswordController::class, 'register']);
+Route::post('/auth/login', [PasswordController::class, 'login']);
+Route::post('/auth/password/reset', [PasswordController::class, 'reset']);
 Route::get('/auth/mode', [ModeController::class, 'get']);
 Route::post('/auth/mode', [ModeController::class, 'save']);
+
+// Provider application and status
+Route::get('/providers/status', [ProviderController::class, 'status']);
+Route::post('/providers/apply', [ProviderController::class, 'apply']);
+Route::post('/admin/providers/approve', [ProviderController::class, 'approve']);
+Route::post('/admin/providers/revoke', [ProviderController::class, 'revoke']);
 
 Route::get('/bookings/', [BookingsController::class, 'index']);
 Route::post('/bookings/', [BookingsController::class, 'store']);

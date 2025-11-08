@@ -1,0 +1,22 @@
+{
+    "users": [
+        {
+            "name": "Mark Joshua Punzalan",
+            "email": "markjoshuapunzalan2@gmail.com",
+            "password_hash": "$2y$12$FEwRLejg6caiEqQccQms9OIEUogvUxECGvh19dvCbQj0mpfxCNmY6",
+            "role": "client"
+        },
+        {
+            "name": "QA User",
+            "email": "new.user+otp@local.test",
+            "password_hash": "$2y$12$Qr50FozH6yBa9FLNV\/Pgqu39uxHXcwNPmFnBXJco81M2cfmHirUAO",
+            "role": "client"
+        },
+        {
+            "name": "Mc Organo",
+            "email": "carleslie.organo@cdsp.edu.ph",
+            "password_hash": "$2y$12$DbOT2wHjeaacdNImCkr\/iunxXXBWAT8NlK3n4hWOOba0N.jGP\/tlO",
+            "role": "client"
+        }
+    ]
+}

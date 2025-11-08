@@ -23,6 +23,10 @@ Desktop.ini
 logs/
 storage/logs/*
 !storage/logs/.gitkeep
+# Node/Yarn debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Composer / PHP
 vendor/
@@ -50,6 +54,7 @@ coverage/
 .tmp/
 temp/
 tmp/
+.nyc_output/
  
 # Local tooling
 tools/
@@ -57,6 +62,9 @@ tools/
 # Docker local overrides
 docker-compose.override.yml
 .docker/
+
+# Hosting/CI artifacts
+.vercel/
 
 # PHP caches
 .phpunit.result.cache

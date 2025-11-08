@@ -6,6 +6,7 @@
   <title>Admin | Applicant Details</title>
   <link rel="stylesheet" href="css/applicant_details.css" />
   <script src="js/lazy-images.js" defer></script>
+  <script src="js/app.js" defer></script>
 </head>
 <body>
   <div class="dashboard-container">

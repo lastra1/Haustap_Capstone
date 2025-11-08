@@ -1,6 +1,7 @@
 // Minimal admin scripts for Manage Bookings page
 (function(){
   const API_BASE = '/api/admin';
+  const API_LARAVEL = 'http://127.0.0.1:8001/api';
 
   function qs(sel){ return document.querySelector(sel); }
   function qsa(sel){ return Array.from(document.querySelectorAll(sel)); }
@@ -9,6 +10,17 @@
     const url = new URL(API_BASE + path, window.location.origin);
     Object.entries(params).forEach(([k,v]) => { if(v!==undefined && v!==null) url.searchParams.set(k, v); });
     const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+    if(!res.ok){ throw new Error('HTTP '+res.status); }
+    return res.json();
+  }
+
+  async function apiPostLaravel(path, payload={}){
+    const url = new URL(API_LARAVEL + path);
+    const res = await fetch(url.toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
     if(!res.ok){ throw new Error('HTTP '+res.status); }
     return res.json();
   }
@@ -146,12 +158,13 @@
       const st = String(it.status || 'pending_review');
       const cls = applicantStatusClass(st);
       const label = st.replace('_',' ');
+      const email = it.email || '';
       return `<tr>
         <td>${id}</td>
         <td>${name}</td>
         <td>${applied}</td>
         <td><span class="status ${cls}">${label}</span></td>
-        <td>›</td>
+        <td><a href="applicant_details.php${email ? ('?email='+encodeURIComponent(email)) : ''}" class="arrow">›</a></td>
       </tr>`;
     }).join('');
     tbody.innerHTML = rows;
@@ -264,10 +277,38 @@
     applyDashboard(summary);
   }
 
+  // Applicant details page: wire Update Status to provider endpoints
+  function initApplicantDetails(){
+    const updateBtn = qs('.update-btn');
+    const dropdown = qs('.status-dropdown');
+    if(!updateBtn || !dropdown) return; // only run on applicant_details page
+    const params = new URLSearchParams(location.search);
+    const email = params.get('email');
+    updateBtn.addEventListener('click', async () => {
+      const choiceText = dropdown.value || dropdown.options[dropdown.selectedIndex]?.text || '';
+      const choice = String(choiceText).trim().toLowerCase();
+      if(!email){ alert('Missing applicant email.'); return; }
+      try{
+        if(choice === 'hired'){
+          const r = await apiPostLaravel('/admin/providers/approve', { email });
+          alert((r && r.success) ? 'Provider approved.' : (r?.message || 'Approve failed'));
+        }else if(choice === 'rejected'){
+          const r = await apiPostLaravel('/admin/providers/revoke', { email, remove_role: true });
+          alert((r && r.success) ? 'Provider revoked.' : (r?.message || 'Revoke failed'));
+        }else{
+          alert('Status updated locally. No provider role change needed.');
+        }
+      }catch(err){
+        alert('Request failed: ' + (err?.message || String(err)));
+      }
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     initDashboard();
     initBookings();
     initApplicants();
+    initApplicantDetails();
   });
 })();
 

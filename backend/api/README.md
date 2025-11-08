@@ -21,6 +21,35 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Email OTP Delivery (Haustap)
+
+The API exposes `POST /api/auth/otp/send` and `POST /api/auth/otp/verify` for one-time password authentication. In development, emails are written to the application log via the `log` mailer and include the full message content for easy testing.
+
+- Development: No SMTP required. Log output appears in `storage/logs/laravel.log`.
+- Production: Configure a real SMTP provider and disable `dev_code` in responses.
+
+### Configure SMTP for Production
+
+Set the following in your `.env` (or infrastructure secrets):
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.your-provider.com
+MAIL_PORT=587
+MAIL_USERNAME=your_smtp_username
+MAIL_PASSWORD=your_smtp_password
+MAIL_FROM_ADDRESS=no-reply@haustap.com
+MAIL_FROM_NAME="HausTap"
+```
+
+Recommended providers: Mailtrap (sandbox), Mailgun, SendGrid, Brevo, SES.
+
+### Endpoint Behavior
+
+- `POST /api/auth/otp/send` — generates a 6-digit code, stores it for 5 minutes, and sends it to the user's email.
+- In non-production environments, the response includes `dev_code` for convenience; in production, `dev_code` is omitted.
+- `POST /api/auth/otp/verify` — accepts `email` and `code` and returns a token when valid and unexpired.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.

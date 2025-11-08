@@ -12,8 +12,20 @@
     // Target can be 'backend' or 'mock' (default: backend)
     var target = ((window.API_TARGET || 'backend') + '').toLowerCase();
     if (target === 'backend') {
-      var backend = (window.BACKEND_BASE || 'http://127.0.0.1:8001/api').replace(/\/+$/, '');
-      window.API_BASE = backend;
+      var backend = window.BACKEND_BASE;
+      if (!backend || typeof backend !== 'string' || backend.trim() === '') {
+        try {
+          var host = (window.location && window.location.hostname) || '';
+          if (host && host !== 'localhost' && host !== '127.0.0.1') {
+            backend = 'http://' + host + ':8001/api';
+          } else {
+            backend = 'http://127.0.0.1:8001/api';
+          }
+        } catch (e) {
+          backend = 'http://127.0.0.1:8001/api';
+        }
+      }
+      window.API_BASE = String(backend).replace(/\/+$/, '');
       return;
     }
 

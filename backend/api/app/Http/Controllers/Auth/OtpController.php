@@ -6,6 +6,7 @@ use App\Support\FileJsonStore;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OtpController extends BaseController
 {
@@ -30,8 +31,31 @@ class OtpController extends BaseController
         }));
         $recs[] = ['email' => $email, 'code' => $code, 'expires' => $expires];
         $this->store()->write(['records' => $recs]);
-        Log::info('OTP dev code', ['email' => $email, 'code' => $code]);
-        return response()->json(['success' => true, 'dev_code' => $code, 'expires' => $expires]);
+        // Send OTP via email (dev env defaults to log mailer)
+        try {
+            Mail::raw(
+                "Your HausTap verification code is {$code}. It expires in 5 minutes.",
+                function ($message) use ($email) {
+                    $message->to($email)->subject('Your HausTap OTP');
+                }
+            );
+            Log::info('OTP sent', ['email' => $email]);
+            // Keep dev_code in response for developer convenience in non-production environments
+            return response()->json([
+                'success' => true,
+                'email_sent' => true,
+                'dev_code' => app()->isProduction() ? null : $code,
+                'expires' => $expires,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Failed to send OTP email', ['email' => $email, 'error' => $e->getMessage()]);
+            return response()->json([
+                'success' => true,
+                'email_sent' => false,
+                'dev_code' => app()->isProduction() ? null : $code,
+                'expires' => $expires,
+            ]);
+    }
     }
 
     public function verify(Request $request)

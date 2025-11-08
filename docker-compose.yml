@@ -11,7 +11,11 @@ services:
       - ./docker/web/apache.conf:/etc/apache2/sites-available/000-default.conf:ro
     environment:
       - TZ=Asia/Manila
-    command: ["bash","-lc","a2enmod rewrite headers && apache2-foreground"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   db:
