@@ -1,4 +1,4 @@
-name: Build Android APKs (Client & Provider)
+name: Build Android APK (Unified)
 
 on:
   push:
@@ -17,9 +17,6 @@ permissions:
 jobs:
   build-apk:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        mode: [client, provider]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,7 +60,6 @@ jobs:
       - name: Prebuild Android (Expo)
         working-directory: android-capstone-main/HausTap
         env:
-          EXPO_PUBLIC_USER_MODE: ${{ matrix.mode }}
           EXPO_PUBLIC_API_BASE: http://26.242.103.174:8001
           CI: false
         run: |
@@ -86,17 +82,17 @@ jobs:
           chmod +x ./gradlew
           ./gradlew assembleDebug
 
-      - name: Rename APK with mode
+      - name: Rename APK
         working-directory: android-capstone-main/HausTap/android/app/build/outputs/apk/debug
         run: |
           ls -la
-          if [ -f "app-debug.apk" ]; then mv app-debug.apk haustap-${{ matrix.mode }}-debug.apk; fi
+          if [ -f "app-debug.apk" ]; then mv app-debug.apk haustap-debug.apk; fi
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: haustap-${{ matrix.mode }}-debug-apk
-          path: android-capstone-main/HausTap/android/app/build/outputs/apk/debug/haustap-${{ matrix.mode }}-debug.apk
+          name: haustap-debug-apk
+          path: android-capstone-main/HausTap/android/app/build/outputs/apk/debug/haustap-debug.apk
 
   publish-release:
     needs: build-apk
@@ -105,17 +101,16 @@ jobs:
       - name: Download APK artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: haustap-*-debug-apk
-          merge-multiple: true
+          name: haustap-debug-apk
           path: apk-artifacts
 
       - name: Publish GitHub Release with APKs
         uses: ncipollo/release-action@v1
         with:
           tag: android-debug
-          name: Android Debug (Client & Provider)
+          name: Android Debug (Unified)
           body: |
-            Auto-built Client and Provider debug APKs.
+            Auto-built unified debug APK.
             API base: http://26.242.103.174:8001
           allowUpdates: true
           artifacts: apk-artifacts/**/*.apk
@@ -128,8 +123,7 @@ jobs:
       - name: Download APK artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: haustap-*-debug-apk
-          merge-multiple: true
+          name: haustap-debug-apk
           path: apk-artifacts
 
       - name: Create index page with download links
@@ -145,11 +139,10 @@ jobs:
             <style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;padding:24px;max-width:700px;margin:auto}h1{margin-top:0}a{color:#0b5fff;text-decoration:none}a:hover{text-decoration:underline}code{background:#f2f4f7;padding:2px 6px;border-radius:4px}</style>
           </head>
           <body>
-            <h1>Haustap Android Debug APKs</h1>
-            <p>Direct download links:</p>
+            <h1>Haustap Android Debug APK</h1>
+            <p>Direct download link:</p>
             <ul>
-              <li><a href="./haustap-client-debug.apk">Client Debug APK</a></li>
-              <li><a href="./haustap-provider-debug.apk">Provider Debug APK</a></li>
+              <li><a href="./haustap-debug.apk">Unified Debug APK</a></li>
             </ul>
             <p>API base: <code>http://26.242.103.174:8001</code></p>
             <p>If a link doesn’t start downloading, refresh the page after a minute.</p>

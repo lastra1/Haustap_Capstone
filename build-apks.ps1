@@ -1,7 +1,7 @@
 param(
   [string]$ApiBase = 'http://26.242.103.174:8001',
-  [ValidateSet('client','provider','both')]
-  [string]$Mode = 'both',
+  [ValidateSet('single','client','provider','both')]
+  [string]$Mode = 'single',
   [switch]$Clean
 )
 
@@ -37,7 +37,7 @@ function Build-One {
       npm install
     }
 
-    $env:EXPO_PUBLIC_USER_MODE = $m
+    if ($m -ne 'single') { $env:EXPO_PUBLIC_USER_MODE = $m } else { Remove-Item Env:EXPO_PUBLIC_USER_MODE -ErrorAction SilentlyContinue }
     $env:EXPO_PUBLIC_API_BASE = $ApiBase
 
     $args = @('prebuild','-p','android')
@@ -52,7 +52,8 @@ function Build-One {
       Invoke-Gradle -AndroidDir $AndroidDir
       $apk = Join-Path $AndroidDir 'app\build\outputs\apk\debug\app-debug.apk'
       if (!(Test-Path $apk)) { throw "APK not found at: $apk" }
-      $out = Join-Path $DistDir "haustap-$m-debug.apk"
+      $outName = ($m -eq 'single') ? 'haustap-debug.apk' : "haustap-$m-debug.apk"
+      $out = Join-Path $DistDir $outName
       Copy-Item $apk $out -Force
       Write-Host "Saved: $out" -ForegroundColor Green
     } finally { Pop-Location }
@@ -60,6 +61,7 @@ function Build-One {
 }
 
 switch ($Mode) {
+  'single'   { Build-One 'single' }
   'client'   { Build-One 'client' }
   'provider' { Build-One 'provider' }
   'both'     { Build-One 'client'; Build-One 'provider' }
