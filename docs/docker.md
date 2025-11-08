@@ -18,6 +18,7 @@ Live edit
 - `web` maps the project root to `/var/www` inside the container.
 - `api` maps `./backend/api` to `/var/www` inside the container.
 - Editing files locally updates immediately; the API runs `php artisan serve`.
+ - On first start, `api` auto-configures: copies `.env.docker.example` → `.env` if missing, installs Composer deps, generates `APP_KEY`, and runs migrations.
 
 Stop / rebuild
 - Stop: `docker compose down`

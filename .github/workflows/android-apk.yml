@@ -1,0 +1,50 @@
+name: Build Android APKs (Client & Provider)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mode: [client, provider]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        working-directory: android-capstone-main/HausTap
+        run: |
+          npm ci || npm install
+
+      - name: Prebuild Android (Expo)
+        working-directory: android-capstone-main/HausTap
+        env:
+          EXPO_PUBLIC_USER_MODE: ${{ matrix.mode }}
+          EXPO_PUBLIC_API_BASE: http://26.242.103.174:8001
+          CI: false
+        run: |
+          npx expo prebuild -p android --clean
+
+      - name: Assemble Debug APK
+        working-directory: android-capstone-main/HausTap/android
+        run: |
+          ./gradlew assembleDebug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: haustap-${{ matrix.mode }}-debug-apk
+          path: android-capstone-main/HausTap/android/app/build/outputs/apk/debug/*.apk

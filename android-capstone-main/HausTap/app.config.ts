@@ -18,6 +18,9 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => {
     ...config,
     name,
     slug: isProvider ? 'haustap-provider' : 'haustap-client',
+    plugins: [
+      ['expo-build-properties', { android: { usesCleartextTraffic: true } }],
+    ],
     android: {
       ...config.android,
       package: androidPackage,
