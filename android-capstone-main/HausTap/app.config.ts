@@ -19,7 +19,23 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => {
     name,
     slug: isProvider ? 'haustap-provider' : 'haustap-client',
     plugins: [
-      ['expo-build-properties', { android: { usesCleartextTraffic: true } }],
+      [
+        'expo-build-properties',
+        {
+          android: {
+            usesCleartextTraffic: true,
+            enableProguardInReleaseBuilds: true,
+            packagingOptions: {
+              exclude: [
+                'META-INF/LICENSE*',
+                'META-INF/NOTICE*',
+                'META-INF/DEPENDENCIES',
+                'META-INF/*.kotlin_module'
+              ],
+            },
+          },
+        },
+      ],
     ],
     android: {
       ...config.android,
