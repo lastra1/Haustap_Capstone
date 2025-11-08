@@ -7,8 +7,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libonig-dev \
         libzip-dev \
         curl \
-    && docker-php-ext-install mbstring pdo_mysql zip \
+    && docker-php-ext-install mbstring pdo_mysql zip opcache \
     && rm -rf /var/lib/apt/lists/*
+
+# Enable Opcache with sensible defaults (including CLI)
+RUN set -eux; \
+    {
+      echo 'opcache.enable=1';
+      echo 'opcache.enable_cli=1';
+      echo 'opcache.memory_consumption=128';
+      echo 'opcache.interned_strings_buffer=8';
+      echo 'opcache.max_accelerated_files=10000';
+      echo 'opcache.validate_timestamps=1';
+      echo 'opcache.revalidate_freq=2';
+    } > /usr/local/etc/php/conf.d/opcache.ini
+
+# Composer settings for performance and reliability
+ENV COMPOSER_CACHE_DIR=/root/.composer/cache
+ENV COMPOSER_MEMORY_LIMIT=-1
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

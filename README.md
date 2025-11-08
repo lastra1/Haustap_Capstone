@@ -84,6 +84,20 @@ If authentication is required, use a Personal Access Token (PAT) with `repo` sco
 - These debug APKs are unsigned but installable on most Android devices when "Install from unknown sources" is enabled.
 - The mobile app’s API base (`EXPO_PUBLIC_API_BASE`) defaults to `http://26.242.103.174:8001` for both variants.
 
+### Build APKs Locally (Android Studio / CLI)
+
+- Requirements: Android Studio (SDK 34), JDK 17, Node 18, npm.
+- Scripted build (recommended):
+  - From repo root, run: `./build-apks.ps1 -ApiBase "http://26.242.103.174:8001" -Mode both -Clean`
+  - Outputs: `dist/android/haustap-client-debug.apk` and `dist/android/haustap-provider-debug.apk`.
+- Android Studio path:
+  - Run `./build-apks.ps1 -Mode client -Clean` (or `-Mode provider`) to generate the `android/` folder.
+  - Open `Haustap_Application/HausTap/android` in Android Studio.
+  - Build → Build APK(s). Artifacts appear under `android/app/build/outputs/apk/debug/`.
+- Notes:
+  - The script wires `EXPO_PUBLIC_API_BASE` during prebuild; no UI/UX changes.
+  - If an emulator/device cannot reach `http://26.242.103.174:8001`, ensure same network or use a public HTTPS URL.
+
 ## Docker API & Database
 
 - Start stack: `docker compose up -d`.
