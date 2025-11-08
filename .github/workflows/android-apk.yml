@@ -1,7 +1,12 @@
 name: Build Android APKs (Client & Provider)
 
 on:
+  push:
+    branches: [Haustap_Updated]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-apk:
@@ -17,6 +22,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android licenses and install packages
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -41,6 +54,7 @@ jobs:
       - name: Assemble Debug APK
         working-directory: android-capstone-main/HausTap/android
         run: |
+          chmod +x ./gradlew
           ./gradlew assembleDebug
 
       - name: Upload APK artifact
@@ -48,3 +62,26 @@ jobs:
         with:
           name: haustap-${{ matrix.mode }}-debug-apk
           path: android-capstone-main/HausTap/android/app/build/outputs/apk/debug/*.apk
+
+  publish-release:
+    needs: build-apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download APK artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: haustap-*-debug-apk
+          merge-multiple: true
+          path: apk-artifacts
+
+      - name: Publish GitHub Release with APKs
+        uses: ncipollo/release-action@v1
+        with:
+          tag: android-debug
+          name: Android Debug (Client & Provider)
+          body: |
+            Auto-built Client and Provider debug APKs.
+            API base: http://26.242.103.174:8001
+          allowUpdates: true
+          artifacts: apk-artifacts/**/*.apk
+          artifactErrorsFailBuild: true
