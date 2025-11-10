@@ -30,7 +30,7 @@ Start-Process -FilePath powershell -ArgumentList $apiCmd -WorkingDirectory (Join
 # Expo Web - bind to 0.0.0.0 and point API base to Laravel on Radmin IP
 $expoCmd = "`$env:EXPO_PUBLIC_API_BASE='http://$RadminIp:$ApiPort'; `$env:HOST='0.0.0.0'; npx expo start --web --port $ExpoPort --clear"
 Write-Host "Expo:   $expoCmd" -ForegroundColor DarkGray
-Start-Process -FilePath powershell -ArgumentList "-NoProfile", "-Command", $expoCmd -WorkingDirectory (Join-Path $Root 'Haustap_Application\HausTap')
+Start-Process -FilePath powershell -ArgumentList "-NoProfile", "-Command", $expoCmd -WorkingDirectory (Join-Path $Root 'android-capstone-main\HausTap')
 
 $hostHint = if ($RadminIp) { $RadminIp } else { 'your-Radmin-IP' }
 Write-Host "Open: Legacy http://$hostHint:$LegacyPort/ | API http://$hostHint:$ApiPort/ | Expo http://$hostHint:$ExpoPort/" -ForegroundColor Green

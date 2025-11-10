@@ -28,7 +28,7 @@ This document outlines the canonical layout after cleanup so the project stays o
 - `backend/` — Legacy PHP pages gradually migrated into Laravel.
 
 ## Mobile App
-- `mobile_app/HausTap/` — Primary React Native app folder (Expo managed workflow).
+- `android-capstone-main/HausTap/` — Primary React Native app folder (Expo managed workflow).
 - Build artifacts (`android/`, `ios/`, `.expo/`) are gitignored.
 
 ## Docker and Infra

@@ -47,7 +47,7 @@ cd backend/api
 php artisan serve --port 8001
 
 # Expo Web (uses react-native-maps web stub)
-cd Haustap_Application/HausTap
+cd android-capstone-main/HausTap
 npx expo start --web --port 8082 --clear
 ```
 
