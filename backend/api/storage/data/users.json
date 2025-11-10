@@ -17,6 +17,18 @@
             "email": "carleslie.organo@cdsp.edu.ph",
             "password_hash": "$2y$12$DbOT2wHjeaacdNImCkr\/iunxXXBWAT8NlK3n4hWOOba0N.jGP\/tlO",
             "role": "client"
+        },
+        {
+            "name": "Client Client",
+            "email": "dean@cdsp.edu.ph",
+            "password_hash": "$2y$12$04cwfcOz2WMC.i\/KPNFF1.YoBXhx4Qkn7.LOlcUqqCIBrnArwepTS",
+            "role": "client"
+        },
+        {
+            "name": "Client Client",
+            "email": "milkylorejo@gmail.com",
+            "password_hash": "$2y$12$PyS0MnLup.EMK65iJp6oo.25P3B0aDQsTBGoiKP5d4NJFzknzdTxm",
+            "role": "client"
         }
     ]
 }

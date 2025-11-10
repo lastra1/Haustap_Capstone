@@ -38,7 +38,7 @@ Create local `.env` files from the provided examples and fill credentials as nee
   - `cd android-capstone-main/HausTap`
   - `npm install`
   - `npm run start` (or `npx expo start`)
-  - APK build (Unified): trigger GitHub Actions workflow "Build Android APK (Unified)"; download the single artifact after the run completes.
+  - APK builds (Client & Provider): trigger GitHub Actions workflow "Build Android APKs (Client & Provider)"; download artifacts after the run completes.
 3. Backend libraries (optional):
    - `cd backend`
    - `composer install`
@@ -73,29 +73,16 @@ If authentication is required, use a Personal Access Token (PAT) with `repo` sco
 - After pulling, run `composer install` (for PHP) and `npm install` (for JS) on each relevant project.
 - Review `docs/environment-setup.md` for machine-specific setup notes.
 
-## APK Build & Download Link
+## APK Builds & Download Links
 
-- The workflow `.github/workflows/android-apk.yml` builds a single unified debug APK.
+- The workflow `.github/workflows/android-apk.yml` builds two debug APKs: Client and Provider.
 - To generate download links:
-  - Go to GitHub → Actions → "Build Android APK (Unified)" → Run workflow.
+  - Go to GitHub → Actions → "Build Android APKs (Client & Provider)" → Run workflow.
   - After it finishes, open the run and download artifacts named:
-    - `haustap-debug-apk`
-- The debug APK is unsigned but installable on most Android devices when "Install from unknown sources" is enabled.
-- The mobile app’s API base (`EXPO_PUBLIC_API_BASE`) is wired to `http://26.242.103.174:8001`.
-
-### Build APK Locally (Android Studio / CLI)
-
-- Requirements: Android Studio (SDK 34), JDK 17, Node 18, npm.
-- Scripted build (recommended):
-  - From repo root, run: `./build-apks.ps1 -ApiBase "http://26.242.103.174:8001" -Mode single -Clean`
-  - Output: `dist/android/haustap-debug.apk`.
-- Android Studio path:
-  - Run `./build-apks.ps1 -Mode single -Clean` to generate the `android/` folder.
-  - Open `Haustap_Application/HausTap/android` in Android Studio.
-  - Build → Build APK(s). Artifacts appear under `android/app/build/outputs/apk/debug/`.
-- Notes:
-  - The script wires `EXPO_PUBLIC_API_BASE` during prebuild; no UI/UX changes.
-  - If an emulator/device cannot reach `http://26.242.103.174:8001`, ensure same network or use a public HTTPS URL.
+    - `haustap-client-debug-apk`
+    - `haustap-provider-debug-apk`
+- These debug APKs are unsigned but installable on most Android devices when "Install from unknown sources" is enabled.
+- The mobile app’s API base (`EXPO_PUBLIC_API_BASE`) defaults to `http://26.242.103.174:8001` for both variants.
 
 ## Docker API & Database
 
