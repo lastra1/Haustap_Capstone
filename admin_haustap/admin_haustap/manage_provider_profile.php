@@ -1,3 +1,34 @@
+<?php require_once __DIR__ . '/includes/auth.php';
+
+// Load provider data from storage by id (basic server-side connect)
+$provider = null;
+$providerId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$storePath = realpath(__DIR__ . '/../../storage/data/providers.json');
+if ($storePath && is_file($storePath)) {
+  $raw = @file_get_contents($storePath);
+  $items = json_decode($raw ?: '[]', true);
+  if (is_array($items)) {
+    foreach ($items as $it) {
+      if (isset($it['id']) && (int)$it['id'] === $providerId) { $provider = $it; break; }
+    }
+  }
+}
+
+// Fallback default when not found
+if (!$provider) {
+  $provider = [
+    'id' => $providerId ?: 0,
+    'name' => 'Unknown',
+    'skills' => '—',
+    'rating' => '—',
+    'hired_at' => '',
+    'status' => isset($_GET['status']) ? $_GET['status'] : 'active',
+    'email' => '',
+    'phone' => ''
+  ];
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,49 +53,50 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
       </header>
         <!-- Tabs -->
       <div class="tabs">
-        <button class="active">Profile</button>
-        <button>Jobs</button>
-        <button>Activity</button>
-        <button>Voucher</button>
-        <button>Subscription</button>
+        <?php $pid = (int)($provider['id'] ?? 0); $pstatus = urlencode($provider['status'] ?? ''); ?>
+        <button class="active" data-target="manage_provider_profile.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Profile</button>
+        <button data-target="manage_provider_jobs.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Jobs</button>
+        <button data-target="manage_provider_activity.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Activity</button>
+        <button data-target="manage_provider_voucher.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Voucher</button>
+        <button data-target="manage_provider_subscription.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Subscription</button>
       </div>
 
-        <!-- Profile Content -->
-        <div class="profile-box">
+    <!-- Profile Content -->
+    <div class="profile-box">
 
-            <div class="left-info">
-                <div class="profile-img">
-<i class="fa-solid fa-user"></i>
-                </div>
-                <p class="register-date">Registered on:<br><strong>January 01, 2025</strong></p>
-            </div>
-
-            <div class="right-info">
-                <p><strong>Status:</strong> Active</p>
-                <p><strong>ID:</strong> 01</p>
-                <p><strong>Full name:</strong> Ana Santos</p>    
-                <p><strong> Skills:</strong> Home Cleaning</p>
-                <p><strong>Rating: </strong> 4.5 </p>
-                <p><strong>Email:</strong> <a href="#">jennbornilla@gmail.com</a></p>
-                <p><strong>Mobile number:</strong> 09489129312</p>
-                <p><strong>Date of Birth:</strong> May 04 2003</p>
-                <p><strong>Gender:</strong> Female</p>
-                <p><strong>Address:</strong> Blk 1 Lot 50 Mango St. Saint Joseph Village 10 Brgy Langgam City of San Pedro Laguna</p>
-            </div>
-
-            <button class="submit-btn">Submit</button>
-
+      <div class="left-info">
+        <div class="profile-img">
+          <i class="fa-solid fa-user"></i>
         </div>
+        <p class="register-date">Registered on:<br><strong><?php echo !empty($provider['hired_at']) ? htmlspecialchars(date('F d, Y', strtotime($provider['hired_at']))) : '—'; ?></strong></p>
+      </div>
+
+      <div class="right-info">
+        <p><strong>Status:</strong> <?php echo htmlspecialchars(ucfirst($provider['status'] ?? '')); ?></p>
+        <p><strong>ID:</strong> <?php echo htmlspecialchars($provider['id']); ?></p>
+        <p><strong>Full name:</strong> <?php echo htmlspecialchars($provider['name']); ?></p>
+        <p><strong>Skills:</strong> <?php echo htmlspecialchars($provider['skills'] ?? '—'); ?></p>
+        <p><strong>Rating:</strong> <?php echo htmlspecialchars($provider['rating'] ?? '—'); ?></p>
+        <p><strong>Email:</strong> <?php if (!empty($provider['email'])): ?><a href="mailto:<?php echo htmlspecialchars($provider['email']); ?>"><?php echo htmlspecialchars($provider['email']); ?></a><?php else: ?>—<?php endif; ?></p>
+        <p><strong>Mobile number:</strong> <?php echo htmlspecialchars($provider['phone'] ?? '—'); ?></p>
+        <p><strong>Date of Birth:</strong> —</p>
+        <p><strong>Gender:</strong> —</p>
+        <p><strong>Address:</strong> —</p>
+      </div>
+
+      <button class="submit-btn">Submit</button>
+
+    </div>
 
         <!-- Account Actions -->
         <div class="actions">
@@ -79,17 +111,40 @@
 </div>
 
         <script>
-    const dropdownBtn = document.getElementById("userDropdownBtn");
-    const dropdown = document.getElementById("userDropdown");
-
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
-    });
+    (function(){
+      const dropdownBtn = document.getElementById("userDropdownBtn");
+      const dropdown = document.getElementById("userDropdown");
+      if (!dropdownBtn || !dropdown) return;
+      dropdownBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+      window.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
+      });
+    })();
+  </script>
+  <script>
+    // Tabs navigation: navigate to pages specified in data-target (includes id & status)
+    (function(){
+      const tabsContainer = document.querySelector('.tabs');
+      if (!tabsContainer) return;
+      const buttons = Array.from(tabsContainer.querySelectorAll('button'));
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function(e){
+          // If a data-target is present, navigate to it (full-page navigation)
+          const target = btn.getAttribute('data-target');
+          if (target) {
+            // keep normal navigation behavior for same-page Profile target
+            try { window.location.href = target; } catch (err) { console.error('Navigation failed', err); }
+            return;
+          }
+          // Otherwise, toggle active state for client-side-only tabs
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    })();
   </script>
 
 </body>

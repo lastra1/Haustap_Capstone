@@ -11,19 +11,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    // Simple static credentials (adjust to use your backend later)
+  // Prefer persistent admin credentials stored in storage/data/admins.json
+  $dataDir = __DIR__ . '/../../storage/data';
+  $adminsFile = $dataDir . '/admins.json';
+  $authenticated = false;
+
+  if (is_file($adminsFile)) {
+    $contents = @file_get_contents($adminsFile);
+    $decoded = json_decode($contents, true);
+    if (is_array($decoded)) {
+      foreach ($decoded as $a) {
+        if (isset($a['email']) && $a['email'] === $email && isset($a['password'])) {
+          if (password_verify($password, $a['password'])) {
+            $authenticated = true;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // Fallback to development static credentials for first-time access
+  if (!$authenticated) {
     $allowedEmail = 'admin@haustap.local';
     $allowedPassword = 'Admin123!';
+    if ($email === $allowedEmail && $password === $allowedPassword) $authenticated = true;
+  }
 
-    if ($email === $allowedEmail && $password === $allowedPassword) {
-        $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_email'] = $email;
-        $_SESSION['admin_name'] = 'Admin';
-        header('Location: dashboard.php');
-        exit;
-    } else {
-        $error = 'Invalid email or password.';
-    }
+  if ($authenticated) {
+    $_SESSION['admin_logged_in'] = true;
+    $_SESSION['admin_email'] = $email;
+    $_SESSION['admin_name'] = 'Admin';
+    header('Location: dashboard.php');
+    exit;
+  } else {
+    $error = 'Invalid email or password.';
+  }
 }
 ?>
 <!DOCTYPE html>

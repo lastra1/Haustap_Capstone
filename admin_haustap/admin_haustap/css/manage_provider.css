@@ -197,6 +197,17 @@ body {
   z-index: 100;
 }
 
+/* Rating star styles (kept outside dropdown rule to avoid CSS parsing issues) */
+.rating-filter .star {
+  display: inline-block;
+  font-size: 20px;
+  color: #ddd;
+  margin-right: 6px;
+  line-height: 1;
+}
+.rating-filter .star.selected { color: #f59e0b; }
+.rating-filter .star:focus { outline: 2px solid #86d0d8; outline-offset: 2px; }
+
 .dropdown-content.show {
   display: block;
 }

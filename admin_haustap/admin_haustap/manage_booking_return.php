@@ -23,10 +23,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -48,12 +48,13 @@
   <input type="text" placeholder="Search">
 
   <div class="filter-dropdown">
-<button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter ▼</button>
+<button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</button>
     <div class="dropdown-content">
             <p class="filter-title">Filter by Status</p>
-            <label><input type="checkbox"> Approved</label>
-            <label><input type="checkbox"> Pending</label>
-            <label><input type="checkbox"> Declined</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" value="pending" checked> Approved</label>
+              <label><input type="checkbox" value="ongoing" checked> Pending</label>
+              <label><input type="checkbox" value="complete" checked> Declined</label>
             <button class="apply-btn">Apply</button>
           </div>
         </div>
@@ -125,6 +126,52 @@
     window.addEventListener("click", (e) => {
       if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
     });
+    
+    // Date filter: show rows within selected date range (use dataset flags so it composes with other filters)
+    (function(){
+      const fromInput = document.getElementById('from-date');
+      const toInput = document.getElementById('to-date');
+      const applyBtn = document.querySelector('.apply-btn');
+
+      function parseRowDate(text){
+        if (!text) return null;
+        const m = text.match(/(\d{4})\s*-\s*(\d{2})\s*-\s*(\d{2})/);
+        if (!m) return null;
+        const iso = `${m[1]}-${m[2]}-${m[3]}`;
+        const d = new Date(iso);
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      function updateRowVisibility(){
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          const fHidden = row.dataset.filterHidden === 'true';
+          const sHidden = row.dataset.searchHidden === 'true';
+          row.style.display = (fHidden || sHidden) ? 'none' : '';
+        });
+      }
+
+      function applyDateFilter(){
+        const fromVal = fromInput ? fromInput.value : '';
+        const toVal = toInput ? toInput.value : '';
+        const fromDate = fromVal ? new Date(fromVal) : null;
+        const toDateRaw = toVal ? new Date(toVal) : null;
+        const toDate = toDateRaw ? new Date(toDateRaw.setHours(23,59,59,999)) : null;
+
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          const dateCell = row.querySelector('td:nth-child(5)');
+          const rowDate = parseRowDate(dateCell ? dateCell.textContent.trim() : '');
+          if (!rowDate) { row.dataset.filterHidden = ''; return; }
+          const within = (!fromDate || rowDate >= fromDate) && (!toDate || rowDate <= toDate);
+          row.dataset.filterHidden = within ? '' : 'true';
+        });
+        updateRowVisibility();
+      }
+
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyDateFilter(); if (dropdownContent) dropdownContent.classList.remove('show'); });
+      updateRowVisibility();
+    })();
   </script>
 </body>
 </html>

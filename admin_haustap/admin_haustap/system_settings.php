@@ -1,4 +1,4 @@
-<?php
+<?php require_once __DIR__ . '/includes/auth.php';
   // Load saved settings (file-based dev storage)
   // Prefer absolute base path to avoid issues under different routers
   if (defined('BASE_PATH')) {
@@ -43,10 +43,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+           <a href="admin_profile.php">View Profile</a>
+           <a href="change_password.php">Change Password</a>
+           <a href="activity_logs.php">Activity Logs</a>
+           <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -65,7 +65,16 @@
 
           <div class="form-group">
             <label>System Logo:</label>
-<button class="upload-btn"><i class="fa-solid fa-upload"></i></button>
+            <div class="logo-upload">
+              <div class="logo-preview" id="logoPreview">
+                <span class="placeholder-text">No logo</span>
+              </div>
+              <div class="logo-actions">
+                <input type="file" id="systemLogoInput" accept="image/*" style="display:none">
+                <button type="button" class="upload-btn" id="uploadBtn"><i class="fa-solid fa-upload"></i> Upload</button>
+                <button type="button" class="remove-btn" id="removeLogoBtn"><i class="fa-solid fa-trash"></i> Remove</button>
+              </div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -269,6 +278,45 @@
         showToast("Incorrect password!", "error");
       }
     });
+
+    // Logo upload behavior: preview + remove
+    (function(){
+      const input = document.getElementById('systemLogoInput');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const removeBtn = document.getElementById('removeLogoBtn');
+      const preview = document.getElementById('logoPreview');
+
+      function setPreview(src){
+        preview.innerHTML = '';
+        if (!src) {
+          const span = document.createElement('span');
+          span.className = 'placeholder-text';
+          span.textContent = 'No logo';
+          preview.appendChild(span);
+          return;
+        }
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'System logo';
+        preview.appendChild(img);
+      }
+
+      uploadBtn && uploadBtn.addEventListener('click', (e)=>{ e.preventDefault(); input && input.click(); });
+      removeBtn && removeBtn.addEventListener('click', (e)=>{ e.preventDefault(); setPreview(null); input && (input.value=''); });
+
+      if (input) {
+        input.addEventListener('change', (e)=>{
+          const f = e.target.files && e.target.files[0];
+          if (!f) return setPreview(null);
+          if (!f.type.startsWith('image/')) return showToast('Please select an image file', 'error');
+          const url = URL.createObjectURL(f);
+          setPreview(url);
+        });
+      }
+
+      // init: no logo
+      setPreview(null);
+    })();
   </script>
 </body>
 </html>

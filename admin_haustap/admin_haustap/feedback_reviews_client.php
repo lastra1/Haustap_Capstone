@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/includes/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,10 +23,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -33,8 +34,8 @@
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab">Service Provider</button>
-        <button class="tab active">Client</button>
+        <button class="tab" data-target="feedback_reviews.php">Service Provider</button>
+        <button class="tab active" data-target="feedback_reviews_client.php">Client</button>
       </div>
 
       <!-- Search and Filter -->
@@ -151,53 +152,120 @@
   </div>
 
   <script>
-    // === USER DROPDOWN ===
-    const dropdownBtn = document.getElementById("userDropdownBtn");
-    const dropdown = document.getElementById("userDropdown");
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
-    });
-
-    // === FILTER DROPDOWN ===
-    const filterBtn = document.querySelector('.filter-btn');
-    const dropdownContent = document.querySelector('.dropdown-content');
-    filterBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownContent.classList.toggle('show');
-      filterBtn.innerHTML = dropdownContent.classList.contains('show')
-        ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
-        : '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
-    window.addEventListener('click', () => {
-      dropdownContent.classList.remove('show');
-filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
-
-    // === FEEDBACK MODAL ===
-    const modal = document.getElementById("feedbackModal");
-    const closeBtn = document.querySelector(".close-btn");
-    const openPopupButtons = document.querySelectorAll(".open-popup");
-
-    openPopupButtons.forEach(button => {
-      button.addEventListener("click", (e) => {
-        e.stopPropagation();
-        modal.style.display = "flex";
-      });
-    });
-
-    closeBtn.addEventListener("click", () => {
-      modal.style.display = "none";
-    });
-
-    window.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        modal.style.display = "none";
+    // === USER DROPDOWN (defensive) ===
+    (function(){
+      const dropdownBtn = document.getElementById("userDropdownBtn");
+      const dropdown = document.getElementById("userDropdown");
+      if (dropdownBtn && dropdown) {
+        dropdownBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle("show");
+        });
+        window.addEventListener("click", (e) => {
+          if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
+        });
       }
-    });
+    })();
+
+    // Tabs: navigate between client and provider feedback pages (robust by data-target)
+    (function(){
+      const tabs = document.querySelectorAll('.tabs .tab[data-target]');
+      if (!tabs || tabs.length === 0) return;
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          try {
+            e.stopPropagation();
+            const dst = tab.getAttribute('data-target');
+            if (!dst) return;
+            console.debug('Feedback tab clicked, navigating to', dst);
+            window.location.assign(dst);
+          } catch (err) { console.error('Tab navigation failed', err); }
+        });
+      });
+    })();
+
+    // === FILTER DROPDOWN (defensive) ===
+    (function(){
+      const filterBtn = document.querySelector('.filter-btn');
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!filterBtn || !dropdownContent) return;
+      filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.classList.toggle('show');
+        filterBtn.innerHTML = dropdownContent.classList.contains('show')
+          ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
+          : '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      });
+      window.addEventListener('click', () => {
+        dropdownContent.classList.remove('show');
+        filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      });
+    })();
+
+    // === SEARCH (debounced + immediate) ===
+    (function(){
+      const input = document.querySelector('.search-filter input[type="text"]');
+      if (!input) return;
+      const searchBtn = document.querySelector('.search-filter .search-btn');
+      const rows = Array.from(document.querySelectorAll('.reviews-table tbody tr'));
+      const norm = s => (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase();
+      let timer = null;
+
+      // expose a simple composer so other filters can call it later
+      window.updateReviewsRowVisibility = function(row){
+        try {
+          const searchHidden = row.dataset.searchHidden === 'true';
+          row.style.display = searchHidden ? 'none' : '';
+        } catch (err) { row.style.display = ''; }
+      };
+
+      function applySearch(q){
+        const text = norm(q);
+        rows.forEach(row => {
+          const id = norm(row.querySelector('td:nth-child(1)')?.textContent);
+          const provider = norm(row.querySelector('td:nth-child(2)')?.textContent);
+          const service = norm(row.querySelector('td:nth-child(3)')?.textContent);
+          const matches = !text || id.indexOf(text) !== -1 || provider.indexOf(text) !== -1 || service.indexOf(text) !== -1;
+          row.dataset.searchHidden = matches ? '' : 'true';
+          window.updateReviewsRowVisibility(row);
+        });
+      }
+
+      input.addEventListener('input', (e) => { clearTimeout(timer); timer = setTimeout(() => applySearch(e.target.value), 180); });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape'){ input.value = ''; applySearch(''); }
+        if (e.key === 'Enter'){ e.preventDefault(); clearTimeout(timer); applySearch(input.value); }
+      });
+      if (searchBtn) searchBtn.addEventListener('click', (ev) => { ev.preventDefault(); clearTimeout(timer); applySearch(input.value); });
+
+      // initialize
+      applySearch(input.value || '');
+    })();
+
+    // === FEEDBACK MODAL (defensive) ===
+    (function(){
+      const modal = document.getElementById("feedbackModal");
+      const closeBtn = document.querySelector(".close-btn");
+      const openPopupButtons = document.querySelectorAll(".open-popup");
+      if (modal && closeBtn && openPopupButtons && openPopupButtons.length) {
+        openPopupButtons.forEach(button => {
+          button.addEventListener("click", (e) => {
+            e.stopPropagation();
+            modal.style.display = "flex";
+          });
+        });
+
+        closeBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+        });
+
+        window.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            modal.style.display = "none";
+          }
+        });
+      }
+    })();
   </script>
 </body>
 </html>

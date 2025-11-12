@@ -22,10 +22,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -41,13 +41,12 @@
       </div>
 
       <!-- Search and Filter -->
-<div class="search-filter">
-  <input type="text" placeholder="Search">
+      <div class="search-filter">
+        <input id="bookingSearch" type="text" placeholder="Search">
 
   <div class="filter-dropdown">
-<button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter ▼</button>
+<button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</button>
     <div class="dropdown-content">
-      
       <!-- Filter by Date -->
       <div class="filter-date">
         <p class="filter-title">Filter by Date</p>
@@ -63,8 +62,8 @@
 
       <button class="apply-btn">Apply</button>
     </div>
-  </div>
-</div>
+        </div>
+      </div>
 
       <!-- Table -->
       <div class="table-container">
@@ -124,60 +123,103 @@
       if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
     });
 
-    // Filter Dropdown
+    // Filter Dropdown (robust selection + debug)
     const filterBtn = document.querySelector('.filter-btn');
-    const dropdownContent = document.querySelector('.dropdown-content');
+    let dropdownContent = null;
+    if (filterBtn) dropdownContent = filterBtn.parentElement && filterBtn.parentElement.querySelector('.dropdown-content') || document.querySelector('.dropdown-content');
 
-    filterBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownContent.classList.toggle('show');
-      filterBtn.innerHTML = dropdownContent.classList.contains('show')
-        ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
-        : '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
+    if (!filterBtn || !dropdownContent) {
+      console.debug('Filter UI not found', { filterBtn, dropdownContent });
+    } else {
+      filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.classList.toggle('show');
+        const expanded = dropdownContent.classList.contains('show');
+        filterBtn.innerHTML = expanded
+          ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
+          : '<i class="fa-solid fa-sliders"></i> Filter ▼';
+        filterBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        console.debug('filter toggled', { expanded });
+      });
 
-    window.addEventListener('click', () => {
-      dropdownContent.classList.remove('show');
-filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
+      window.addEventListener('click', (e) => {
+        if (!dropdownContent.contains(e.target) && !filterBtn.contains(e.target)) {
+          dropdownContent.classList.remove('show');
+          filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
+          filterBtn.setAttribute('aria-expanded','false');
+        }
+      });
+    }
 
-    // Date filter: show rows within selected date range
+    // Date filter: show rows within selected date range (use dataset flags so it composes with other filters)
     (function(){
       const fromInput = document.getElementById('from-date');
       const toInput = document.getElementById('to-date');
-      const applyBtn = document.querySelector('.apply-btn');
+      // scope apply button to the dropdown content if possible
+      const applyBtn = (typeof dropdownContent !== 'undefined' && dropdownContent) ? dropdownContent.querySelector('.apply-btn') : document.querySelector('.apply-btn');
 
       function parseRowDate(text){
         if (!text) return null;
-        const m = text.match(/(\d{4})\s*-\s*(\d{2})\s*-\s*(\d{2})/);
-        if (!m) return null;
-        const iso = `${m[1]}-${m[2]}-${m[3]}`;
-        const d = new Date(iso);
-        return isNaN(d.getTime()) ? null : d;
+        // Try extracting YYYY-MM-DD and optional time (accepts separators like - or / and optional time HH:MM)
+        const m = text.match(/(\d{4})\D(\d{2})\D(\d{2})(?:[^\d]*(\d{2}):?(\d{2}))?/);
+        if (m) {
+          const y = m[1], mo = m[2], d = m[3];
+          const hh = m[4] || '00', mm = m[5] || '00';
+          const iso = `${y}-${mo}-${d}T${hh}:${mm}:00`;
+          const dt = new Date(iso);
+          if (!isNaN(dt.getTime())) return dt;
+        }
+        // Fallback to Date.parse for other formats
+        const p = Date.parse(text);
+        if (!isNaN(p)) return new Date(p);
+        return null;
+      }
+
+      function updateRowVisibility(){
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          const fHidden = row.dataset.filterHidden === 'true';
+          const sHidden = row.dataset.searchHidden === 'true';
+          const tabHidden = row.dataset.tabHidden === 'true';
+          const statusHidden = row.dataset.statusHidden === 'true';
+          row.style.display = (fHidden || sHidden || tabHidden || statusHidden) ? 'none' : '';
+        });
       }
 
       function applyDateFilter(){
         const fromVal = fromInput ? fromInput.value : '';
         const toVal = toInput ? toInput.value : '';
         const fromDate = fromVal ? new Date(fromVal) : null;
-        const toDate = toVal ? new Date(toVal) : null;
+        const toDateRaw = toVal ? new Date(toVal) : null;
+        const toDate = toDateRaw ? new Date(toDateRaw.setHours(23,59,59,999)) : null;
 
         const rows = document.querySelectorAll('.table-container tbody tr');
+        let matched = 0;
         rows.forEach(row => {
           const dateCell = row.querySelector('td:nth-child(5)');
           const rowDate = parseRowDate(dateCell ? dateCell.textContent.trim() : '');
-          if (!rowDate) {
-            row.style.display = '';
-            return;
-          }
+          if (!rowDate) { row.dataset.filterHidden = ''; return; }
           const within = (!fromDate || rowDate >= fromDate) && (!toDate || rowDate <= toDate);
-          row.style.display = within ? '' : 'none';
+          row.dataset.filterHidden = within ? '' : 'true';
+          if (within) matched++;
         });
+        updateRowVisibility();
+        console.debug('applyDateFilter', { fromVal, toVal, matched, total: rows.length });
       }
 
+      // Apply on Apply click (scoped) and on input change for immediate feedback
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { 
+        e.preventDefault();
+        applyDateFilter();
+        if (dropdownContent) dropdownContent.classList.remove('show');
+        if (filterBtn) { filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼'; filterBtn.setAttribute('aria-expanded','false'); }
+        console.debug('apply clicked', { from: fromInput ? fromInput.value : null, to: toInput ? toInput.value : null });
+      });
       if (fromInput) fromInput.addEventListener('change', applyDateFilter);
       if (toInput) toInput.addEventListener('change', applyDateFilter);
-      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyDateFilter(); });
+
+      // Initialize visibility
+      updateRowVisibility();
     })();
   </script>
 </body>

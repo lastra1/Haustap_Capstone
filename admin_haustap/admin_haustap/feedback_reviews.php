@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/includes/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,10 +22,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -32,8 +33,8 @@
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab active">Service Provider</button>
-        <button class="tab">Client</button>
+        <button class="tab active" data-target="feedback_reviews.php">Service Provider</button>
+        <button class="tab" data-target="feedback_reviews_client.php">Client</button>
       </div>
 
       <!-- Search and Filter -->
@@ -150,43 +151,148 @@
   </div>
 
   <script>
-    // === USER DROPDOWN ===
+    // === USER DROPDOWN (defensive) ===
     const dropdownBtn = document.getElementById("userDropdownBtn");
     const dropdown = document.getElementById("userDropdown");
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
-    });
+    if (dropdownBtn && dropdown) {
+      dropdownBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+      window.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
+      });
+    }
 
-    // === FILTER DROPDOWN ===
+    // === FILTER DROPDOWN (defensive) ===
     const filterBtn = document.querySelector('.filter-btn');
     const dropdownContent = document.querySelector('.dropdown-content');
-    filterBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownContent.classList.toggle('show');
-      filterBtn.innerHTML = dropdownContent.classList.contains('show')
-        ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
-        : '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
-    window.addEventListener('click', () => {
-      dropdownContent.classList.remove('show');
-filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
-
-    // === FEEDBACK MODAL ===
-    const modal = document.getElementById("feedbackModal");
-    const closeBtn = document.querySelector(".close-btn");
-    const openPopupButtons = document.querySelectorAll(".open-popup");
-
-    openPopupButtons.forEach(button => {
-      button.addEventListener("click", (e) => {
+    if (filterBtn && dropdownContent) {
+      filterBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        modal.style.display = "flex";
+        dropdownContent.classList.toggle('show');
+        filterBtn.innerHTML = dropdownContent.classList.contains('show')
+          ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
+          : '<i class="fa-solid fa-sliders"></i> Filter ▼';
       });
-    });
+      window.addEventListener('click', () => {
+        dropdownContent.classList.remove('show');
+        filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      });
+    }
+
+    // === SEARCH (debounced + immediate) ===
+    (function(){
+      const input = document.querySelector('.search-filter input[type="text"]');
+      if (!input) return;
+      const searchBtn = document.querySelector('.search-filter .search-btn');
+      const rows = Array.from(document.querySelectorAll('.reviews-table tbody tr'));
+      const norm = s => (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase();
+      let timer = null;
+
+      // expose a simple composer so other filters can call it later
+      window.updateReviewsRowVisibility = function(row){
+        try {
+          const searchHidden = row.dataset.searchHidden === 'true';
+          row.style.display = searchHidden ? 'none' : '';
+        } catch (err) { row.style.display = ''; }
+      };
+
+      function applySearch(q){
+        const text = norm(q);
+        rows.forEach(row => {
+          const provider = norm(row.querySelector('td:nth-child(2)')?.textContent);
+          const service = norm(row.querySelector('td:nth-child(3)')?.textContent);
+          const matches = !text || provider.indexOf(text) !== -1 || service.indexOf(text) !== -1;
+          row.dataset.searchHidden = matches ? '' : 'true';
+          window.updateReviewsRowVisibility(row);
+        });
+      }
+
+      input.addEventListener('input', (e) => { clearTimeout(timer); timer = setTimeout(() => applySearch(e.target.value), 180); });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape'){ input.value = ''; applySearch(''); }
+        if (e.key === 'Enter'){ e.preventDefault(); clearTimeout(timer); applySearch(input.value); }
+      });
+      if (searchBtn) searchBtn.addEventListener('click', (ev) => { ev.preventDefault(); clearTimeout(timer); applySearch(input.value); });
+
+      // initialize
+      applySearch(input.value || '');
+    })();
+
+  // === FEEDBACK MODAL (defensive) ===
+  const modal = document.getElementById("feedbackModal");
+  const closeBtn = document.querySelector(".close-btn");
+  const openPopupButtons = document.querySelectorAll(".open-popup");
+  const markBtn = document.querySelector('.btn.green');
+  const warnBtn = document.querySelector('.btn.red');
+
+    // Track which table row opened the modal so actions can update it
+    let currentRow = null;
+
+    if (openPopupButtons && openPopupButtons.length && modal) {
+      openPopupButtons.forEach(button => {
+        button.addEventListener("click", (e) => {
+          e.stopPropagation();
+          // Find the closest row for this button and store it
+          currentRow = button.closest('tr');
+          // Optionally populate modal details from the row (id, provider, service, rating, date)
+          try {
+            const cols = currentRow.querySelectorAll('td');
+            const clientEl = document.querySelector('#feedbackModal .modal-content p strong');
+            // (Keeping the modal static for now; could update content here.)
+          } catch (err) {
+            // ignore if DOM shape isn't as expected
+          }
+          modal.style.display = "flex";
+        });
+      });
+    }
+
+    // Mark as reviewed: update the row's status badge client-side and close modal
+    if (markBtn) {
+      markBtn.addEventListener('click', () => {
+        if (currentRow) {
+          const statusSpan = currentRow.querySelector('.status');
+          if (statusSpan) {
+            statusSpan.textContent = 'Reviewed';
+            statusSpan.classList.remove('pending', 'mark');
+            statusSpan.classList.add('reviewed');
+          }
+        }
+        if (modal) modal.style.display = 'none';
+      });
+    }
+
+    // Send warning: simple prompt for now (no server call) and close modal
+    if (warnBtn) {
+      warnBtn.addEventListener('click', () => {
+        const msg = prompt('Enter warning message to send to client:');
+        if (msg && currentRow) {
+          // TODO: wire to a server endpoint to persist/send the warning.
+          console.log('Warning message (not sent):', msg);
+          alert('Warning queued (demo).');
+        }
+        if (modal) modal.style.display = 'none';
+      });
+    }
+
+    // Tabs: navigate between provider and client feedback pages (robust by data-target)
+    (function(){
+      const tabs = document.querySelectorAll('.tabs .tab[data-target]');
+      if (!tabs || tabs.length === 0) return;
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          try {
+            e.stopPropagation();
+            const dst = tab.getAttribute('data-target');
+            if (!dst) return;
+            console.debug('Feedback tab clicked, navigating to', dst);
+            window.location.assign(dst);
+          } catch (err) { console.error('Tab navigation failed', err); }
+        });
+      });
+    })();
 
     closeBtn.addEventListener("click", () => {
       modal.style.display = "none";

@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/includes/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +24,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -34,7 +35,7 @@
 
       <!-- Search and Filter -->
       <div class="search-filter">
-        <input type="text" placeholder="Search Services">
+        <input type="text" placeholder="Search Provider">
         <div class="filter-dropdown">
 <div class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</div>
           <div class="dropdown-content">
@@ -200,37 +201,45 @@
   <script>
     const dropdownBtn = document.getElementById("userDropdownBtn");
     const dropdown = document.getElementById("userDropdown");
-
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target) && e.target !== dropdownBtn) {
-        dropdown.classList.remove("show");
-      }
-    });
-
-    // Filter dropdown toggle
-    (function(){
-      const filterBtn = document.querySelector('.filter-btn');
-      const dropdownContent = document.querySelector('.dropdown-content');
-      if (!filterBtn || !dropdownContent) return;
-      filterBtn.addEventListener('click', (e) => {
+    if (dropdownBtn && dropdown) {
+      dropdownBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        dropdownContent.classList.toggle('show');
+        dropdown.classList.toggle("show");
       });
-      window.addEventListener('click', (e) => {
-        if (!dropdownContent.contains(e.target) && !filterBtn.contains(e.target)) {
-          dropdownContent.classList.remove('show');
+      window.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target) && e.target !== dropdownBtn) {
+          dropdown.classList.remove("show");
         }
       });
+    }
+
+    // Filter dropdown toggle (scoped + accessible)
+    (function(){
+      const filterBtn = document.querySelector('.filter-btn');
+      if (!filterBtn) return;
+      // ensure role/button and keyboard focus
+      filterBtn.setAttribute('role','button');
+      filterBtn.setAttribute('tabindex','0');
+      // find dropdown content scoped to this filter button
+      const dropdownContent = filterBtn.parentElement && filterBtn.parentElement.querySelector('.dropdown-content') || document.querySelector('.dropdown-content');
+      if (!dropdownContent) return;
+      // initialise aria state
+      filterBtn.setAttribute('aria-expanded','false');
+      function closeDropdown(){ dropdownContent.classList.remove('show'); filterBtn.setAttribute('aria-expanded','false'); filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼'; }
+      function openDropdown(){ dropdownContent.classList.add('show'); filterBtn.setAttribute('aria-expanded','true'); filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▲'; }
+
+      filterBtn.addEventListener('click', (e) => { e.stopPropagation(); dropdownContent.classList.toggle('show'); const expanded = dropdownContent.classList.contains('show'); filterBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false'); filterBtn.innerHTML = expanded ? '<i class="fa-solid fa-sliders"></i> Filter ▲' : '<i class="fa-solid fa-sliders"></i> Filter ▼'; });
+
+      // keyboard support (Enter/Space)
+      filterBtn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); filterBtn.click(); } });
+
+      window.addEventListener('click', (e) => { if (!dropdownContent.contains(e.target) && !filterBtn.contains(e.target)) { closeDropdown(); } });
     })();
 
-    // Status filter: single-select, immediate apply
+    // Status filter: apply via Apply button (supports multi-select)
     (function(){
-      const dropdownContent = document.querySelector('.dropdown-content');
+      const filterBtn = document.querySelector('.filter-btn');
+      const dropdownContent = filterBtn && (filterBtn.parentElement && filterBtn.parentElement.querySelector('.dropdown-content')) || document.querySelector('.dropdown-content');
       if (!dropdownContent) return;
       const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]');
       const applyBtn = dropdownContent.querySelector('.apply-btn');
@@ -247,21 +256,79 @@
       function applyFilter(){
         const selected = new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
         const rows = document.querySelectorAll('.subscription-table tbody tr');
+        let matched = 0;
         rows.forEach(row => {
           const badge = row.querySelector('.status');
           const s = rowStatus(badge);
-          row.style.display = (selected.size === 0 || selected.has(s)) ? '' : 'none';
+            const show = (selected.size === 0 || selected.has(s));
+            row.dataset.statusHidden = show ? '' : 'true';
+            if (show) matched++;
+        });
+        console.debug('subscription applyFilter', { selected: Array.from(selected), matched, total: rows.length });
+        // after applying, disable apply until next change
+        if (applyBtn) applyBtn.disabled = true;
+      }
+
+      // Track changes and enable Apply (do not auto-apply)
+      checkboxes.forEach(cb => cb.addEventListener('change', () => {
+        if (applyBtn) applyBtn.disabled = false;
+      }));
+
+      if (applyBtn) {
+        applyBtn.addEventListener('click', (e) => { 
+          e.preventDefault();
+          applyFilter();
+          // close dropdown and reset aria/label
+          if (dropdownContent) dropdownContent.classList.remove('show');
+          if (filterBtn) { filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼'; filterBtn.setAttribute('aria-expanded','false'); }
         });
       }
 
-      // Single-select behavior and immediate filter
-      checkboxes.forEach(cb => cb.addEventListener('change', () => {
-        if (!cb.checked) cb.checked = true;
-        checkboxes.forEach(other => { if (other !== cb) other.checked = false; });
-        applyFilter();
-      }));
+      // initialize: disable apply button until user changes selection
+      if (applyBtn) applyBtn.disabled = true;
+      // run initial filter based on default checked boxes
+      applyFilter();
+      // helper: compose status + search visibility
+      // expose visibility composer globally so other modules (search) can call it
+      window.updateSubscriptionRowVisibility = function(row){
+        try {
+          const statusHidden = row.dataset.statusHidden === 'true';
+          const searchHidden = row.dataset.searchHidden === 'true';
+          row.style.display = (statusHidden || searchHidden) ? 'none' : '';
+        } catch (err) { row.style.display = ''; }
+      }
+      // initialize visibility for all rows
+      document.querySelectorAll('.subscription-table tbody tr').forEach(r => updateSubscriptionRowVisibility(r));
+    })();
 
-      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyFilter(); });
+    // Search: filter by provider name (first column). Debounced.
+    (function(){
+      const input = document.querySelector('.search-filter input[type="text"]');
+      if (!input) return;
+      const rows = Array.from(document.querySelectorAll('.subscription-table tbody tr'));
+      const norm = s => (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase();
+      let timer = null;
+      function applySearch(q){
+        const text = norm(q);
+        rows.forEach(row => {
+          const provider = norm(row.querySelector('td:first-child')?.textContent);
+          const matches = !text || provider.indexOf(text) !== -1;
+          row.dataset.searchHidden = matches ? '' : 'true';
+          updateSubscriptionRowVisibility(row);
+        });
+      }
+      input.addEventListener('input', (e) => { clearTimeout(timer); timer = setTimeout(() => applySearch(e.target.value), 180); });
+      input.addEventListener('keydown', (e) => { 
+        if (e.key === 'Escape'){ input.value = ''; applySearch(''); }
+        if (e.key === 'Enter') { // immediate apply on Enter
+          e.preventDefault(); clearTimeout(timer); applySearch(input.value);
+        }
+      });
+      // wire search button (immediate apply)
+      const searchBtn = document.querySelector('.search-filter .search-btn');
+      if (searchBtn) searchBtn.addEventListener('click', (ev) => { ev.preventDefault(); clearTimeout(timer); applySearch(input.value); });
+      // init
+      applySearch(input.value || '');
     })();
 
     // Modals

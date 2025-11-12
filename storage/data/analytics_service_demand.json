@@ -1,0 +1,9 @@
+{
+  "services": [
+    { "name": "Cleaning", "count": 320, "trend": "+8%" },
+    { "name": "Plumbing", "count": 180, "trend": "+2%" },
+    { "name": "Beauty", "count": 140, "trend": "-1%" },
+    { "name": "Wellness", "count": 95, "trend": "+5%" },
+    { "name": "Tech Support", "count": 120, "trend": "+12%" }
+  ]
+}
