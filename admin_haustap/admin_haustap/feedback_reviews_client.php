@@ -247,21 +247,77 @@
       const modal = document.getElementById("feedbackModal");
       const closeBtn = document.querySelector(".close-btn");
       const openPopupButtons = document.querySelectorAll(".open-popup");
+<<<<<<< Updated upstream
+=======
+      const markReviewedBtn = document.querySelector(".modal-actions .btn.green");
+      const sendWarningBtn = document.querySelector(".modal-actions .btn.red");
+      let currentRow = null; // Track which row is being viewed
+      
+>>>>>>> Stashed changes
       if (modal && closeBtn && openPopupButtons && openPopupButtons.length) {
         openPopupButtons.forEach(button => {
           button.addEventListener("click", (e) => {
             e.stopPropagation();
+<<<<<<< Updated upstream
+=======
+            // Store reference to the clicked row
+            currentRow = button.closest('tr');
+>>>>>>> Stashed changes
             modal.style.display = "flex";
           });
         });
 
         closeBtn.addEventListener("click", () => {
           modal.style.display = "none";
+<<<<<<< Updated upstream
+=======
+          currentRow = null;
+>>>>>>> Stashed changes
         });
 
         window.addEventListener("click", (e) => {
           if (e.target === modal) {
             modal.style.display = "none";
+<<<<<<< Updated upstream
+=======
+            currentRow = null;
+          }
+        });
+      }
+
+      // Mark as Reviewed button
+      if (markReviewedBtn) {
+        markReviewedBtn.addEventListener("click", () => {
+          if (confirm("Mark this feedback as reviewed?")) {
+            const clientName = document.querySelector(".modal-content p:nth-child(3)")?.textContent?.replace("Client: ", "").trim();
+            
+            // Update the status in the table row
+            if (currentRow) {
+              const statusCell = currentRow.querySelector('.status');
+              if (statusCell) {
+                statusCell.textContent = 'Reviewed';
+                statusCell.className = 'status reviewed';
+              }
+            }
+            
+            alert(`Feedback from ${clientName} has been marked as reviewed.`);
+            modal.style.display = "none";
+            currentRow = null;
+            // Here you could add API call to update the backend
+          }
+        });
+      }
+
+      // Send Warning button
+      if (sendWarningBtn) {
+        sendWarningBtn.addEventListener("click", () => {
+          if (confirm("Send warning to this client?")) {
+            const clientName = document.querySelector(".modal-content p:nth-child(3)")?.textContent?.replace("Client: ", "").trim();
+            alert(`Warning sent to ${clientName}.`);
+            modal.style.display = "none";
+            currentRow = null;
+            // Here you could add API call to send the warning
+>>>>>>> Stashed changes
           }
         });
       }

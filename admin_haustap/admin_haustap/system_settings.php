@@ -197,18 +197,21 @@
     const cancelPopup = document.getElementById("cancelPopup");
     const verifyPopup = document.getElementById("verifyPopup");
     const saveButtons = document.querySelectorAll(".save-btn");
+    let isVerified = false;
 
-    // Show popup when Save is clicked
-    saveButtons.forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        popup.style.display = "flex";
-      });
+    // Show popup on page load (when entering system settings)
+    window.addEventListener('DOMContentLoaded', () => {
+      popup.style.display = "flex";
     });
 
-    // Close popup
+    // Close popup and prevent access
     cancelPopup.addEventListener("click", () => {
-      popup.style.display = "none";
+      // If not verified, redirect back
+      if (!isVerified) {
+        window.location.href = 'dashboard.php';
+      } else {
+        popup.style.display = "none";
+      }
     });
 
     // Toast helper (HausTap themed)
@@ -267,18 +270,42 @@
       showToast(lastError, 'error');
     }
 
-    // Verify password (development logic) then save
+    // Verify password (development logic) then allow access
     verifyPopup.addEventListener("click", () => {
       const password = document.getElementById("adminPassword").value;
       const allowedPassword = "Admin123!"; // dev credential used in login.php
       if (password.trim() === allowedPassword) {
+        isVerified = true;
         popup.style.display = "none";
-        saveSettings();
+        document.getElementById("adminPassword").value = '';
+        showToast('Access verified', 'success');
       } else {
         showToast("Incorrect password!", "error");
       }
     });
 
+<<<<<<< Updated upstream
+=======
+    // Save buttons now just save without showing popup
+    saveButtons.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (isVerified) {
+          saveSettings();
+        } else {
+          showToast('Please verify your password first', 'error');
+        }
+      });
+    });
+
+    // Allow Enter key in password field to verify
+    document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        verifyPopup.click();
+      }
+    });
+
+>>>>>>> Stashed changes
     // Logo upload behavior: preview + remove
     (function(){
       const input = document.getElementById('systemLogoInput');

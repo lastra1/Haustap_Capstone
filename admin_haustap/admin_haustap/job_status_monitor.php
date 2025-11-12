@@ -453,8 +453,85 @@
   </div>
 </div>
 
-
   <script>
+    // Update status card counts based on table data - call on page load
+    function initializeStatusCounts() {
+      const rows = document.querySelectorAll('.table-container tbody tr');
+      const counts = { pending: 0, ongoing: 0, completed: 0, cancelled: 0, return: 0 };
+      
+      rows.forEach(row => {
+        const statusBadge = row.querySelector('.status');
+        if (!statusBadge) return;
+        
+        const classList = statusBadge.classList;
+        if (classList.contains('pending')) counts.pending++;
+        else if (classList.contains('ongoing')) counts.ongoing++;
+        else if (classList.contains('completed')) counts.completed++;
+        else if (classList.contains('cancelled')) counts.cancelled++;
+        else if (classList.contains('return')) counts.return++;
+      });
+      
+      // Update the card numbers
+      const pendingCard = document.querySelector('.card.pending h3');
+      const ongoingCard = document.querySelector('.card.ongoing h3');
+      const completedCard = document.querySelector('.card.completed h3');
+      const cancelledCard = document.querySelector('.card.cancelled h3');
+      const returnCard = document.querySelector('.card.return h3');
+      
+      if (pendingCard) pendingCard.textContent = counts.pending;
+      if (ongoingCard) ongoingCard.textContent = counts.ongoing;
+      if (completedCard) completedCard.textContent = counts.completed;
+      if (cancelledCard) cancelledCard.textContent = counts.cancelled;
+      if (returnCard) returnCard.textContent = counts.return;
+    }
+    
+    // Initialize counts on page load
+    window.addEventListener('DOMContentLoaded', initializeStatusCounts);
+    
+    // Status card filter - connect summary cards to table filtering
+    (function(){
+      const statusCards = document.querySelectorAll('.status-cards .card');
+      let activeFilter = null; // Track which status filter is active
+      
+      statusCards.forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          const statusClass = Array.from(card.classList).find(cls => 
+            ['pending', 'ongoing', 'completed', 'cancelled', 'return'].includes(cls)
+          );
+          
+          if (!statusClass) return;
+          
+          // Toggle filter: if clicking same card, clear filter
+          if (activeFilter === statusClass) {
+            activeFilter = null;
+            card.classList.remove('active');
+            // Show all rows
+            document.querySelectorAll('.table-container tbody tr').forEach(row => {
+              row.style.display = '';
+            });
+          } else {
+            // Remove active state from previous card
+            document.querySelectorAll('.status-cards .card.active').forEach(c => {
+              c.classList.remove('active');
+            });
+            // Set new active filter
+            activeFilter = statusClass;
+            card.classList.add('active');
+            // Filter table rows to show only matching status
+            document.querySelectorAll('.table-container tbody tr').forEach(row => {
+              const statusBadge = row.querySelector('.status');
+              if (statusBadge && statusBadge.classList.contains(statusClass)) {
+                row.style.display = '';
+              } else {
+                row.style.display = 'none';
+              }
+            });
+          }
+        });
+      });
+    })();
+
     const dropdownBtn = document.getElementById("userDropdownBtn");
     const dropdown = document.getElementById("userDropdown");
 
@@ -562,7 +639,14 @@ function setBadgeStatus(badge, status, displayText) {
 if (approveCancelBtn) approveCancelBtn.addEventListener('click', () => {
   try {
     console.log('[job_status_monitor] approveCancelBtn clicked, currentBookingId=', currentBookingId);
+<<<<<<< Updated upstream
     if (!currentBookingId) return console.warn('No booking selected for approve cancellation');
+=======
+    if (!currentBookingId) {
+      alert('No booking selected for approve cancellation');
+      return;
+    }
+>>>>>>> Stashed changes
     if (!confirm(`Approve cancellation for booking #${currentBookingId}?`)) return;
     const row = document.querySelector(`tr[data-booking-id="${currentBookingId}"]`);
     if (!row) {
@@ -576,18 +660,35 @@ if (approveCancelBtn) approveCancelBtn.addEventListener('click', () => {
     if (badge) badge.classList.add('cancel-approved');
     row.classList.add('row-cancel-approved');
     if (cancelledPopup) cancelledPopup.classList.remove('show');
+<<<<<<< Updated upstream
     currentBookingId = null;
     updateStatusCards();
     console.log('[job_status_monitor] approve applied for booking', currentBookingId);
   } catch (err) {
     console.error('[job_status_monitor] error in approveCancelBtn handler', err);
+=======
+    alert(`Cancellation approved for booking #${currentBookingId}`);
+    currentBookingId = null;
+    updateStatusCards();
+    console.log('[job_status_monitor] approve cancellation applied for booking', currentBookingId);
+  } catch (err) {
+    console.error('[job_status_monitor] error in approveCancelBtn handler', err);
+    alert('Error approving cancellation: ' + err.message);
+>>>>>>> Stashed changes
   }
 });
 
 if (rejectCancelBtn) rejectCancelBtn.addEventListener('click', () => {
   try {
     console.log('[job_status_monitor] rejectCancelBtn clicked, currentBookingId=', currentBookingId);
+<<<<<<< Updated upstream
     if (!currentBookingId) return console.warn('No booking selected for reject cancellation');
+=======
+    if (!currentBookingId) {
+      alert('No booking selected for reject cancellation');
+      return;
+    }
+>>>>>>> Stashed changes
     if (!confirm(`Reject cancellation for booking #${currentBookingId}?`)) return;
     const row = document.querySelector(`tr[data-booking-id="${currentBookingId}"]`);
     if (!row) {
@@ -600,11 +701,21 @@ if (rejectCancelBtn) rejectCancelBtn.addEventListener('click', () => {
     setBadgeStatus(badge, 'ongoing', 'Ongoing');
     row.classList.remove('row-cancel-approved');
     if (cancelledPopup) cancelledPopup.classList.remove('show');
+<<<<<<< Updated upstream
     currentBookingId = null;
     updateStatusCards();
     console.log('[job_status_monitor] reject applied for booking', currentBookingId);
   } catch (err) {
     console.error('[job_status_monitor] error in rejectCancelBtn handler', err);
+=======
+    alert(`Cancellation rejected for booking #${currentBookingId}`);
+    currentBookingId = null;
+    updateStatusCards();
+    console.log('[job_status_monitor] reject cancellation applied for booking', currentBookingId);
+  } catch (err) {
+    console.error('[job_status_monitor] error in rejectCancelBtn handler', err);
+    alert('Error rejecting cancellation: ' + err.message);
+>>>>>>> Stashed changes
   }
 });
 
@@ -639,7 +750,14 @@ const rejectReturnBtn = returnPopup ? returnPopup.querySelector('.reject-btn') :
 if (approveReturnBtn) approveReturnBtn.addEventListener('click', () => {
   try {
     console.log('[job_status_monitor] approveReturnBtn clicked, currentBookingId=', currentBookingId);
+<<<<<<< Updated upstream
     if (!currentBookingId) return console.warn('No booking selected for approve return');
+=======
+    if (!currentBookingId) {
+      alert('No booking selected for approve return');
+      return;
+    }
+>>>>>>> Stashed changes
     if (!confirm(`Approve return for booking #${currentBookingId}?`)) return;
     const row = document.querySelector(`tr[data-booking-id="${currentBookingId}"]`);
     if (!row) {
@@ -654,18 +772,33 @@ if (approveReturnBtn) approveReturnBtn.addEventListener('click', () => {
     badge.classList.add('return-approved');
     row.classList.add('row-return-approved');
     if (returnPopup) returnPopup.classList.remove('show');
+<<<<<<< Updated upstream
+=======
+    alert(`Return approved for booking #${currentBookingId}`);
+>>>>>>> Stashed changes
     currentBookingId = null;
     updateStatusCards();
     console.log('[job_status_monitor] approve return applied for booking', currentBookingId);
   } catch (err) {
     console.error('[job_status_monitor] error in approveReturnBtn handler', err);
+<<<<<<< Updated upstream
+=======
+    alert('Error approving return: ' + err.message);
+>>>>>>> Stashed changes
   }
 });
 
 if (rejectReturnBtn) rejectReturnBtn.addEventListener('click', () => {
   try {
     console.log('[job_status_monitor] rejectReturnBtn clicked, currentBookingId=', currentBookingId);
+<<<<<<< Updated upstream
     if (!currentBookingId) return console.warn('No booking selected for reject return');
+=======
+    if (!currentBookingId) {
+      alert('No booking selected for reject return');
+      return;
+    }
+>>>>>>> Stashed changes
     if (!confirm(`Reject return for booking #${currentBookingId}?`)) return;
     const row = document.querySelector(`tr[data-booking-id="${currentBookingId}"]`);
     if (!row) {
@@ -679,11 +812,19 @@ if (rejectReturnBtn) rejectReturnBtn.addEventListener('click', () => {
     setBadgeStatus(badge, 'completed', 'Completed');
     row.classList.remove('row-return-approved');
     if (returnPopup) returnPopup.classList.remove('show');
+<<<<<<< Updated upstream
+=======
+    alert(`Return rejected for booking #${currentBookingId}`);
+>>>>>>> Stashed changes
     currentBookingId = null;
     updateStatusCards();
     console.log('[job_status_monitor] reject return applied for booking', currentBookingId);
   } catch (err) {
     console.error('[job_status_monitor] error in rejectReturnBtn handler', err);
+<<<<<<< Updated upstream
+=======
+    alert('Error rejecting return: ' + err.message);
+>>>>>>> Stashed changes
   }
 });
 
@@ -693,3 +834,4 @@ if (rejectReturnBtn) rejectReturnBtn.addEventListener('click', () => {
 
 
 
+  

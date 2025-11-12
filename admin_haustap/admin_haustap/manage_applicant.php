@@ -25,6 +25,7 @@
     <main class="main-content">
       <!-- Topbar -->
       <header class="topbar">
+        <h3>Manage of Applicants</h3>
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
@@ -41,7 +42,7 @@
 
       <!-- Header -->
       <div class="page-header">
-        <h3>Manage of Applicants</h3>
+        
       </div>
 
       <!-- Applicant Tabs -->

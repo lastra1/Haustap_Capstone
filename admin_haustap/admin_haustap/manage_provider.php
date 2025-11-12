@@ -17,7 +17,11 @@
     <main class="main-content">
       <!-- Topbar -->
       <header class="topbar">
+<<<<<<< Updated upstream
         <h3>Manage of Pro</h3>
+=======
+        <h3>Manage of Provider</h3>
+>>>>>>> Stashed changes
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
@@ -87,8 +91,20 @@
                 <td><span class="status suspend">Suspend</span></td><td><span class="arrow">&gt;</span></td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr class="pagination-row">
+                <td colspan="7">
+                  <div class="pagination">
+                    <span>[ ◄ Prev ]</span>
+                    <span>Showing 1–10 of 10</span>
+                    <span>[ Next ► ]</span>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
+<<<<<<< Updated upstream
 
         <!-- Pagination and Summary -->
         <div class="table-footer">
@@ -104,6 +120,8 @@
             <span id="totalSuspend">Suspend: 0</span>
           </div>
         </div>
+=======
+>>>>>>> Stashed changes
       </section>
     </main>
   </div>

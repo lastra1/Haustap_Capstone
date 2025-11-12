@@ -145,6 +145,66 @@ if (!$provider) {
         });
       });
     })();
+<<<<<<< Updated upstream
+=======
+  </script>
+  <script>
+    // Account Actions: Suspend, Banned, Delete
+    (function(){
+      const providerId = <?php echo json_encode($provider['id'] ?? 0); ?>;
+      if (!providerId) return;
+
+      const suspendBtn = document.querySelector('.btn.suspend');
+      const bannedBtn = document.querySelector('.btn.banned');
+      const deleteBtn = document.querySelector('.btn.delete');
+
+      function handleAction(action, buttonEl) {
+        const confirmed = confirm(`Are you sure you want to ${action} this provider?`);
+        if (!confirmed) return;
+
+        const formData = new FormData();
+        formData.append('id', providerId);
+        formData.append('action', action);
+
+        const apiUrl = 'api/update_provider_status.php';
+
+        fetch(apiUrl, {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin'
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert(`Provider ${action === 'delete' ? 'deleted' : 'status updated to ' + action} successfully!`);
+            if (action === 'delete') {
+              // Redirect back to provider list
+              window.location.href = 'manage_provider.php';
+            } else {
+              // Reload to show updated status
+              window.location.reload();
+            }
+          } else {
+            alert('Error: ' + (data.error || 'Unknown error'));
+          }
+        })
+        .catch(err => {
+          console.error('Action failed:', err);
+          alert('Failed to perform action. Check console for details.');
+        });
+      }
+
+      if (suspendBtn) {
+        suspendBtn.addEventListener('click', () => handleAction('suspended', suspendBtn));
+      }
+      if (bannedBtn) {
+        bannedBtn.addEventListener('click', () => handleAction('banned', bannedBtn));
+      }
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => handleAction('delete', deleteBtn));
+      }
+    })();
+>>>>>>> Stashed changes
   </script>
 
 </body>
