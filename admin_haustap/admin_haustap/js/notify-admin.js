@@ -159,20 +159,54 @@
     // Seed with sample items if empty (prevents empty dropdown confusion)
     try {
       if (list && list.children.length === 0){
+        // Helper to format relative time and keep it fresh
+        function formatRelative(ts){
+          try {
+            var diff = Math.max(0, Date.now() - ts);
+            var s = Math.floor(diff/1000);
+            if (s < 60) return s + 's ago';
+            var m = Math.floor(s/60);
+            if (m < 60) return m + 'm ago';
+            var h = Math.floor(m/60);
+            if (h < 24) return h + 'h ago';
+            var d = Math.floor(h/24);
+            return d + 'd ago';
+          } catch(e){ return 'now'; }
+        }
+
+        var now = Date.now();
         var samples = [
-          { text: 'New booking placed by a client', time: '2m ago' },
-          { text: 'Provider updated availability schedule', time: '1h ago' },
-          { text: 'Voucher redeemed in checkout', time: '3h ago' }
+          { text: 'New booking placed by a client', ts: now - 2*60*1000 },
+          { text: 'Provider updated availability schedule', ts: now - 60*60*1000 },
+          { text: 'Voucher redeemed in checkout', ts: now - 3*60*60*1000 }
         ];
         for (var s=0; s<samples.length; s++){
           var li = document.createElement('li');
           li.style.cssText = 'padding:10px 12px; border-bottom:1px solid #f0f2f4;';
           var p = document.createElement('p'); p.textContent = samples[s].text; p.style.margin = '0 0 4px';
-          var small = document.createElement('small'); small.textContent = samples[s].time; small.style.color = '#64748b';
+          var small = document.createElement('small');
+          small.textContent = formatRelative(samples[s].ts);
+          small.style.color = '#64748b';
+          try { small.setAttribute('data-ts', String(samples[s].ts)); } catch(e){}
           li.appendChild(p); li.appendChild(small);
           list.appendChild(li);
         }
         if (count){ count.textContent = samples.length; count.style.display = 'inline-block'; }
+
+        // Refresh relative times periodically so they adjust as clock advances
+        function updateRelativeTimes(){
+          try {
+            var nodes = list.querySelectorAll('small[data-ts]');
+            for (var i=0; i<nodes.length; i++){
+              var el = nodes[i];
+              var ts = parseInt(el.getAttribute('data-ts') || '0', 10);
+              if (ts) { el.textContent = formatRelative(ts); }
+            }
+          } catch(e){}
+        }
+        updateRelativeTimes();
+        try { window.__HT_NOTIF_REL_TIMER && clearInterval(window.__HT_NOTIF_REL_TIMER); } catch(e){}
+        window.__HT_NOTIF_REL_TIMER = setInterval(updateRelativeTimes, 60000);
       }
     } catch(e){}
 
@@ -181,9 +215,70 @@
   }
 
   if (document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', function(){ injectStyles(); ensureUi(); bindInteractions(); });
+    document.addEventListener('DOMContentLoaded', function(){ injectStyles(); ensureUi(); bindInteractions(); startRealtime(); });
   } else {
-    injectStyles(); ensureUi(); bindInteractions();
+    injectStyles(); ensureUi(); bindInteractions(); startRealtime();
+  }
+
+  // --- Realtime updates: SSE with polling fallback ---
+  function startRealtime(){
+    try {
+      var countEl = document.getElementById('notifCount');
+      var es = null; var timer = null;
+
+      function updateCount(n){
+        try {
+          if (!countEl) return;
+          n = (typeof n === 'number') ? n : parseInt(n || '0', 10);
+          if (isNaN(n) || n <= 0) { countEl.textContent = ''; countEl.style.display = 'none'; }
+          else { countEl.textContent = String(n); countEl.style.display = 'inline-block'; }
+        } catch(e){}
+      }
+
+      function fetchUnread(){
+        fetch('/api/admin/notifications/unread_count').then(function(res){
+          if (!res.ok) throw new Error('bad status');
+          return res.json();
+        }).then(function(data){
+          var n = (data && (data.total ?? (data.count ?? 0))) || 0;
+          updateCount(n);
+        }).catch(function(){ /* silent */ });
+      }
+
+      function startPolling(){
+        try { if (timer) clearInterval(timer); } catch(e){}
+        fetchUnread();
+        timer = setInterval(fetchUnread, 5000);
+        window.__HT_NOTIF_TIMER = timer;
+      }
+
+      function startSSE(){
+        try { if (es) es.close(); } catch(e){}
+        es = new EventSource('/api/admin/notifications/stream');
+        window.__HT_NOTIF_ES = es;
+        es.onmessage = function(ev){
+          try {
+            var data = {};
+            try { data = JSON.parse(ev.data || '{}'); } catch(e){}
+            var n = (data && (data.total ?? (data.count ?? 0))) || 0;
+            updateCount(n);
+          } catch(err){}
+        };
+        es.onerror = function(){
+          try { es.close(); } catch(e){}
+          startPolling();
+        };
+      }
+
+      // prefer SSE, fallback to polling
+      if ('EventSource' in window) { startSSE(); } else { startPolling(); }
+
+      // cleanup on navigation
+      window.addEventListener('beforeunload', function(){
+        try { if (es) es.close(); } catch(e){}
+        try { if (timer) clearInterval(timer); } catch(e){}
+      });
+    } catch(err){}
   }
 })();
 

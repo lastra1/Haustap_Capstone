@@ -1,3 +1,15 @@
+<?php
+require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/data_gateway.php';
+$q = isset($_GET['q']) ? trim($_GET['q']) : '';
+$per = 10; $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1); $offset = ($page - 1) * $per;
+$providers = search_providers($q, null, $per, $offset);
+$totalProviders = count_providers($q);
+$endIndex = min($page * $per, $totalProviders);
+$startIndex = $totalProviders === 0 ? 0 : ($offset + 1);
+$totals = provider_status_counts();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +32,7 @@
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
-            <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
+            <button id="userDropdownBtn" class="user-dropdown-btn"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼</button>
             <div class="user-dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>
@@ -36,7 +48,7 @@
         <div class="search-filter">
           <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search Provider" />
+            <input type="text" id="providerSearch" placeholder="Search Provider" value="<?= htmlspecialchars($q) ?>" />
           </div>
 
           <!-- Filter Dropdown -->
@@ -73,18 +85,24 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td><td>Jenn Bornilla</td><td>Home Cleaning</td><td>4.5/5</td><td>January 7, 2024</td>
-                <td><span class="status active">Active</span></td><td><span class="arrow">&gt;</span></td>
-              </tr>
-              <tr>
-                <td>2</td><td>Pagod na</td><td>Plumbing</td><td>4.5/5</td><td>January 24, 2024</td>
-                <td><span class="status inactive">Inactive</span></td><td><span class="arrow">&gt;</span></td>
-              </tr>
-              <tr>
-                <td>3</td><td>Pagod na</td><td>Electrical</td><td>4.5/5</td><td>January 24, 2024</td>
-                <td><span class="status suspend">Suspend</span></td><td><span class="arrow">&gt;</span></td>
-              </tr>
+              <?php if (!empty($providers)): ?>
+                <?php foreach ($providers as $p): ?>
+                <tr>
+                  <td><?= htmlspecialchars($p['id']) ?></td>
+                  <td><?= htmlspecialchars($p['name'] ?? 'Unknown') ?></td>
+                  <td><?= htmlspecialchars($p['skills'] ?? '—') ?></td>
+                  <td><?= htmlspecialchars($p['rating_fmt'] ?? '—') ?></td>
+                  <td><?= htmlspecialchars($p['date_hired'] ?? '') ?></td>
+                  <td>
+                    <?php $st = strtolower($p['status'] ?? 'active'); ?>
+                    <span class="status <?= $st ?>"><?= ucfirst($st) ?></span>
+                  </td>
+                  <td><span class="arrow">&gt;</span></td>
+                </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr><td colspan="7" style="text-align:center;color:#888;">No providers found</td></tr>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>
@@ -92,15 +110,15 @@
         <!-- Pagination and Summary -->
         <div class="table-footer">
           <div class="pagination">
-            <span>[ ◄ Prev ]</span>
-            <span>Showing 1–10 of 120</span>
-            <span>[ Next ► ]</span>
+            <span class="prev" data-page="<?= max(1, $page - 1) ?>">[ ◄ Prev ]</span>
+            <span>Showing <?= (int)$startIndex ?>–<?= (int)$endIndex ?> of <?= (int)$totalProviders ?></span>
+            <span class="next" data-page="<?= ($endIndex < $totalProviders) ? ($page + 1) : $page ?>">[ Next ► ]</span>
           </div>
           <div class="summary">
-            <span>Total Clients: 1250</span>
-            <span>Active: 1,000</span>
-            <span>Inactive: 200</span>
-            <span>Suspend: 50</span>
+            <span>Total Providers: <?= (int)$totals['total'] ?></span>
+            <span>Active: <?= (int)$totals['active'] ?></span>
+            <span>Inactive: <?= (int)$totals['inactive'] ?></span>
+            <span>Suspend: <?= (int)$totals['suspend'] ?></span>
           </div>
         </div>
       </section>
@@ -160,6 +178,51 @@
         applyProviderFilter();
       }));
       if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyProviderFilter(); });
+    })();
+
+    // Hook search box to navigate with query param
+    (function(){
+      const input = document.getElementById('providerSearch');
+      if (!input) return;
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const q = input.value.trim();
+          const url = new URL(window.location.href);
+          if (q) url.searchParams.set('q', q); else url.searchParams.delete('q');
+          url.searchParams.delete('page');
+          window.location.href = url.toString();
+        }
+      });
+    })();
+
+    // Hook pagination spans
+    (function(){
+      const prev = document.querySelector('.pagination .prev');
+      const next = document.querySelector('.pagination .next');
+      function goto(el){
+        if (!el) return;
+        el.addEventListener('click', () => {
+          const page = el.getAttribute('data-page');
+          const url = new URL(window.location.href);
+          url.searchParams.set('page', page);
+          window.location.href = url.toString();
+        });
+      }
+      goto(prev); goto(next);
+    })();
+
+    // Row navigation to provider profile without changing UI
+    (function(){
+      const rows = document.querySelectorAll('.table-container tbody tr');
+      rows.forEach(row => {
+        const idCell = row.querySelector('td');
+        if (!idCell) return;
+        const id = idCell.textContent.trim();
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', () => {
+          window.location.href = 'manage_provider_profile.php?id=' + encodeURIComponent(id);
+        });
+      });
     })();
   </script>
 </body>

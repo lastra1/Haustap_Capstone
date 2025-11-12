@@ -1,4 +1,9 @@
-<?php require_once __DIR__ . '/includes/auth.php'; ?>
+<?php require_once __DIR__ . '/includes/auth.php'; require_once __DIR__ . '/includes/db.php'; require_once __DIR__ . '/includes/data_gateway.php';
+$totalBookings = count_bookings();
+$pendingJobs = count_pending_jobs();
+$verifiedProviders = count_verified_providers();
+$totalClients = count_clients();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +26,7 @@
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
             <button class="user-btn" id="userDropdownBtn">
-              Mj Punzalan ▼
+              <?= htmlspecialchars($_SESSION['admin_name'] ?? 'Admin') ?> ▼
             </button>
             <div class="dropdown" id="userDropdown">
               <a href="#">View Profile</a>
@@ -36,19 +41,19 @@
       <!-- Summary Cards -->
       <section class="cards">
         <div class="card">
-          <h3 id="totalBookings">—</h3>
+          <h3 id="totalBookings"><?= (int)$totalBookings ?></h3>
           <p>Total Bookings</p>
         </div>
         <div class="card">
-          <h3 id="pendingJobs">—</h3>
+          <h3 id="pendingJobs"><?= (int)$pendingJobs ?></h3>
           <p>Pending Jobs</p>
         </div>
         <div class="card">
-          <h3 id="verifiedProviders">—</h3>
+          <h3 id="verifiedProviders"><?= (int)$verifiedProviders ?></h3>
           <p>Verified Service Providers</p>
         </div>
         <div class="card">
-          <h3 id="totalClients">—</h3>
+          <h3 id="totalClients"><?= (int)$totalClients ?></h3>
           <p>Total Clients</p>
         </div>
       </section>

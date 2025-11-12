@@ -15,6 +15,7 @@ require dirname(__DIR__, 2) . '/includes/header.shared.php';
 <script src="/client/js/user_profile.js"></script>
 <script src="/client/js/referral-init.js" defer></script>
 <script src="/client/js/service-price-capture.js" defer></script>
+<script src="/client/js/multi-select-services.js" defer></script>
 <script src="/my_account/js/referral-modal.js" defer></script>
 <script>
   // Keep Bookings gated for logged-out users; always show My Account on client

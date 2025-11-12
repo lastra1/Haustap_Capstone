@@ -1,22 +1,21 @@
 <?php
-  // Load saved settings (file-based dev storage)
-  // Prefer absolute base path to avoid issues under different routers
-  if (defined('BASE_PATH')) {
-    $settingsPath = BASE_PATH . DIRECTORY_SEPARATOR . 'admin_haustap' . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'system-settings.json';
-  } else {
-    $settingsPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'system-settings.json';
-  }
-
+  require_once __DIR__ . '/includes/db.php';
+  // Load saved settings from MySQL (fallback to file-based defaults if empty)
   $defaults = [
-    'system_name' => 'Ana Santos',
-    'contact_email' => 'haustap@gmail.com'
+    'system_name' => 'HausTap',
+    'contact_email' => 'support@example.com'
   ];
   $settings = $defaults;
-  if (is_file($settingsPath)) {
-    $loaded = json_decode(@file_get_contents($settingsPath), true);
-    if (is_array($loaded)) {
-      $settings = array_merge($defaults, $loaded);
+  try {
+    $db = get_db();
+    if (table_exists($db, 'system_settings')) {
+      $row = $db->query('SELECT system_name, contact_email FROM system_settings ORDER BY id ASC LIMIT 1')->fetch();
+      if ($row) {
+        $settings = array_merge($defaults, $row);
+      }
     }
+  } catch (Throwable $e) {
+    // Silently fall back to defaults
   }
 ?>
 <!DOCTYPE html>
@@ -41,7 +40,7 @@
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
-            <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
+            <button id="userDropdownBtn" class="user-dropdown-btn"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼</button>
             <div class="user-dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>

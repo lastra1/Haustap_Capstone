@@ -5,8 +5,13 @@
   <title>Log In | HausTap</title>
   <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/login_sign%20up/css/login.css">
-<link rel="stylesheet" href="/client/css/homepage.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
 <body>
+  <script>
+    // Point UI to the running Laravel backend on port 8001
+    // This override is read by /login_sign up/js/api.js
+    window.API_BASE_OVERRIDE = 'http://127.0.0.1:8001/api';
+  </script>
   <script src="/login_sign%20up/js/api.js"></script>
   <div class="container">
     <div class="logo">
@@ -48,7 +53,10 @@
         try {
           const res = await fetch(`${window.API_BASE}/auth/login`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
             body: JSON.stringify({ email, password })
           });
 

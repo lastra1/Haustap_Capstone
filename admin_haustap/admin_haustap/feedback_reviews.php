@@ -19,7 +19,7 @@
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
-            <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
+            <button id="userDropdownBtn" class="user-dropdown-btn"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼</button>
             <div class="user-dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>

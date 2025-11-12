@@ -16,68 +16,87 @@
     <main class="main-content">
         <div class="services-header">
             <h1 class="services-title">Services</h1>
-            <select class="category-select">
-                <option value="">CATEGORY</option>
-                <option value="cleaning">Cleaning Services</option>
-                <option value="outdoor">Outdoor Services</option>
-                <option value="repairs">Home Repairs</option>
-                <option value="beauty">Beauty Services</option>
-                <option value="wellness">Wellness Services</option>
-                <option value="tech">Tech & Gadget Services</option>
-            </select>
+            <select class="category-select"></select>
         </div>
 
-        <div class="services-grid">
-            <a href="/services/cleaning" class="service-card" style="text-decoration:none;color:inherit">
-                <img src="images/cleaning.png" alt="Cleaning Services" class="service-image">
-                <div class="service-content">
-                    <h2 class="service-title">Cleaning Services</h2>
-                    <p class="service-description">Professional and reliable cleaning to keep your space at its best. Expert cleaning services from our trusted professionals.</p>
-                </div>
-            </a>
-
-            <a href="/services/outdoor" class="service-card" style="text-decoration:none;color:inherit">
-                <img src="images/outdoor.png" alt="Outdoor Services" class="service-image">
-                <div class="service-content">
-                    <h2 class="service-title">Outdoor Services</h2>
-                    <p class="service-description">Expert gardening and outdoor care services to make your outdoor space beautiful and well-maintained.</p>
-                </div>
-            </a>
-
-            <a href="/services/repairs" class="service-card" style="text-decoration:none;color:inherit">
-                <img src="images/repair.png" alt="Home Repairs" class="service-image">
-                <div class="service-content">
-                    <h2 class="service-title">Home Repairs</h2>
-                    <p class="service-description">Quick and reliable repairs for plumbing, electrical, and other home maintenance needs.</p>
-                </div>
-            </a>
-
-            <a href="/services/beauty" class="service-card" style="text-decoration:none;color:inherit">
-                <img src="images/beauty service.png" alt="Beauty Services" class="service-image">
-                <div class="service-content">
-                    <h2 class="service-title">Beauty Services</h2>
-                    <p class="service-description">Pamper yourself at home with salon-quality beauty services from certified professionals.</p>
-                </div>
-            </a>
-
-            <a href="/services/wellness" class="service-card" style="text-decoration:none;color:inherit">
-                <img src="images/wellness.png" alt="Wellness Services" class="service-image">
-                <div class="service-content">
-                    <h2 class="service-title">Wellness Services</h2>
-                    <p class="service-description">Enjoy relaxing wellness and self-care services in the comfort of your home.</p>
-                </div>
-            </a>
-
-            <a href="/services/tech" class="service-card" style="text-decoration:none;color:inherit">
-                <img src="images/tech.png" alt="Tech & Gadget Services" class="service-image">
-                <div class="service-content">
-                    <h2 class="service-title">Tech & Gadget Services</h2>
-                    <p class="service-description">Get expert help with device setup, repairs, and smart home installations.</p>
-                </div>
-            </a>
-        </div>
+        <div class="services-grid"></div>
     </main>
 
   <?php include __DIR__ . '/includes/footer.php'; ?>
+  <script>
+    (function(){
+      var select = document.querySelector('.category-select');
+      var grid = document.querySelector('.services-grid');
+      if (!select || !grid) return;
+      var map = {
+        cleaning: { href: '/services/cleaning', img: 'images/cleaning.png' },
+        outdoor: { href: '/services/outdoor', img: 'images/outdoor.png' },
+        repairs: { href: '/services/repairs', img: 'images/repair.png' },
+        beauty: { href: '/services/beauty', img: 'images/beauty service.png' },
+        wellness: { href: '/services/wellness', img: 'images/wellness.png' },
+        tech: { href: '/services/tech', img: 'images/tech.png' }
+      };
+      function render(categories){
+        select.innerHTML = '';
+        var opt0 = document.createElement('option');
+        opt0.value = '';
+        opt0.textContent = 'CATEGORY';
+        select.appendChild(opt0);
+        grid.innerHTML = '';
+        categories.forEach(function(cat){
+          var opt = document.createElement('option');
+          opt.value = cat.slug;
+          opt.textContent = cat.name;
+          select.appendChild(opt);
+          var info = map[cat.slug] || { href: '/booking/choose-sp?category=' + cat.slug, img: '' };
+          var a = document.createElement('a');
+          a.href = info.href;
+          a.className = 'service-card';
+          a.style.textDecoration = 'none';
+          a.style.color = 'inherit';
+          if (info.img) {
+            var img = document.createElement('img');
+            img.className = 'service-image';
+            img.alt = cat.name;
+            img.src = info.img;
+            a.appendChild(img);
+          }
+          var content = document.createElement('div');
+          content.className = 'service-content';
+          var h2 = document.createElement('h2');
+          h2.className = 'service-title';
+          h2.textContent = cat.name;
+          var p = document.createElement('p');
+          p.className = 'service-description';
+          p.textContent = cat.description || '';
+          content.appendChild(h2);
+          content.appendChild(p);
+          a.appendChild(content);
+          grid.appendChild(a);
+        });
+        select.onchange = function(){
+          var slug = select.value;
+          if (!slug) return;
+          var info = map[slug] || { href: '/booking/choose-sp?category=' + slug };
+          window.location.href = info.href;
+        };
+      }
+      function load(){
+        fetch('/api/system/categories').then(function(r){ return r.json(); }).then(function(data){
+          if (data && data.success && Array.isArray(data.categories)) { render(data.categories); }
+        }).catch(function(){
+          render([
+            { slug: 'cleaning', name: 'Cleaning Services' },
+            { slug: 'outdoor', name: 'Outdoor Services' },
+            { slug: 'repairs', name: 'Home Repairs' },
+            { slug: 'beauty', name: 'Beauty Services' },
+            { slug: 'wellness', name: 'Wellness Services' },
+            { slug: 'tech', name: 'Tech & Gadget Services' }
+          ]);
+        });
+      }
+      load();
+    })();
+  </script>
 </body>
 </html>

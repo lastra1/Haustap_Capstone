@@ -16,11 +16,6 @@
             "expires": 1762554677095
         },
         {
-            "email": "haustap4024@gmail.com",
-            "code": "856603",
-            "expires": 1762555383610
-        },
-        {
             "email": "markjoshupunzalan2@gmail.com",
             "code": "543725",
             "expires": 1762562262635
@@ -39,6 +34,26 @@
             "email": "milkylorejo@gmail.com",
             "code": "517106",
             "expires": 1762577289580
+        },
+        {
+            "email": "dbuser@haustap.local",
+            "code": "773966",
+            "expires": 1762784447901
+        },
+        {
+            "email": "devtest@example.com",
+            "code": "517325",
+            "expires": 1762891236931
+        },
+        {
+            "email": "haustap4024@gmail.com",
+            "code": "475056",
+            "expires": 1762893929732
+        },
+        {
+            "email": "joshua.punzalan@cdsp.edu.ph",
+            "code": "832073",
+            "expires": 1762894977008
         }
     ]
 }

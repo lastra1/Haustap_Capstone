@@ -38,5 +38,13 @@
         "mobile": null,
         "created_at": 1762439797,
         "expires_at": 1762440097
+    },
+    "mock-otp-95d5b7b0": {
+        "id": "mock-otp-95d5b7b0",
+        "code": "123401",
+        "email": "joshua.punzalan@cdsp.edu.ph",
+        "mobile": null,
+        "created_at": 1762890137,
+        "expires_at": 1762890437
     }
 }

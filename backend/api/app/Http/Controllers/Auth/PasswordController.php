@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Support\FileJsonStore;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -9,11 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends BaseController
 {
-    private function store(): FileJsonStore
-    {
-        $path = base_path('storage/data/users.json');
-        return new FileJsonStore($path, ['users' => []]);
-    }
+    // Note: Registration and login now use the MySQL users table via Eloquent.
 
     public function register(Request $request)
     {
@@ -28,28 +25,24 @@ class PasswordController extends BaseController
         if ($password === '' || strlen($password) < 6) { $errors['password'] = ['Password must be at least 6 characters']; }
         if ($confirm === '' || $confirm !== $password) { $errors['confirmPassword'] = ['Passwords do not match']; }
         if (!empty($errors)) { return response()->json(['success' => false, 'errors' => $errors], 422); }
-
-        $store = $this->store()->read();
-        $users = is_array($store['users'] ?? null) ? $store['users'] : [];
-        foreach ($users as $u) {
-            if (strcasecmp((string)($u['email'] ?? ''), $email) === 0) {
-                return response()->json(['success' => false, 'errors' => ['email' => ['Email already registered']]], 422);
-            }
+        // Ensure email is unique in the DB
+        if (User::where('email', $email)->exists()) {
+            return response()->json(['success' => false, 'errors' => ['email' => ['Email already registered']]], 422);
         }
 
-        $users[] = [
+        // Persist to MySQL users table with default role 'client'
+        $user = User::create([
             'name' => $name,
             'email' => $email,
-            'password_hash' => Hash::make($password),
+            'password' => Hash::make($password),
             'role' => 'client',
-        ];
-        $this->store()->write(['users' => $users]);
+        ]);
 
         return response()->json([
             'success' => true,
             'user' => [
-                'name' => $name,
-                'email' => $email,
+                'name' => $user->name,
+                'email' => $user->email,
                 'role' => 'client',
             ],
         ], 201);
@@ -64,24 +57,23 @@ class PasswordController extends BaseController
             return response()->json(['success' => false, 'errors' => ['message' => ['email and password required']]], 422);
         }
 
-        $store = $this->store()->read();
-        $users = is_array($store['users'] ?? null) ? $store['users'] : [];
-        foreach ($users as $u) {
-            if (strcasecmp((string)($u['email'] ?? ''), $email) === 0) {
-                $hash = (string)($u['password_hash'] ?? '');
-                if ($hash !== '' && Hash::check($password, $hash)) {
-                    return response()->json([
-                        'success' => true,
-                        'token' => 'dev-token-' . md5($email . $hash),
-                        'user' => [
-                            'name' => (string) ($u['name'] ?? ''),
-                            'email' => $email,
-                            'role' => (string) ($u['role'] ?? 'client'),
-                        ],
-                    ]);
-                }
-                break;
-            }
+        // Verify against DB users table
+        $user = User::where('email', $email)->first();
+        if ($user && $user->password && Hash::check($password, $user->password)) {
+            $token = 'dev-token-' . md5($user->email . $user->password);
+            // Persist token to remember_token for middleware auth
+            $user->remember_token = $token;
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'token' => $token,
+                'user' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role ?: 'client',
+                ],
+            ]);
         }
 
         return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
@@ -128,20 +120,11 @@ class PasswordController extends BaseController
         // Persist remaining OTP records (consume used one)
         $otpStore->write(['records' => $newRecords]);
 
-        // Update user's password
-        $store = $this->store()->read();
-        $users = is_array($store['users'] ?? null) ? $store['users'] : [];
-        $found = false;
-        foreach ($users as &$u) {
-            if (strcasecmp((string)($u['email'] ?? ''), $email) === 0) {
-                $u['password_hash'] = Hash::make($password);
-                $found = true;
-                break;
-            }
-        }
-        unset($u);
-        if (!$found) { return response()->json(['success' => false, 'message' => 'email not registered'], 404); }
-        $this->store()->write(['users' => $users]);
+        // Update user's password in DB
+        $user = User::where('email', $email)->first();
+        if (!$user) { return response()->json(['success' => false, 'message' => 'email not registered'], 404); }
+        $user->password = Hash::make($password);
+        $user->save();
 
         return response()->json(['success' => true, 'message' => 'password updated']);
     }

@@ -1,0 +1,257 @@
+{
+  "info": {
+    "name": "HausTap API",
+    "_postman_id": "c4df8c2c-6b2f-4b1f-9f7f-9f2f9f91b001",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection covering health, auth, provider, bookings, chat, OTP, and admin settings. Uses {{baseUrl}} and captures {{token}} and {{booking_id}} automatically."
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000/api" },
+    { "key": "token", "value": "" },
+    { "key": "last_email", "value": "dbuser@haustap.local" },
+    { "key": "booking_id", "value": "1" },
+    { "key": "client_id", "value": "1" },
+    { "key": "provider_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/health" }
+    },
+    {
+      "name": "Auth › Register",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"DB User\",\n  \"email\": \"dbuser@haustap.local\",\n  \"password\": \"password\",\n  \"confirmPassword\": \"password\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/register"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let json = {}; try { json = pm.response.json(); } catch(e) {}",
+              "if (json && json.success && json.user && json.user.email) { pm.environment.set('last_email', json.user.email); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth › Login",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{last_email}}\",\n  \"password\": \"password\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/login"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let json = {}; try { json = pm.response.json(); } catch(e) {}",
+              "if (json && json.success && json.token) { pm.environment.set('token', json.token); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mode › Get",
+      "request": { "method": "GET", "url": "{{baseUrl}}/auth/mode?email={{last_email}}" }
+    },
+    {
+      "name": "Mode › Save",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{last_email}}\",\n  \"mode\": \"provider\"\n}" },
+        "url": "{{baseUrl}}/auth/mode"
+      }
+    },
+    {
+      "name": "Providers › Status",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": "{{baseUrl}}/providers/status?email={{last_email}}"
+      }
+    },
+    {
+      "name": "Providers › Apply",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{last_email}}\",\n  \"name\": \"DB User\",\n  \"phone\": \"+63 900 000 0000\",\n  \"experience\": \"3 years\",\n  \"services\": [\"Cleaning\", \"Laundry\"]\n}"
+        },
+        "url": "{{baseUrl}}/providers/apply"
+      }
+    },
+    {
+      "name": "Providers › Approve (admin)",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{last_email}}\"\n}" },
+        "url": "{{baseUrl}}/admin/providers/approve"
+      }
+    },
+    {
+      "name": "Providers › Revoke (admin)",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{last_email}}\",\n  \"remove_role\": true\n}" },
+        "url": "{{baseUrl}}/admin/providers/revoke"
+      }
+    },
+    {
+      "name": "Bookings › Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"provider_id\": {{provider_id}},\n  \"service_name\": \"Cleaning\",\n  \"scheduled_date\": \"2025-11-10\",\n  \"scheduled_time\": \"09:00\",\n  \"address\": \"Metro Manila\",\n  \"lat\": 14.5995,\n  \"lng\": 120.9842,\n  \"price\": 500,\n  \"notes\": \"Please bring supplies\"\n}"
+        },
+        "url": "{{baseUrl}}/bookings/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let json = {}; try { json = pm.response.json(); } catch(e) {}",
+              "var id = json.id || (json.data && json.data.id); if (id) { pm.environment.set('booking_id', id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings › List",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{baseUrl}}/bookings/" }
+    },
+    {
+      "name": "Bookings › Cancel",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Change of plans\"\n}" },
+        "url": "{{baseUrl}}/bookings/{{booking_id}}/cancel"
+      }
+    },
+    {
+      "name": "Bookings › Update Status",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"status\": \"completed\"\n}" },
+        "url": "{{baseUrl}}/bookings/{{booking_id}}/status"
+      }
+    },
+    {
+      "name": "Bookings › Rate",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"rating\": 5\n}" },
+        "url": "{{baseUrl}}/bookings/{{booking_id}}/rate"
+      }
+    },
+    {
+      "name": "Bookings › Request Return",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"issues\": [\"Missed spot\"],\n  \"notes\": \"Please revisit\"\n}" },
+        "url": "{{baseUrl}}/bookings/{{booking_id}}/return"
+      }
+    },
+    {
+      "name": "Returns › List",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{baseUrl}}/bookings/returns" }
+    },
+    {
+      "name": "Chat › Open",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"booking_id\": {{booking_id}},\n  \"client_id\": {{client_id}},\n  \"provider_id\": {{provider_id}}\n}" },
+        "url": "{{baseUrl}}/chat/open"
+      }
+    },
+    {
+      "name": "Chat › List Messages",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{baseUrl}}/chat/{{booking_id}}/messages" }
+    },
+    {
+      "name": "Chat › Send Message",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"text\": \"Hello!\",\n  \"sender\": \"client\",\n  \"sender_id\": {{client_id}}\n}" },
+        "url": "{{baseUrl}}/chat/{{booking_id}}/messages"
+      }
+    },
+    {
+      "name": "Admin Settings › Get",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": "{{baseUrl}}/admin/settings" }
+    },
+    {
+      "name": "Admin Settings › Save",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"system_name\": \"HausTap\",\n  \"contact_email\": \"support@haustap.local\"\n}" },
+        "url": "{{baseUrl}}/admin/settings"
+      }
+    },
+    {
+      "name": "OTP › Send",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{last_email}}\"\n}" },
+        "url": "{{baseUrl}}/auth/otp/send"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let json = {}; try { json = pm.response.json(); } catch(e) {}",
+              "if (json && json.dev_code) { pm.environment.set('otp_code', json.dev_code); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "OTP › Verify",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{last_email}}\",\n  \"code\": \"{{otp_code}}\"\n}" },
+        "url": "{{baseUrl}}/auth/otp/verify"
+      }
+    }
+  ]
+}

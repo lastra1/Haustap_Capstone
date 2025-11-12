@@ -7,6 +7,12 @@ $fullPath = $docRoot . $normalized;
 $projectRoot = dirname(__DIR__, 2);
 $ADMIN_APP_PATH = $projectRoot . DIRECTORY_SEPARATOR . 'admin_haustap' . DIRECTORY_SEPARATOR . 'admin_haustap';
 
+// Default landing: redirect root to the guest homepage
+if ($uri === '/' || $uri === '/index.php') {
+  header('Location: /guest/homepage.php', true, 302);
+  exit;
+}
+
 // Ensure UTF-8 Content-Type for dynamic HTML responses
 function ensureUtf8HtmlHeader() {
   if (!headers_sent()) {
@@ -75,6 +81,106 @@ if (isset($aliases[$uri])) {
   if (is_file($aliasPath)) {
     ensureUtf8HtmlHeader();
     require $aliasPath;
+    return true;
+  }
+}
+
+if ($uri === '/api/system/categories') {
+  header('Content-Type: application/json');
+  $fallback = [
+    [ 'slug' => 'cleaning', 'name' => 'Cleaning Services', 'description' => 'Professional and reliable cleaning to keep your space at its best.' ],
+    [ 'slug' => 'outdoor', 'name' => 'Outdoor Services', 'description' => 'Expert gardening and outdoor care services for beautiful spaces.' ],
+    [ 'slug' => 'repairs', 'name' => 'Home Repairs', 'description' => 'Quick and reliable repairs for home maintenance needs.' ],
+    [ 'slug' => 'beauty', 'name' => 'Beauty Services', 'description' => 'Salon-quality beauty services from certified professionals.' ],
+    [ 'slug' => 'wellness', 'name' => 'Wellness Services', 'description' => 'Relaxing wellness and self-care services at home.' ],
+    [ 'slug' => 'tech', 'name' => 'Tech & Gadget Services', 'description' => 'Help with device setup, repairs, and smart home installations.' ],
+  ];
+  try {
+    $base = dirname(__DIR__, 2);
+    @require_once $base . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+    $envPath = $base . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . '.env';
+    $env = [];
+    if (is_file($envPath)) {
+      foreach (@file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+        $line = trim($line);
+        if ($line === '' || $line[0] === '#') continue;
+        $pos = strpos($line, '=');
+        if ($pos === false) continue;
+        $key = trim(substr($line, 0, $pos));
+        $val = trim(substr($line, $pos + 1));
+        $val = preg_replace('/^"|"$/', '', $val);
+        $val = preg_replace("/^'|'$/", '', $val);
+        $env[$key] = $val;
+      }
+    }
+    $projectId = $env['FIREBASE_PROJECT_ID'] ?? getenv('FIREBASE_PROJECT_ID') ?? null;
+    if ($projectId && class_exists('Google\\Auth\\ApplicationDefaultCredentials')) {
+      $scopes = ['https://www.googleapis.com/auth/datastore'];
+      $creds = \Google\Auth\ApplicationDefaultCredentials::getCredentials($scopes);
+      $tokenInfo = $creds->fetchAuthToken();
+      $accessToken = is_array($tokenInfo) ? ($tokenInfo['access_token'] ?? null) : null;
+      if ($accessToken) {
+        $url = 'https://firestore.googleapis.com/v1/projects/' . $projectId . '/databases/(default)/documents/categories?pageSize=200';
+        $ctx = stream_context_create([
+          'http' => [
+            'method' => 'GET',
+            'header' => [
+              'Authorization: Bearer ' . $accessToken,
+              'Accept: application/json'
+            ],
+            'ignore_errors' => true,
+            'timeout' => 15
+          ]
+        ]);
+        $raw = @file_get_contents($url, false, $ctx);
+        $json = json_decode($raw ?: 'null', true);
+        $items = [];
+        $docs = is_array($json['documents'] ?? null) ? $json['documents'] : [];
+        foreach ($docs as $d) {
+          $f = $d['fields'] ?? [];
+          $slug = (string)($f['slug']['stringValue'] ?? '');
+          $name = (string)($f['name']['stringValue'] ?? '');
+          $desc = (string)($f['description']['stringValue'] ?? '');
+          if ($slug === '') {
+            $slug = preg_replace('/[^a-z0-9]+/', '-', strtolower($name));
+            $slug = trim($slug, '-');
+          }
+          if ($name !== '') {
+            $items[] = ['slug' => $slug ?: $name, 'name' => $name, 'description' => $desc];
+          }
+        }
+        if (!empty($items)) {
+          echo json_encode(['success' => true, 'categories' => $items, 'source' => 'firestore'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+          return true;
+        }
+      }
+    }
+    require_once $ADMIN_APP_PATH . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'db.php';
+    $pdo = get_db();
+    $stmt = $pdo->query('SELECT service_categories FROM providers WHERE service_categories IS NOT NULL');
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    $unique = [];
+    foreach ($rows as $r) {
+      $cats = json_decode((string)($r['service_categories'] ?? '[]'), true);
+      if (!is_array($cats)) continue;
+      foreach ($cats as $c) {
+        $name = '';
+        $desc = '';
+        if (is_string($c)) { $name = trim($c); }
+        elseif (is_array($c)) { $name = trim((string)($c['name'] ?? '')); $desc = trim((string)($c['description'] ?? '')); }
+        if ($name === '') continue;
+        $slug = preg_replace('/[^a-z0-9]+/', '-', strtolower($name));
+        $slug = trim($slug, '-');
+        if ($slug === '') continue;
+        if (!isset($unique[$slug])) { $unique[$slug] = ['slug' => $slug, 'name' => $name, 'description' => $desc]; }
+      }
+    }
+    $result = array_values($unique);
+    if (empty($result)) $result = $fallback;
+    echo json_encode(['success' => true, 'categories' => $result, 'source' => empty($unique) ? 'fallback' : 'db'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    return true;
+  } catch (Throwable $e) {
+    echo json_encode(['success' => true, 'categories' => $fallback, 'source' => 'fallback'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     return true;
   }
 }

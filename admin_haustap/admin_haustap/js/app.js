@@ -7,9 +7,18 @@
   function qsa(sel){ return Array.from(document.querySelectorAll(sel)); }
 
   async function apiGet(path, params={}){
-    const url = new URL(API_BASE + path, window.location.origin);
-    Object.entries(params).forEach(([k,v]) => { if(v!==undefined && v!==null) url.searchParams.set(k, v); });
-    const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+    const buildUrl = (suffix='') => {
+      const u = new URL(API_BASE + path + suffix, window.location.origin);
+      Object.entries(params).forEach(([k,v]) => { if(v!==undefined && v!==null) u.searchParams.set(k, v); });
+      return u;
+    };
+    let url = buildUrl('');
+    let res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+    // Fallback for environments that require .php endpoints
+    if(!res.ok && res.status === 404){
+      url = buildUrl('.php');
+      res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+    }
     if(!res.ok){ throw new Error('HTTP '+res.status); }
     return res.json();
   }

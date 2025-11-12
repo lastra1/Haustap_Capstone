@@ -148,6 +148,9 @@
       var selectedTime = get('selected_time');
       var address = get('booking_address');
       var serviceName = get('selected_service_name');
+      var servicesList = (function(){
+        try { var raw = get('selected_services_names'); return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
+      })();
       var providerName = get('selected_provider_name');
 
       // Update service header text if available (content only)
@@ -171,12 +174,16 @@
         }
       });
 
-      // Update "You selected" line with the chosen service name
+      // Update "You selected" line; support multiple selected services
       var multiLines = Array.prototype.slice.call(document.querySelectorAll('.details p.multi-line'));
       if (multiLines.length) {
         var selectedLine = multiLines[0];
-        var bEl = selectedLine ? selectedLine.querySelector('b') : null;
-        if (bEl && serviceName) { bEl.textContent = serviceName; }
+        if (servicesList && servicesList.length) {
+          selectedLine.innerHTML = '<strong>You selected:</strong> ' + servicesList.map(function(s){ return '<b>'+ s +'</b>'; }).join('<br>');
+        } else {
+          var bEl = selectedLine ? selectedLine.querySelector('b') : null;
+          if (bEl && serviceName) { bEl.textContent = serviceName; }
+        }
       }
 
       // Update subtotal and total to reflect selected price

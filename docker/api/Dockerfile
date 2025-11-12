@@ -11,16 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable Opcache with sensible defaults (including CLI)
-RUN set -eux; \
-    {
-      echo 'opcache.enable=1';
-      echo 'opcache.enable_cli=1';
-      echo 'opcache.memory_consumption=128';
-      echo 'opcache.interned_strings_buffer=8';
-      echo 'opcache.max_accelerated_files=10000';
-      echo 'opcache.validate_timestamps=1';
-      echo 'opcache.revalidate_freq=2';
-    } > /usr/local/etc/php/conf.d/opcache.ini
+RUN printf "opcache.enable=1\nopcache.enable_cli=1\nopcache.memory_consumption=128\nopcache.interned_strings_buffer=8\nopcache.max_accelerated_files=10000\nopcache.validate_timestamps=1\nopcache.revalidate_freq=2\n" > /usr/local/etc/php/conf.d/opcache.ini
 
 # Composer settings for performance and reliability
 ENV COMPOSER_CACHE_DIR=/root/.composer/cache

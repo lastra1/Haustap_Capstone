@@ -33,6 +33,10 @@ $router->get('/admin/dashboard.php', function() {
     error_log('[router] alias route hit: /admin/dashboard.php');
     run_php(ADMIN_APP_PATH . '/dashboard.php');
 });
+$router->get('/admin/manage_booking.php', function() {
+    error_log('[router] alias route hit: /admin/manage_booking.php');
+    run_php(ADMIN_APP_PATH . '/manage_booking.php');
+});
 $router->get('/admin/*', function() {
     $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
     $prefix = '/admin/';
@@ -77,6 +81,14 @@ $router->get('/api/admin/analytics/summary/', fn() => (new \App\Controllers\Admi
 $router->get('/api/admin/system/all', fn() => (new \App\Controllers\Admin\SystemController())->all());
 $router->get('/api/admin/system/summary', fn() => (new \App\Controllers\Admin\SystemController())->summary());
 $router->get('/api/admin/system/summary/', fn() => (new \App\Controllers\Admin\SystemController())->summary());
+// Public system data
+$router->get('/api/system/categories', fn() => (new \App\Controllers\Admin\SystemController())->categories());
+// Notifications: unread count and server-sent events stream
+$router->get('/api/admin/notifications/unread_count', fn() => (new \App\Controllers\Admin\NotificationsController())->unreadCount());
+$router->get('/api/admin/notifications/stream', fn() => (new \App\Controllers\Admin\NotificationsController())->stream());
+// Dev seeding endpoints to demo bell updates
+$router->get('/api/admin/dev/seed/applicants', fn() => (new \App\Controllers\Admin\NotificationsController())->seedApplicants());
+$router->get('/api/admin/dev/seed/bookings', fn() => (new \App\Controllers\Admin\NotificationsController())->seedBookings());
 // Bookings list for admin tables
 $router->get('/api/admin/bookings', fn() => (new \App\Controllers\Admin\BookingsController())->index());
 // Clients and Providers list for admin tables
