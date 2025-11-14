@@ -1,0 +1,30 @@
+.search-box input {
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  width: 180px;
+  background: #fff;
+}
+
+.ht-highlight {
+  background: rgba(61, 191, 195, 0.2);
+  color: #000;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+#ht-no-results-msg {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 400px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.category-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}

@@ -1,0 +1,28 @@
+/* Reports page: only page-specific overrides so admin header/sidebar styles remain consistent */
+
+/* Summary cards layout (rely on global .content-area padding from admin CSS) */
+.summary-cards { display:flex; gap:12px; margin-bottom:16px; }
+.summary-cards .card { background:#fff; padding:16px; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,0.04); min-width:160px; }
+.summary-cards .card .label { font-size:12px; color:#6b7280; }
+.summary-cards .card .value { font-size:20px; font-weight:600; margin-top:6px; }
+.summary-cards .card.highlight { background:linear-gradient(90deg,#eef2ff,#f0fdf4); }
+
+.controls { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.tabs .tab { background:transparent; border:1px solid transparent; padding:8px 12px; border-radius:999px; cursor:pointer; margin-right:6px; }
+.tabs .tab.active { background:#0ea5a4; color:#fff; border-color:rgba(14,165,164,0.2); }
+.search-box { display:flex; align-items:center; gap:8px; }
+.search-box input { padding:8px 10px; border-radius:6px; border:1px solid #e5e7eb; }
+.table-container { background:#fff; padding:12px; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+.reports-table { width:100%; border-collapse:collapse; }
+.reports-table th, .reports-table td { text-align:left; padding:10px 8px; border-bottom:1px solid #f1f5f9; }
+.reports-table thead th { color:#6b7280; font-size:13px; }
+.muted { color:#6b7280; font-size:12px; }
+.badge { padding:6px 10px; border-radius:999px; font-size:12px; display:inline-block; }
+.badge.pending { background:#fff7ed; color:#b45309; border:1px solid #fcd34d; }
+.badge.review { background:#eef2ff; color:#3730a3; }
+.badge.resolved { background:#ecfdf5; color:#065f46; }
+.btn { padding:6px 10px; border-radius:6px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; }
+.btn.review { background:#06b6d4; color:#fff; border-color:transparent; }
+.btn.suspend { background:#ef4444; color:#fff; border-color:transparent; }
+.btn.view { background:#10b981; color:#fff; }
+.btn.danger { background:#ef4444; }

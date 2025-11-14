@@ -1,0 +1,68 @@
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Archives
+*.zip
+
+# IDE
+.vscode/
+.idea/
+.history/
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs
+*.log
+logs/
+storage/logs/*
+!storage/logs/.gitkeep
+
+# Composer / PHP
+vendor/
+composer.phar
+composer-setup.php
+
+# Node / JS
+node_modules/
+dist/
+build/
+.cache/
+.eslintcache
+.yarn/
+.pnp.*
+.npm/
+
+# Expo / React Native
+.android/
+.ios/
+.expo/
+.expo-shared/
+
+# Coverage and temp
+coverage/
+.tmp/
+temp/
+tmp/
+ 
+# Local tooling
+tools/
+
+# Docker local overrides
+docker-compose.override.yml
+.docker/
+
+# PHP caches
+.phpunit.result.cache
+.php_cs.cache
+.php-cs-fixer.cache
+
+# Runtime caches
+cache/
+bootstrap/cache/

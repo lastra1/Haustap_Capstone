@@ -1,0 +1,48 @@
+services:
+  web:
+    build: ./docker/web
+    container_name: haustap_web
+    depends_on:
+      - db
+    ports:
+      - "8088:80"
+    volumes:
+      - ./:/var/www:cached
+      - ./docker/web/apache.conf:/etc/apache2/sites-available/000-default.conf:ro
+    environment:
+      - TZ=Asia/Manila
+    command: ["bash","-lc","a2enmod rewrite headers && apache2-foreground"]
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: haustap_db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=haustap
+      - MYSQL_USER=haustap
+      - MYSQL_PASSWORD=haustap
+      - MYSQL_ROOT_PASSWORD=haustap
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:latest
+    container_name: haustap_adminer
+    depends_on:
+      - db
+    environment:
+      - ADMINER_DEFAULT_SERVER=db
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  db_data:
