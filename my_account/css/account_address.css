@@ -1,0 +1,135 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+/* MAIN CONTENT */
+.address-page {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.address-container {
+  background-color: #fff;
+  width: 90%;
+  max-width: 900px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* HEADER INSIDE BOX */
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.address-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+
+.add-address-btn {
+  background-color: #00b3b3;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add-address-btn:hover {
+  background-color: #009393;
+}
+
+/* Divider line */
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  margin: 15px 0 25px;
+}
+
+/* Address Box */
+.address-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.address-box:hover {
+  border-color: #00b3b3;
+  box-shadow: 0 2px 6px rgba(0,179,179,0.15);
+}
+
+/* Left info section */
+.address-info {
+  flex: 1;
+}
+
+.address-name {
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: #333;
+}
+
+.address-details {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+/* Right actions section */
+.address-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.edit-delete {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  color: #00a6a6;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.delete-btn {
+  color: #e00000;
+}
+
+.default-btn {
+  background-color: #e6e6e6;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.default-btn:hover {
+  background-color: #d4d4d4;
+}

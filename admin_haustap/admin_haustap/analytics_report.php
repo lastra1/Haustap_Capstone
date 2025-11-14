@@ -1,3 +1,191 @@
+<?php require_once __DIR__ . '/includes/auth.php'; ?>
+<?php
+// Load data sources for analytics (applicants, providers, clients, bookings)
+$dataDir = realpath(__DIR__ . '/../../storage/data');
+$backendBookings = realpath(__DIR__ . '/../../backend/api/storage/data/bookings.json');
+
+$applicants = [];
+$providers = [];
+$clients = [];
+$bookings = [];
+
+if ($dataDir) {
+  $aPath = $dataDir . DIRECTORY_SEPARATOR . 'applicants.json';
+  if (is_file($aPath)) {
+    $raw = @file_get_contents($aPath);
+    $applicants = json_decode($raw ?: '[]', true) ?: [];
+  }
+
+  $pPath = $dataDir . DIRECTORY_SEPARATOR . 'providers.json';
+  if (is_file($pPath)) {
+    $raw = @file_get_contents($pPath);
+    $providers = json_decode($raw ?: '[]', true) ?: [];
+  }
+
+  $cPath = $dataDir . DIRECTORY_SEPARATOR . 'clients.json';
+  if (is_file($cPath)) {
+    $raw = @file_get_contents($cPath);
+    $clients = json_decode($raw ?: '[]', true) ?: [];
+  }
+}
+
+// bookings live in backend mock storage
+if ($backendBookings && is_file($backendBookings)) {
+  $raw = @file_get_contents($backendBookings);
+  $bookings = json_decode($raw ?: '[]', true) ?: [];
+}
+
+// Summary counts
+$totalApplicants = count($applicants);
+$totalProviders = count($providers);
+$totalClients = count($clients);
+$totalBookings = count($bookings);
+
+// Helpers: convert various date formats/fields to timestamp
+function to_timestamp($val) {
+  if (empty($val)) return null;
+  // numeric (ms or s)
+  if (is_numeric($val)) {
+    $n = intval($val);
+    // milliseconds
+    if ($n > 9999999999) return intval($n / 1000);
+    return $n;
+  }
+  // try parseable date string
+  try { $dt = new DateTime($val); return $dt->getTimestamp(); } catch (Exception $e) { return null; }
+}
+
+function count_periods($items, $field) {
+  $res = ['day' => 0, 'week' => 0, 'month' => 0];
+  $now = new DateTime();
+  foreach ($items as $it) {
+    if (empty($it[$field])) continue;
+    $ts = to_timestamp($it[$field]);
+    if (!$ts) continue;
+    $dt = (new DateTime())->setTimestamp($ts);
+    if ($dt->format('Y-m-d') === $now->format('Y-m-d')) $res['day']++;
+    // ISO week-year (o) and week number (W)
+    if ($dt->format('oW') === $now->format('oW')) $res['week']++;
+    if ($dt->format('Y-m') === $now->format('Y-m')) $res['month']++;
+  }
+  return $res;
+}
+
+// Compute per-period counts
+$applicantCounts = count_periods($applicants, 'applied_at');
+$providerCounts = count_periods($providers, 'hired_at');
+$clientCounts = count_periods($clients, 'joined_at');
+
+// Bookings may have created_at (ms) or scheduled_date
+$bookingCounts = ['day'=>0,'week'=>0,'month'=>0];
+$now = new DateTime();
+foreach ($bookings as $b) {
+  $ts = null;
+  if (!empty($b['created_at'])) {
+    $ts = to_timestamp($b['created_at']);
+  } elseif (!empty($b['scheduled_date'])) {
+    $ts = to_timestamp($b['scheduled_date']);
+  }
+  if (!$ts) continue;
+  $dt = (new DateTime())->setTimestamp($ts);
+  if ($dt->format('Y-m-d') === $now->format('Y-m-d')) $bookingCounts['day']++;
+  if ($dt->format('oW') === $now->format('oW')) $bookingCounts['week']++;
+  if ($dt->format('Y-m') === $now->format('Y-m')) $bookingCounts['month']++;
+}
+
+// Top providers by rating (descending)
+usort($providers, function($a, $b){
+  $ra = isset($a['rating']) ? floatval($a['rating']) : 0;
+  $rb = isset($b['rating']) ? floatval($b['rating']) : 0;
+  return $rb <=> $ra;
+});
+$topProviders = array_slice($providers, 0, 4);
+
+// Monthly bookings for last 8 months (based on created_at if available, else scheduled_date)
+$monthlyLabels = [];
+$monthlyCounts = [];
+$monthsToShow = 8;
+$now = new DateTime();
+for ($i = $monthsToShow - 1; $i >= 0; $i--) {
+  $dt = (clone $now)->modify("-{$i} months");
+  $label = $dt->format('M');
+  $monthlyLabels[] = $label;
+  $monthlyCounts[$label] = 0;
+}
+
+foreach ($bookings as $b) {
+  $ts = null;
+  if (!empty($b['created_at'])) {
+    // created_at stored as milliseconds in some mocks
+    $created = $b['created_at'];
+    if (is_numeric($created) && $created > 9999999999) {
+      $ts = intval($created / 1000);
+    } else if (is_numeric($created)) {
+      $ts = intval($created);
+    }
+  } elseif (!empty($b['scheduled_date'])) {
+    $d = $b['scheduled_date'];
+    try { $dt = new DateTime($d); $ts = $dt->getTimestamp(); } catch (Exception $e) { $ts = null; }
+  }
+  if ($ts) {
+    $m = (new DateTime())->setTimestamp($ts)->format('M');
+    if (array_key_exists($m, $monthlyCounts)) $monthlyCounts[$m]++;
+  }
+}
+
+// Prepare arrays for JS
+$js_monthly_labels = array_values($monthlyLabels);
+$js_monthly_counts = array_values($monthlyCounts);
+
+// Provider performance data (average rating) - repeat across months to fit chart labels
+$avgProviderRating = 0;
+if (!empty($providers)) {
+  $sum = 0; $cnt = 0;
+  foreach ($providers as $p) {
+    if (isset($p['rating']) && is_numeric($p['rating'])) { $sum += floatval($p['rating']); $cnt++; }
+  }
+  if ($cnt) $avgProviderRating = $sum / $cnt;
+}
+$js_provider_performance = array_fill(0, count($js_monthly_labels), round($avgProviderRating,2));
+
+// User activity trends (last N days) - clients joined and providers hired
+$activityDays = 15;
+$activityLabels = [];
+$activityClients = [];
+$activityProviders = [];
+$today = new DateTime();
+for ($i = $activityDays - 1; $i >= 0; $i--) {
+  $d = (clone $today)->modify("-{$i} days");
+  $label = $d->format('M j');
+  $activityLabels[] = $label;
+  $activityClients[$label] = 0;
+  $activityProviders[$label] = 0;
+}
+
+// Count clients by joined_at
+foreach ($clients as $c) {
+  if (empty($c['joined_at'])) continue;
+  try {
+    $dt = new DateTime($c['joined_at']);
+    $lbl = $dt->format('M j');
+    if (array_key_exists($lbl, $activityClients)) $activityClients[$lbl]++;
+  } catch (Exception $e) { }
+}
+
+// Count providers by hired_at
+foreach ($providers as $p) {
+  if (empty($p['hired_at'])) continue;
+  try {
+    $dt = new DateTime($p['hired_at']);
+    $lbl = $dt->format('M j');
+    if (array_key_exists($lbl, $activityProviders)) $activityProviders[$lbl]++;
+  } catch (Exception $e) { }
+}
+
+$js_activity_labels = array_values($activityLabels);
+$js_activity_clients = array_values($activityClients);
+$js_activity_providers = array_values($activityProviders);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +194,8 @@
   <title>Admin Dashboard - Analytics & Report</title>
   <link rel="stylesheet" href="css/analytics_report.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/lazy-images.js" defer></script>
+  <script src="js/lazy-images.js" defer></script>
+  
 </head>
 <body>
   <div class="dashboard-container">
@@ -17,140 +206,355 @@
     <main class="main-content">
       <!-- Topbar -->
       <header class="topbar">
-        <h3>Job Status Monitor</h3>
+        <h3>Analytics and Report</h3>
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
       </header>
 
-      <section class="stats-cards">
-        <div class="card"><h3>1,234</h3><p>Total Applicants</p></div>
-        <div class="card"><h3>89</h3><p>Total Providers</p></div>
-        <div class="card"><h3>567</h3><p>Total Clients</p></div>
-        <div class="card"><h3>456</h3><p>Total Bookings</p></div>
-      </section>
+     <!-- Summary Cards -->
+  <section class="summary-section">
+    <div class="summary-card" data-day="<?php echo intval($applicantCounts['day']); ?>" data-week="<?php echo intval($applicantCounts['week']); ?>" data-month="<?php echo intval($applicantCounts['month']); ?>">
+      <div class="card-header">
+        <button class="time-btn active">DAY</button>
+        <button class="time-btn">WEEK</button>
+        <button class="time-btn">MONTH</button>
+      </div>
+        <div class="card-body">
+          <h2><?php echo number_format(intval($applicantCounts['day'])); ?></h2>
+          <p>Total Applicants</p>
+        </div>
+    </div>
 
-      <section class="analytics-section">
-        <div class="chart-box">
-          <h3>User Activity Report</h3>
-          <canvas id="activityChart"></canvas>
-        </div>
-        <div class="chart-box">
-          <h3>User Types</h3>
-          <canvas id="userTypeChart"></canvas>
-        </div>
-        <div class="chart-box">
-          <h3>Service Distribution</h3>
-          <canvas id="serviceChart"></canvas>
-        </div>
-      </section>
+    <div class="summary-card" data-day="<?php echo intval($providerCounts['day']); ?>" data-week="<?php echo intval($providerCounts['week']); ?>" data-month="<?php echo intval($providerCounts['month']); ?>">
+      <div class="card-header">
+        <button class="time-btn active">DAY</button>
+        <button class="time-btn">WEEK</button>
+        <button class="time-btn">MONTH</button>
+      </div>
+      <div class="card-body">
+        <h2><?php echo number_format(intval($providerCounts['day'])); ?></h2>
+        <p>Total Providers</p>
+      </div>
+    </div>
 
-      <section class="bottom-section">
-        <div class="booking-stats">
-          <h3>Booking & Job Statistics</h3>
-          <h1>1,245</h1>
-          <p>Total Bookings</p>
-          <canvas id="bookingChart"></canvas>
-        </div>
+    <div class="summary-card" data-day="<?php echo intval($clientCounts['day']); ?>" data-week="<?php echo intval($clientCounts['week']); ?>" data-month="<?php echo intval($clientCounts['month']); ?>">
+      <div class="card-header">
+        <button class="time-btn active">DAY</button>
+        <button class="time-btn">WEEK</button>
+        <button class="time-btn">MONTH</button>
+      </div>
+      <div class="card-body">
+        <h2><?php echo number_format(intval($clientCounts['day'])); ?></h2>
+        <p>Total Clients</p>
+      </div>
+    </div>
 
-        <div class="rating-card">
-          <h3>Average Rating</h3>
-          <h1>4.5 ⭐⭐⭐⭐⭐</h1>
-        </div>
-      </section>
+    <div class="summary-card" data-day="<?php echo intval($bookingCounts['day']); ?>" data-week="<?php echo intval($bookingCounts['week']); ?>" data-month="<?php echo intval($bookingCounts['month']); ?>">
+      <div class="card-header">
+        <button class="time-btn active">DAY</button>
+        <button class="time-btn">WEEK</button>
+        <button class="time-btn">MONTH</button>
+      </div>
+      <div class="card-body">
+        <h2><?php echo number_format(intval($bookingCounts['day'])); ?></h2>
+        <p>Total Bookings</p>
+      </div>
+    </div>
+  </section>
 
-      <section class="bottom-section analytics2">
-        <div class="box">
-          <h3>Applicant Acceptance Rate</h3>
-          <h1>56%</h1>
-        </div>
-        <div class="box">
-          <h3>Top-rated Providers</h3>
-          <h1>25</h1>
-        </div>
-      </section>
-    </main>
+  <!-- Charts Row -->
+ <section class="chart-row">
+  <div class="chart-card">
+    <h3>User Activity Trend</h3>
+    <canvas id="userActivityChart"></canvas>
+
+    <!-- NEW BOOKING CHART -->
+    <div class="booking-chart">
+      <h3>Booking & Job Statistics</h3>
+      <canvas id="bookingChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Provider Performance</h3>
+    <canvas id="providerPerformanceChart"></canvas>
+    <div class="top-providers">
+      <h4>Top-Rated Providers</h4>
+      <ul>
+        <?php foreach ($topProviders as $tp):
+          $name = $tp['name'] ?? 'Unknown';
+          $parts = preg_split('/\s+/', trim($name));
+          $initials = '';
+          if (count($parts) >= 2) {
+            $initials = strtoupper(substr($parts[0],0,1) . substr($parts[1],0,1));
+          } else {
+            $initials = strtoupper(substr($parts[0],0,2));
+          }
+          $rating = isset($tp['rating']) ? number_format(floatval($tp['rating']),1) : '–';
+        ?>
+          <li><span class="badge"><?php echo htmlspecialchars($initials); ?></span> <?php echo htmlspecialchars($name); ?> — <strong><?php echo $rating; ?></strong></li>
+        <?php endforeach; ?>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+ <!-- SERVICE DEMAND SECTION -->
+<section class="service-demand">
+  <h3>Service Demand</h3>
+  <p class="section-subtitle">Top Booked Services</p>
+
+  <div class="service-grid">
+    <!-- Cleaning Services -->
+    <div class="service-card">
+      <h4>Cleaning Services</h4>
+      <ul>
+        <li><span>Home Cleaning</span><div class="bar"><div style="width:80%"></div></div></li>
+        <li><span>AC Cleaning</span><div class="bar"><div style="width:60%"></div></div></li>
+        <li><span>AC Deep Cleaning (Chemical Cleaning)</span><div class="bar"><div style="width:90%"></div></div></li>
+      </ul>
+    </div>
+
+    <!-- Indoor Services -->
+    <div class="service-card">
+      <h4>Indoor Services</h4>
+      <ul>
+        <li><span>Handyman</span><div class="bar"><div style="width:75%"></div></div></li>
+        <li><span>Plumbing</span><div class="bar"><div style="width:65%"></div></div></li>
+        <li><span>Electrical</span><div class="bar"><div style="width:55%"></div></div></li>
+        <li><span>Appliance Repair</span><div class="bar"><div style="width:70%"></div></div></li>
+        <li><span>Pest Control</span><div class="bar"><div style="width:50%"></div></div></li>
+      </ul>
+    </div>
+
+    <!-- Beauty Services -->
+    <div class="service-card">
+      <h4>Beauty Services</h4>
+      <ul>
+        <li><span>Hair Services</span><div class="bar"><div style="width:80%"></div></div></li>
+        <li><span>Nail Care</span><div class="bar"><div style="width:60%"></div></div></li>
+        <li><span>Make-up</span><div class="bar"><div style="width:70%"></div></div></li>
+        <li><span>Lashes</span><div class="bar"><div style="width:85%"></div></div></li>
+        <li><span>Packages</span><div class="bar"><div style="width:75%"></div></div></li>
+      </ul>
+    </div>
+
+    <!-- Outdoor Services -->
+    <div class="service-card">
+      <h4>Outdoor Services</h4>
+      <ul>
+        <li><span>Gardening & Landscaping</span><div class="bar"><div style="width:80%"></div></div></li>
+        <li><span>Pest Control</span><div class="bar"><div style="width:60%"></div></div></li>
+      </ul>
+    </div>
+
+    <!-- Tech & Gadget Services -->
+    <div class="service-card">
+      <h4>Tech & Gadget Services</h4>
+      <ul>
+        <li><span>Mobile Phone</span><div class="bar"><div style="width:70%"></div></div></li>
+        <li><span>Laptop & Desktop</span><div class="bar"><div style="width:60%"></div></div></li>
+        <li><span>PC</span><div class="bar"><div style="width:50%"></div></div></li>
+        <li><span>Tablet & iPad</span><div class="bar"><div style="width:65%"></div></div></li>
+        <li><span>Game & Console</span><div class="bar"><div style="width:80%"></div></div></li>
+      </ul>
+    </div>
+
+    <!-- Wellness Services -->
+    <div class="service-card">
+      <h4>Wellness Services</h4>
+      <ul>
+        <li><span>Massage</span><div class="bar"><div style="width:85%"></div></div></li>
+        <li><span>Packages</span><div class="bar"><div style="width:70%"></div></div></li>
+      </ul>
+    </div>
+  </div>
+  </section>
+  
+  <!-- Reports Analytics Section (placed at bottom of main content) -->
+  <section class="reports-analytics">
+    <div class="metrics">
+      <div class="metric-card">
+        <h4>Total Reports Filed</h4>
+        <div class="value">1,248</div>
+      </div>
+      <div class="metric-card">
+        <h4>Resolved Reports</h4>
+        <div class="value" style="color:#0b7a72;">1,020</div>
+      </div>
+      <div class="metric-card">
+        <h4>Pending Reports</h4>
+        <div class="value">228</div>
+      </div>
+    </div>
+
+    <div class="panels">
+      <div class="panel">
+        <h4>Reports by Category</h4>
+        <div class="progress-row"><div class="label">Last-Minute Cancellation</div><div class="bar"><i style="width:20%"></i></div><div style="width:36px;text-align:right;color:#666;">20%</div></div>
+        <div class="progress-row"><div class="label">No Prior Notice</div><div class="bar"><i style="width:15%;background:#ffb74d"></i></div><div style="width:36px;text-align:right;color:#666;">15%</div></div>
+        <div class="progress-row"><div class="label">Unprofessional Communication</div><div class="bar"><i style="width:13%;background:#ffd54f"></i></div><div style="width:36px;text-align:right;color:#666;">13%</div></div>
+        <div class="progress-row"><div class="label">Failure to Arrive / No-Show</div><div class="bar"><i style="width:14%;background:#ffd54f"></i></div><div style="width:36px;text-align:right;color:#666;">14%</div></div>
+        <div class="progress-row"><div class="label">Cancelled to Force Outside-App Transaction</div><div class="bar"><i style="width:10%;background:#f48fb1"></i></div><div style="width:36px;text-align:right;color:#666;">10%</div></div>
+        <div class="progress-row"><div class="label">Fake or Incorrect Availability</div><div class="bar"><i style="width:9%;background:#b39ddb"></i></div><div style="width:36px;text-align:right;color:#666;">9%</div></div>
+        <div class="progress-row"><div class="label">Misleading Information / Dishonesty</div><div class="bar"><i style="width:8%;background:#9fa8da"></i></div><div style="width:36px;text-align:right;color:#666;">8%</div></div>
+        <div class="progress-row"><div class="label">Safety or Security Concern</div><div class="bar"><i style="width:7%;background:#90caf9"></i></div><div style="width:36px;text-align:right;color:#666;">7%</div></div>
+        <div class="progress-row"><div class="label">Other Valid Concerns</div><div class="bar"><i style="width:4%;background:#cfd8dc"></i></div><div style="width:36px;text-align:right;color:#666;">4%</div></div>
+      </div>
+
+      <div class="panel">
+        <h4>Most Reported Providers</h4>
+        <table>
+          <thead><tr><th>Provider</th><th>Reports</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Callix Bryle</td><td>3</td><td><span class="status-pill status-under">Under Review</span></td></tr>
+            <tr><td>Ana Santos</td><td>2</td><td><span class="status-pill status-active">Active</span></td></tr>
+            <tr><td>CJ Garcia</td><td>1</td><td><span class="status-pill status-resolved">Resolved</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  </main>
   </div>
 
   <script>
-    // User dropdown
-    const dropdownBtn = document.getElementById("userDropdownBtn");
-    const dropdown = document.getElementById("userDropdown");
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
-    });
-    
-    // User Activity Chart
-    new Chart(document.getElementById('activityChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Day', 'Week', 'Month'],
-        datasets: [{
-          label: 'Active Users',
-          data: [20, 40, 60],
-          backgroundColor: '#00bcd4'
-        }]
-      },
-      options: { responsive: true, plugins: { legend: { display: false } } }
-    });
+    // Dropdown
+    (function(){
+      const dropdownBtn = document.getElementById("userDropdownBtn");
+      const dropdown = document.getElementById("userDropdown");
+      if (dropdownBtn && dropdown) {
+        dropdownBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle("show");
+        });
+        window.addEventListener("click", (e) => {
+          if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
+        });
+      }
+    })();
 
-    // User Type Chart
-    new Chart(document.getElementById('userTypeChart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Admin', 'Client', 'Provider', 'Applicant'],
-        datasets: [{
-          data: [10, 30, 40, 20],
-          backgroundColor: ['#009688', '#03a9f4', '#ff9800', '#e91e63']
-        }]
-      },
-      options: { responsive: true }
-    });
+    // Charts setup
+(function(){
+  if (typeof Chart === 'undefined') return;
 
-    // Service Distribution
-    new Chart(document.getElementById('serviceChart'), {
-      type: 'pie',
-      data: {
-        labels: ['Cleaning', 'Indoor Services', 'Beauty Services', 'Wellness Services', 'Tech & Gadget Services'],
-        datasets: [{
-          data: [30, 25, 15, 10, 20],
-          backgroundColor: ['#4caf50', '#03a9f4', '#e91e63', '#ff9800', '#9c27b0']
-        }]
-      },
-      options: { responsive: true }
-    });
+  const ctx1 = document.getElementById('userActivityChart');
+  new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: <?php echo json_encode($js_activity_labels); ?>,
+      datasets: [
+        { label: 'Clients', data: <?php echo json_encode($js_activity_clients); ?>, borderColor: '#00bcd4', fill: false },
+        { label: 'Service Providers', data: <?php echo json_encode($js_activity_providers); ?>, borderColor: '#03a9f4', fill: false }
+      ]
+    },
+    options: { responsive: true, plugins:{ legend:{ position:'bottom' } } }
+  });
 
-    // Booking Chart
-    new Chart(document.getElementById('bookingChart'), {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [{
-          label: 'Bookings',
-          data: [80, 100, 120, 130, 140, 160, 170, 190, 200, 210, 220, 250],
-          fill: true,
-          backgroundColor: 'rgba(0,188,212,0.2)',
-          borderColor: '#00bcd4'
-        }]
+  const ctx2 = document.getElementById('providerPerformanceChart');
+  new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: <?php echo json_encode($js_monthly_labels); ?>,
+      datasets: [{ label: 'Performance', data: <?php echo json_encode($js_provider_performance); ?>, borderColor:'#2196f3', backgroundColor:'rgba(33,150,243,0.1)', fill:true }]
+    },
+    options: { responsive: true, plugins:{ legend:{ display:false } } }
+  });
+
+  // Booking & Job Statistics Chart (data populated from server-side analytics)
+  const bookingCtx = document.getElementById('bookingChart');
+  new Chart(bookingCtx, {
+    type: 'bar',
+    data: {
+      labels: <?php echo json_encode($js_monthly_labels); ?>,
+      datasets: [{
+        label: 'Bookings',
+        data: <?php echo json_encode($js_monthly_counts); ?>,
+        backgroundColor: 'rgba(0, 102, 255, 0.3)',
+        borderColor: '#0066ff',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
       },
-      options: { responsive: true, plugins: { legend: { display: false } } }
-    });
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+})();
+
+    // Time period buttons functionality
+    (function(){
+      const timeButtons = document.querySelectorAll('.time-btn');
+      if (!timeButtons.length) return;
+
+      // Data for different time periods
+      const cardData = {
+        'Today': {
+          day: { value: 890, label: 'Today' },
+          week: { value: 6230, label: 'This Week' },
+          month: { value: 28450, label: 'This Month' }
+        },
+        'This Week': {
+          day: { value: 890, label: 'Today' },
+          week: { value: 6230, label: 'This Week' },
+          month: { value: 28450, label: 'This Month' }
+        },
+        'This Month': {
+          day: { value: 890, label: 'Today' },
+          week: { value: 6230, label: 'This Week' },
+          month: { value: 28450, label: 'This Month' }
+        }
+      };
+
+      timeButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const period = this.textContent.toLowerCase(); // 'day', 'week', 'month'
+          const card = this.closest('.summary-card');
+          if (!card) return;
+
+          // Update button states (active/inactive)
+          const buttons = card.querySelectorAll('.time-btn');
+          buttons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          // Get the card body and update values from data-* attributes
+          const cardBody = card.querySelector('.card-body');
+          const h2 = cardBody.querySelector('h2');
+          const p = cardBody.querySelector('p');
+          const val = card.dataset[period] || card.dataset['day'] || '0';
+          h2.textContent = Number(val).toLocaleString();
+
+          if (period === 'day') {
+            p.textContent = 'Today';
+          } else if (period === 'week') {
+            p.textContent = 'This Week';
+          } else if (period === 'month') {
+            p.textContent = 'This Month';
+          }
+        });
+      });
+    })();
+
   </script>
 </body>
 </html>
-
-
-

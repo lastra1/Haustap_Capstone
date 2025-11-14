@@ -23,7 +23,7 @@
             <div class="service-card">
                 <div class="service-header">
                     <div>
-                        <h3 class="service-title">Inspection Fee</h3>
+                        <h3 class="service-title">Inspection</h3>
                         <p class="service-price">â‚±300</p>
                         <p class="service-note">Additional fee per gardener for inspection</p>
                     </div>

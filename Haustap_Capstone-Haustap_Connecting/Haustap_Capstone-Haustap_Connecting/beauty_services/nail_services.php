@@ -60,6 +60,7 @@
                  Nail cutting and shaping<br>
                  Cuticle cleaning and pushing<br>
                  Gentle removal of dead skin or light calluses<br>
+                 Nail buffing for smooth finish <br>
                  Application of base coat, polish, and top coat<br>
                  Light foot massage
               </p>
@@ -77,11 +78,12 @@
               <h3>Gel Manicure</h3>
               <p class="price">â‚±700</p>
               <p><strong>Inclusions:</strong><br>
-                 Nail shaping and cuticle cleaning<br>
-                 Buffing for proper gel adhesion<br>
-                 Application of gel layers with UV/LED curing<br>
-            Glossy finish (2&ndash;3 weeks wear)<br>
-                 Optional nail art or design
+                 Nail shaping and cuticle cleaning <br>
+                Buffing for proper gel adhesion <br>
+                Application of base gel coat, 2–3 layers of gel color, and top gel coat <br>
+                Each layer cured under UV/LED lamp for durability<br>
+                Long-lasting glossy finish (2–3 weeks wear) <br>
+                Optional: nail art or design (may have add-on cost) <br>
               </p>
             </div>
           </label>
@@ -92,11 +94,12 @@
               <h3>Gel Pedicure</h3>
               <p class="price">â‚±800</p>
               <p><strong>Inclusions:</strong><br>
-                 Relaxing foot soak<br>
-                 Nail trimming and cuticle cleaning<br>
-                 Application of gel polish with curing<br>
-                 Chip-resistant color<br>
-                 Light foot massage
+                 Relaxing foot soak <br>  
+                  Nail trimming, shaping, and cuticle cleaning <br>
+                  Gentle buffing to prep nails <br> 
+                  Application of gel polish with curing under UV/LED lamp <br>
+                  Long-lasting, chip-resistant color for feet <br>
+                  Light foot massage with lotion <br>
               </p>
             </div>
           </label>
@@ -109,13 +112,15 @@
           <label class="service-card">
             <input type="radio" name="nail">
             <div class="service-content">
-              <h3>Acrylic or Gel Extensions</h3>
+              <h3>Nail Extensions (Acrylic or Gel)</h3>
               <p class="price">â‚±1,000</p>
               <p><strong>Inclusions:</strong><br>
-                 Natural nail prep: cleaning, buffing, and cuticle care<br>
-                 Application of nail tips or forms for extension<br>
-                 Acrylic or gel overlay shaped to desired length<br>
-                 Polish or gel color application
+                 Natural nail prep: cleaning, buffing, and cuticle care <br>
+                  Application of nail tips or forms for extension <br>
+                  Acrylic or gel overlay applied and shaped <br>
+                  Filing and smoothing to achieve desired length and shape <br>
+                  Polish or gel color application with top coat <br>
+                  Durable, lengthened nails (ideal for styling or nail art) <br>
               </p>
             </div>
           </label>
@@ -126,10 +131,12 @@
               <h3>Polygel Extensions</h3>
               <p class="price">â‚±1,200</p>
               <p><strong>Inclusions:</strong><br>
-                 Natural nail preparation (cleaning and buffing)<br>
-                 Application of polygel using dual forms<br>
-                 Lightweight yet durable shaping<br>
-                 Polish or gel color finish
+                 Natural nail preparation (cleaning and buffing) <br>
+                  Application of polygel using dual forms or sculpting method <br>
+                  Lightweight yet durable extension shaping <br>
+                  Filing and finishing to client’s desired style (square, coffin, stiletto, etc.) <br>
+                  Polish or gel color application with glossy top coat <br>
+                  Stronger and more flexible than acrylic <br>
               </p>
             </div>
           </label>
@@ -145,10 +152,12 @@
               <h3>Hand Spa</h3>
               <p class="price">â‚±500</p>
               <p><strong>Inclusions:</strong><br>
-                 Cleansing wash and exfoliating scrub<br>
-                 Cuticle softening soak<br>
-                 Moisturizing mask or cream<br>
-                 Relaxing hand massage
+                 Cleansing wash for hands <br>
+                  Exfoliating scrub to remove dead skin cells <br>
+                  Cuticle softening soak <br>
+                  Moisturizing hand mask or cream application <br>
+                  Relaxing hand massage with lotion/oil <br>
+                  Optional nail buffing or light polish (basic) <br>
               </p>
             </div>
           </label>
@@ -159,10 +168,12 @@
               <h3>Foot Spa</h3>
               <p class="price">â‚±600</p>
               <p><strong>Inclusions:</strong><br>
-                 Warm foot soak with salts<br>
-                 Exfoliating scrub and callus removal<br>
-                 Moisturizing mask<br>
-                 Foot massage
+                 Warm foot soak with salts or essential oils <br>
+                  Exfoliating scrub for feet and legs <br>
+                  Callus and dead skin removal (heels & soles) <br>
+                  Moisturizing foot mask or lotion treatment <br>
+                  Relaxing foot and lower leg massage <br>
+                  Optional nail buffing or light polish (basic) <br>
               </p>
             </div>
           </label>
@@ -178,10 +189,12 @@
               <h3>Paraffin Wax (Hands or Feet)</h3>
               <p class="price">â‚±400</p>
               <p><strong>Inclusions:</strong><br>
-                 Gentle cleansing and hydrating cream<br>
-                 Warm paraffin wax dip<br>
-                 Wax wrapping for deep moisture<br>
-                 Soft, rejuvenated skin after removal
+                 Gentle cleansing of hands/feet <br>
+                  Application of hydrating cream or oil <br>
+                  Dipping in warm paraffin wax for deep moisture <br>
+                  Wax wrapping (gloves/socks) to lock in hydration <br>
+                  After set time, wax removed to reveal smoother, softer skin <br>
+                  Leaves skin deeply moisturized and rejuvenated <br>
               </p>
             </div>
           </label>

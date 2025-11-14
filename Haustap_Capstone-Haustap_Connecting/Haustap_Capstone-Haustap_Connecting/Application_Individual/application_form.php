@@ -31,10 +31,7 @@
             <label for="lastName">Last Name</label>
             <input type="text" id="lastName" name="lastName">
           </div>
-          <div>
-            <label for="middleName">Middle Name</label>
-            <input type="text" id="middleName" name="middleName">
-          </div>
+          <!-- middle name removed -->
         </div>
         <div class="row">
           <div>

@@ -51,7 +51,7 @@
             <input type="radio" name="haircut" />
             <div class="service-content">
               <h3>Kiddie Haircut (Men)</h3>
-              <p class="price">Starts at â‚±100</p>
+              <p class="price">Starts at â‚±150</p>
               <p><strong>Inclusions:</strong><br>
                 Gentle haircut suitable for kids<br />
                 Quick comb & styling<br />
@@ -77,7 +77,7 @@
             <input type="radio" name="haircut" />
             <div class="service-content">
               <h3>Kiddie Haircut (Women)</h3>
-              <p class="price">Starts at â‚±200</p>
+              <p class="price">Starts at â‚±250</p>
               <p><strong>Inclusions:</strong><br>
                 Gentle haircut suitable for kids<br />
                 Simple styling (ponytail, braids, or blow-dry)<br />
@@ -95,13 +95,13 @@
           <label class="service-card">
             <input type="radio" name="haircolor" />
             <div class="service-content">
-            <h3>L&rsquo;Oreal Full Hair Color (Short)</h3>
+            <h3>L&rsquo;Oreal Full Hair Color - Short (up to 10 in.)</h3>
             <p class="price">Starts at â‚±2,000&ndash;â‚±2,500</p>
               <p><strong>Inclusions:</strong><br>
-            L&rsquo;Oreal color application<br />
-                Scalp & strand protection<br />
-                Rinse and blow-dry<br />
-                Basic styling
+            Professional hair color application using L’Oreal products
+            Scalp and strand protection treatment
+            Rinse and <br> blow-dry finish
+            Basic styling
               </p>
             </div>
           </label>
@@ -112,9 +112,9 @@
               <h3>Highlights / Low Lights</h3>
             <p class="price">Starts at â‚±2,500&ndash;â‚±3,200</p>
               <p><strong>Inclusions:</strong><br>
-                Foil or balayage technique<br />
-                Protective cream/treatment<br />
-                Shampoo, rinse & blow-dry
+                Foil or balayage technique for highlights/low lights
+                Application <br> of protective cream/treatment
+                Shampoo, rinse, and blow-dry finish
               </p>
             </div>
           </label>
@@ -122,13 +122,13 @@
           <label class="service-card">
             <input type="radio" name="haircolor" />
             <div class="service-content">
-            <h3>L&rsquo;Oreal Full Hair Color (Medium)</h3>
+            <h3>L&rsquo;Oreal Full Hair Color - Medium (10 – 18 in.)</h3>
             <p class="price">Starts at â‚±2,500&ndash;â‚±3,000</p>
               <p><strong>Inclusions:</strong><br>
-            L&rsquo;Oreal color application<br />
-                Scalp & strand protection<br />
-                Rinse & blow-dry<br />
-                Basic styling
+            Professional hair color application using L’Oreal products
+            Scalp and strand protection treatment
+            Rinse and <br> blow-dry finish
+            Basic styling
               </p>
             </div>
           </label>
@@ -141,7 +141,7 @@
               <p><strong>Inclusions:</strong><br>
                 Professional balayage technique<br />
                 Toner (if needed)<br />
-                Protective treatment<br />
+                Protective treatment for scalp & hair<br />
                 Rinse & blow-dry
               </p>
             </div>
@@ -150,13 +150,13 @@
           <label class="service-card">
             <input type="radio" name="haircolor" />
             <div class="service-content">
-            <h3>L&rsquo;Oreal Full Hair Color (Long)</h3>
+            <h3>L&rsquo;Oreal Full Hair Color - Long (18 in. and above)</h3>
             <p class="price">Starts at â‚±3,000&ndash;â‚±3,500</p>
               <p><strong>Inclusions:</strong><br>
-            L&rsquo;Oreal color application<br />
-                Scalp & strand protection<br />
-                Rinse and blow-dry<br />
-                Basic styling
+            Professional hair color application using L’Oreal products
+            Scalp and strand protection treatment
+            Rinse and <br> blow-dry finish
+            Basic styling
               </p>
             </div>
           </label>
@@ -170,12 +170,12 @@
           <label class="service-card">
             <input type="radio" name="straightening" />
             <div class="service-content">
-            <h3>L&rsquo;Oreal Hair Straightening (Short)</h3>
+            <h3>L&rsquo;Oreal Hair Straightening - Short (up to 10 in.)</h3>
             <p class="price">Starts at â‚±2,000&ndash;â‚±3,000</p>
               <p><strong>Inclusions:</strong><br>
-                Professional straightening<br />
-                Heat protection serum<br />
-                Blow-dry & ironing<br />
+                Professional hair straightening using L’Oreal products <br>
+                Application of heat protection serum <br>
+                Blow-dry and ironing for a sleek finish<br>
                 Basic styling
               </p>
             </div>
@@ -184,12 +184,12 @@
           <label class="service-card">
             <input type="radio" name="straightening" />
             <div class="service-content">
-            <h3>L&rsquo;Oreal Hair Straightening (Medium)</h3>
+            <h3>L&rsquo;Oreal Hair Straightening Medium (10 – 18 in.)</h3>
             <p class="price">Starts at â‚±3,000&ndash;â‚±4,000</p>
               <p><strong>Inclusions:</strong><br>
-                Professional straightening<br />
-                Heat protection serum<br />
-                Blow-dry & ironing<br />
+                Professional hair straightening using L’Oreal products <br>
+                Application of heat protection serum <br>
+                Blow-dry and ironing for a sleek finish<br>
                 Basic styling
               </p>
             </div>
@@ -198,12 +198,12 @@
           <label class="service-card">
             <input type="radio" name="straightening" />
             <div class="service-content">
-            <h3>L&rsquo;Oreal Hair Straightening (Long)</h3>
+            <h3>L&rsquo;Oreal Hair Straightening - Long (18 in. and above)</h3>
             <p class="price">Starts at â‚±4,000&ndash;â‚±5,500</p>
               <p><strong>Inclusions:</strong><br>
-                Professional straightening<br />
-                Heat protection serum<br />
-                Blow-dry & ironing<br />
+                Professional hair straightening using L’Oreal products <br>
+                Application of heat protection serum <br>
+                Blow-dry and ironing for a sleek finish<br>
                 Basic styling
               </p>
             </div>
@@ -246,9 +246,9 @@
               <h3>Event Hairstyling</h3>
               <p class="price">â‚±500 per head</p>
               <p><strong>Inclusions:</strong><br />
-                Updo, curls, or themed look<br />
-                Use of heat tools<br />
-                Setting with hairspray
+               Professional hairstyling (updo, curls, or themed look) <br>
+              Use of heat tools (curling iron, flat iron) <br>
+              Setting with hairspray & finishing products <br>
               </p>
             </div>
           </label>
@@ -259,9 +259,9 @@
               <h3>Hair Accessories Styling</h3>
               <p class="price">â‚±400 per head</p>
               <p><strong>Inclusions:</strong><br />
-                Styling with accessories<br />
-                Secure fitting & adjustment<br />
-                Final touch-ups
+                Styling with accessories (flowers, pins, tiaras, etc.) <br>
+                Secure fitting and adjustment for comfort <br>
+                Final touch-ups for neat look <br>
               </p>
             </div>
           </label>

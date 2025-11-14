@@ -23,7 +23,7 @@
       <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="inspection-fee">
         <label for="inspection-fee" class="radio-label"></label>
-        <div class="service-title">Inspection Fee</div>
+        <div class="service-title">Inspection</div>
         <div class="service-price">₱300 <span class="note">Applies if install not processed</span></div>
         <div class="service-details">
           <strong>Inclusions:</strong><br>

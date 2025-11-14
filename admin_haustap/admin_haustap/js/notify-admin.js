@@ -32,7 +32,7 @@
       bellBtn.appendChild(count);
     }
 
-    // Build dropdown if missing
+  // Build dropdown if missing
     if (!document.getElementById('notifDropdown')){
       var dropdown = document.createElement('div');
       dropdown.id = 'notifDropdown';
@@ -66,6 +66,36 @@
       dropdown.appendChild(footer);
       userBox.appendChild(dropdown);
     }
+    // Attach interactive handlers
+    try{
+      const bell = document.getElementById('notifBellBtn');
+      const dropdownEl = document.getElementById('notifDropdown');
+      const countEl = document.getElementById('notifCount');
+      const markAllBtn = document.getElementById('notifMarkAll');
+
+      // toggle dropdown
+      bell.addEventListener('click', async function(e){
+        e.stopPropagation();
+        dropdownEl.classList.toggle('hidden');
+        // when opening, refresh list
+        if (!dropdownEl.classList.contains('hidden')) await loadDropdown();
+      });
+
+      // hide on outside click
+      document.addEventListener('click', function(ev){
+        if (!dropdownEl.contains(ev.target) && !bell.contains(ev.target)) dropdownEl.classList.add('hidden');
+      });
+
+      // mark all read
+      markAllBtn.addEventListener('click', async function(){
+        try{ await markAllRead(); await loadDropdown(); await updateCount(); } catch(e){ console.error(e); }
+      });
+
+      // initial load
+      updateCount();
+      // poll for unread count periodically
+      setInterval(updateCount, 25000);
+    }catch(e){ console.warn('notif UI attach failed', e); }
   }
 
   if (document.readyState === 'loading'){
@@ -74,4 +104,66 @@
     injectStyles(); ensureUi();
   }
 })();
+
+// === notification data helpers (global so tests can call) ===
+async function fetchNotifications(params){
+  const qs = params ? ('?'+new URLSearchParams(params).toString()) : '';
+  const res = await fetch('api/notifications.php'+qs, { credentials: 'same-origin' });
+  return res.json();
+}
+
+async function loadDropdown(limit){
+  limit = limit || 20;
+  try{
+    const data = await fetchNotifications({ limit: limit });
+    if (!data.ok) return;
+    const list = data.data || [];
+    const ul = document.getElementById('notifList');
+    ul.innerHTML = '';
+    if (list.length === 0){
+      ul.innerHTML = '<li style="padding:12px;">No notifications</li>';
+      return;
+    }
+    list.forEach(n => {
+      const li = document.createElement('li');
+      li.style.padding = '10px 12px';
+      li.style.borderBottom = '1px solid #f0f2f4';
+      li.style.display = 'flex';
+      li.style.alignItems = 'center';
+      const left = document.createElement('div'); left.style.flex='1';
+      const msg = document.createElement('div'); msg.textContent = n.message || '';
+      msg.style.cursor = n.href ? 'pointer' : 'default';
+      msg.style.marginBottom = '4px';
+      if (!n.read){ const dot = document.createElement('span'); dot.textContent='• '; dot.style.color='#3dbfc3'; msg.prepend(dot); }
+      const small = document.createElement('small'); small.style.color='#64748b'; small.textContent = (new Date(n.created_at)).toLocaleString();
+      left.appendChild(msg); left.appendChild(small);
+      li.appendChild(left);
+      const actions = document.createElement('div');
+      if (!n.read){ const b = document.createElement('button'); b.textContent='Mark'; b.style.background='transparent'; b.style.border='0'; b.style.color='#3dbfc3'; b.style.cursor='pointer'; b.addEventListener('click', async (e)=>{ e.stopPropagation(); await markRead(n.id); await loadDropdown(limit); await updateCount(); }); actions.appendChild(b); }
+      if (n.href){ const go = document.createElement('button'); go.textContent='Open'; go.style.marginLeft='8px'; go.style.background='transparent'; go.style.border='0'; go.style.color='#0b74da'; go.style.cursor='pointer'; go.addEventListener('click', ()=>{ window.location.href = n.href; }); actions.appendChild(go); }
+      li.appendChild(actions);
+      ul.appendChild(li);
+      // clicking message navigates
+      if (n.href) msg.addEventListener('click', ()=> window.location.href = n.href);
+    });
+  }catch(e){ console.error('loadDropdown failed', e); }
+}
+
+async function markRead(id){
+  try{ const res = await fetch('api/notifications.php', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'mark_read', id: id }) }); return res.json(); }catch(e){ console.error(e); }
+}
+
+async function markAllRead(){
+  try{ const res = await fetch('api/notifications.php', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'mark_all_read' }) }); return res.json(); }catch(e){ console.error(e); }
+}
+
+async function updateCount(){
+  try{
+    const data = await fetchNotifications({ unread: 1 });
+    if (!data.ok) return;
+    const unread = (data.data || []).length;
+    const countEl = document.getElementById('notifCount');
+    if (countEl){ countEl.textContent = unread>0?unread:''; countEl.style.display = unread>0?'inline-block':'none'; }
+  }catch(e){ console.error(e); }
+}
 

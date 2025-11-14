@@ -38,5 +38,117 @@
         "mobile": null,
         "created_at": 1762439797,
         "expires_at": 1762440097
+    },
+    "mock-otp-0baf7112": {
+        "id": "mock-otp-0baf7112",
+        "code": "419276",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044650,
+        "expires_at": 1763044950
+    },
+    "mock-otp-e1f96a17": {
+        "id": "mock-otp-e1f96a17",
+        "code": "102131",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044656,
+        "expires_at": 1763044956
+    },
+    "mock-otp-c72b99e8": {
+        "id": "mock-otp-c72b99e8",
+        "code": "894902",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044661,
+        "expires_at": 1763044961
+    },
+    "mock-otp-0ce445f7": {
+        "id": "mock-otp-0ce445f7",
+        "code": "422404",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044666,
+        "expires_at": 1763044966
+    },
+    "mock-otp-ef929b56": {
+        "id": "mock-otp-ef929b56",
+        "code": "165162",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044671,
+        "expires_at": 1763044971
+    },
+    "mock-otp-8e1216e8": {
+        "id": "mock-otp-8e1216e8",
+        "code": "869235",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044676,
+        "expires_at": 1763044976
+    },
+    "mock-otp-1871026a": {
+        "id": "mock-otp-1871026a",
+        "code": "235526",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044681,
+        "expires_at": 1763044981
+    },
+    "mock-otp-426b9671": {
+        "id": "mock-otp-426b9671",
+        "code": "928513",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044686,
+        "expires_at": 1763044986
+    },
+    "mock-otp-f55dddd5": {
+        "id": "mock-otp-f55dddd5",
+        "code": "424156",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044691,
+        "expires_at": 1763044991
+    },
+    "mock-otp-bf48a88e": {
+        "id": "mock-otp-bf48a88e",
+        "code": "875244",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044696,
+        "expires_at": 1763044996
+    },
+    "mock-otp-46fac206": {
+        "id": "mock-otp-46fac206",
+        "code": "282518",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044701,
+        "expires_at": 1763045001
+    },
+    "mock-otp-7e692f02": {
+        "id": "mock-otp-7e692f02",
+        "code": "824161",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044706,
+        "expires_at": 1763045006
+    },
+    "mock-otp-664594b3": {
+        "id": "mock-otp-664594b3",
+        "code": "339419",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044711,
+        "expires_at": 1763045011
+    },
+    "mock-otp-d4a079b1": {
+        "id": "mock-otp-d4a079b1",
+        "code": "831647",
+        "email": "carljoshuamirabueno@gmail.com",
+        "mobile": "09350874484",
+        "created_at": 1763044716,
+        "expires_at": 1763045016
     }
 }

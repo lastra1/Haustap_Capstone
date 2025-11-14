@@ -297,3 +297,84 @@ footer {
     height: 200px;
   }
 }
+
+/* Categories bar styles moved from inline <style> in Outdoor-Services.php */
+.categories-bar{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  margin:18px 0 28px 0;
+  padding:0 4px;
+  justify-content:center; /* center the whole categories row under the title */
+}
+.categories-bar .cat{
+  color:#222;
+  text-decoration:none;
+  padding:10px 12px;
+  display:inline-block;
+  position:relative;
+}
+.categories-bar .cat + .cat::before{
+  /* vertical divider between categories */
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 22px;
+  background: #cfcfcf;
+  margin: 0 12px 0 12px;
+  vertical-align: middle;
+}
+.categories-bar .cat.active{
+  font-weight:700;
+  color:#222;
+}
+/* active underline centered under the text */
+.categories-bar .cat.active::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -8px;
+  width: 60%;
+  height: 4px;
+  background: #2cc1be;
+  border-radius: 2px;
+}
+
+@media (max-width: 600px) {
+  .categories-bar{ gap:12px; margin:12px 0; }
+  .categories-bar .cat{ padding:8px 4px; }
+}
+
+/* Button-like variant for a category (used for Pest Control in the design) */
+.categories-bar .cat.btn{
+  background:transparent;
+  padding:8px 12px;
+  border-radius:6px;
+  display:inline-block;
+  transition:background 0.15s, transform 0.12s;
+}
+.categories-bar .cat.btn:hover{
+  background:rgba(44,193,190,0.06);
+  transform:translateY(-1px);
+}
+.categories-bar .cat.btn.active{
+  border-bottom:4px solid #2cc1be; /* keep the teal underline when active */
+  padding-bottom:6px; /* tighten while keeping underline visible */
+}
+
+/* Left-align only the Rats section (keeps other groups centered) */
+.rats-section {
+  text-align: left;
+}
+.rats-section .services-row {
+  justify-content: flex-start; /* align cards to the left within the group */
+  gap: 20px;
+}
+.rats-section .service-card {
+  /* match the general service-card sizing so Rats cards are the same size as other sections */
+  flex: 0 1 calc(50% - 16px);
+  max-width: 480px;
+  box-sizing: border-box;
+  min-height: 140px;
+}

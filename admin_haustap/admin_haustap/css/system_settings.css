@@ -175,6 +175,29 @@ body {
   cursor: pointer;
 }
 
+/* Logo upload / preview */
+.logo-upload {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.logo-preview {
+  width: 84px;
+  height: 84px;
+  border-radius: 12px;
+  background: #f7f7f7;
+  border: 1px dashed #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.logo-preview img { width: 100%; height: 100%; object-fit: contain; display:block }
+.logo-preview .placeholder-text { color:#999; font-size:12px }
+.logo-actions { display:flex; gap:8px; align-items:center }
+.remove-btn { background:#fff; border:1px solid #e0e0e0; padding:8px 10px; border-radius:6px; cursor:pointer; color:#d9534f }
+.remove-btn:hover { background:#ffecec }
+
 .radio-group {
   display: flex;
   gap: 20px;

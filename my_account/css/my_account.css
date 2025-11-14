@@ -1,0 +1,484 @@
+/* ===== GENERAL STYLES ===== */
+body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+/* ===== HEADER ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 40px 60px;
+  box-sizing: border-box;
+}
+
+.logo-img {
+  height: 100px;
+  width: auto;
+  display: block;
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+  margin-left: 24px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #222;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.nav a.active {
+  color: #3dbfc3;
+  border-bottom: 2px solid #3dbfc3;
+}
+
+.nav a:hover {
+  color: #009999;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.notification-box {
+  position: relative;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.notification-box i {
+  font-size: 25px;
+  color: #131313;
+  transition: color 0.3s;
+}
+
+.notification-box i:hover {
+  color: cyan;
+  transform: scale3d(1.3, 1.3, 1);
+}
+
+
+.account-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #222;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.account-icon {
+  font-size: 20px;
+  color: cyan;
+}
+
+/* --- Profile card new layout --- */
+.profile-card {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+/* Flex layout: icon on left, text on right */
+.profile-header-side {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-header-side i {
+  color: #333;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-name {
+  font-weight: 700;
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Edit Profile Button with icon */
+.edit-profile-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  margin-top: 4px;
+  transition: color 0.3s;
+}
+
+.edit-profile-btn i {
+  font-size: 12px;
+}
+
+.edit-profile-btn:hover {
+  color: #00a6a6;
+}
+
+
+.account-page {
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.account-container {
+  display: flex;
+  gap: 40px;
+  width: 90%;
+  max-width: 1200px;
+}
+
+/* LEFT SIDEBAR */
+.sidebar {
+  width: 250px;
+}
+
+.profile-card {
+  background-color: #f8f8f8;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.profile-name {
+  font-weight: 700;
+}
+
+.edit-profile-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.sidebar-nav li {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.sidebar-nav li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.sidebar-nav li a.active {
+  font-weight: bold;
+}
+
+.sidebar-secondary li {
+  margin: 8px 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sidebar-secondary i {
+  margin-right: 8px;
+}
+
+.logout-btn {
+  background-color: #e00000;
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 8px 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* RIGHT MAIN CONTENT */
+.profile-box {
+  border: 1px solid #ccc;
+  padding: 25px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.profile-header {
+  margin-bottom: 25px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* 🔹 Add the divider line here */
+.profile-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative; /* Needed for the divider */
+}
+
+/* 🔹 Vertical divider line */
+.profile-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 65%; /* Adjust this percentage as needed */
+  width: 1px;
+  background-color: #ccc;
+}
+
+/* INFO SECTION (LEFT) */
+.profile-info {
+  flex: 1;
+  margin-right: 40px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.info-row label {
+  width: 160px;
+  font-weight: 500;
+  color: #333;
+}
+
+.info-row span {
+  flex: 1;
+  text-align: left;
+  color: #333;
+}
+
+.info-row a {
+  color: #00a6a6;
+  font-size: 13px;
+  margin-left: 5px;
+}
+
+/* 🔹 Editable name input box */
+.info-row input#name {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 14px;
+  color: #333;
+}
+
+.info-row input#name:focus {
+  outline: none;
+  border-color: #00b3b3;
+  box-shadow: 0 0 3px rgba(0, 179, 179, 0.5);
+}
+
+.gender label {
+  margin-right: 10px;
+}
+
+.btn-group {
+  margin-top: 25px;
+}
+
+.change-password,
+.save-btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.change-password {
+  background-color: cyan;
+  color: rgb(0, 0, 0);
+  border: 1px solid #adadad;
+  margin-right: 10px;
+}
+
+.save-btn {
+  background-color: cyan;
+  color: rgb(0, 0, 0);
+  border: 1px solid #adadad;
+}
+.change-password:hover {
+  background-color: cyan;
+  color: rgb(0, 0, 0);
+  border: 1px solid #adadad;
+  transform: scale3d(1.05, 1.05, 1);
+}
+
+.save-btn:hover {
+  background-color: cyan;
+  color: rgb(0, 0, 0);
+  border: 1px solid #adadad;
+  transform: scale3d(1.05, 1.05, 1);
+}
+
+
+/* PROFILE IMAGE SECTION (RIGHT) */
+.profile-image {
+  text-align: center;
+  width: 250px;
+}
+
+.profile-image i {
+  margin-bottom: 20px;
+}
+
+.select-image {
+  display: block;
+  margin: 10px auto;
+  padding: 6px 15px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+}
+
+.file-note {
+  font-size: 11px;
+  color: #666;
+  margin-top: 5px;
+}
+
+
+
+
+/* ===== FOOTER ===== */
+footer {
+  background: #e6e6e6;
+  padding: 50px 70px 25px;
+  color: #000;
+  min-height: 200px;
+  position: relative;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-height: 150px;
+  position: relative;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* LEFT SECTION */
+.footer-left h4 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.footer-left ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-left li {
+  margin-bottom: 5px;
+}
+
+.footer-left a {
+  text-decoration: none;
+  color: #000;
+}
+
+.footer-left a:hover {
+  color: #10bfc9;
+}
+
+/* CENTER SECTION */
+.footer-center {
+  text-align: center;
+}
+
+.footer-center img {
+  width: 100px;
+}
+
+.footer-center p {
+  font-size: 13px;
+}
+
+/* RIGHT SECTION */
+.footer-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.footer-right h4 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.footer-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 50px;
+  right: 0;
+}
+
+.footer-right li {
+  margin-bottom: 6px;
+}
+
+.footer-right .contact-info {
+  position: absolute;
+  bottom: -40px;
+  right: 0;
+  margin: 0;
+}
+
+.footer-right .contact-info p {
+  font-size: 13px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* FOOTER BOTTOM */
+.footer-bottom {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 25px;
+  border-top: 1px solid #d1d1d1;
+  padding-top: 10px;
+  font-size: 14px;
+  }

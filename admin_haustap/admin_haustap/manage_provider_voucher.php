@@ -1,3 +1,7 @@
+<?php require_once __DIR__ . '/includes/auth.php';
+$pid = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,11 +36,10 @@
       </header>
         <!-- Tabs -->
       <div class="tabs">
-        <button>Profile</button>
-        <button>Bookings</button>
-        <button>Activity</button>
-        <button class="active">Voucher</button>
-        <button>Subscription</button>
+        <button data-target="manage_provider_profile.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Profile</button>
+        <button data-target="manage_provider_jobs.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Jobs</button>
+        <button class="active" data-target="manage_provider_voucher.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Voucher</button>
+        <button data-target="manage_provider_subscription.php?id=<?php echo $pid; ?>&status=<?php echo $pstatus; ?>">Subscription</button>
       </div>
 
       <!-- Search and Filter -->
@@ -133,8 +136,23 @@
 
     window.addEventListener('click', () => {
       dropdownContent.classList.remove('show');
-filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
     });
+
+    // Tabs navigation handler: navigate to data-target when present
+    (function(){
+      const tabsContainer = document.querySelector('.tabs');
+      if (!tabsContainer) return;
+      const buttons = Array.from(tabsContainer.querySelectorAll('button'));
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function(e){
+          const target = btn.getAttribute('data-target');
+          if (target) { window.location.href = target; return; }
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    })();
   </script>
 </body>
 </html>

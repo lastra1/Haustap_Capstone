@@ -1,0 +1,59 @@
+/* Shared footer styles to ensure consistent layout across pages */
+footer{
+	background:#e6e6e6;
+	color:#000;
+	padding:50px 40px 25px;
+	box-sizing:border-box;
+}
+
+.footer-content{
+	display:flex;
+	justify-content:space-between;
+	align-items:flex-start;
+	gap:24px;
+	flex-wrap:wrap;
+}
+
+.footer-left, .footer-center, .footer-right{
+	flex:1 1 220px;
+	min-width:220px;
+	box-sizing:border-box;
+	padding:0 8px;
+}
+
+.footer-left h4, .footer-right h4{
+	font-weight:700;
+	margin-bottom:12px;
+}
+
+.footer-left ul, .footer-right ul{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+
+.footer-left a, .footer-right a{ color:#000; text-decoration:none; }
+.footer-left a:hover, .footer-right a:hover{ color:#10bfc9; }
+
+/* Make the center block centered and logo sized appropriately */
+.footer-center{ text-align:center; }
+.footer-center img{ width:90px; height:auto; display:block; margin:0 auto 10px; }
+
+/* Ensure the right column flows normally (no absolute positioning) and aligns its text to the right */
+.footer-right{ text-align:right; }
+.footer-right ul{ position:static; }
+.footer-right .contact-info{ position:static; margin-top:12px; }
+
+.footer-bottom{
+	text-align:center;
+	font-weight:600;
+	margin-top:18px;
+	border-top:1px solid #d1d1d1;
+	padding-top:12px;
+	font-size:14px;
+}
+
+@media (max-width:900px){
+	.footer-content{ flex-direction:column; align-items:center; }
+	.footer-right{ text-align:center; }
+}

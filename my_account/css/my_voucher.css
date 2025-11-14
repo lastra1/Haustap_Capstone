@@ -1,0 +1,166 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* MAIN CONTAINER */
+.voucher-page {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.voucher-container {
+  background: #fff;
+  width: 90%;
+  max-width: 800px;
+  border: 4px solid #ddd;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   HEADER
+========================= */
+.voucher-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 6px solid #ddd; /* ✅ Thicker gray underline */
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+}
+
+.voucher-header h2 {
+  font-size: 24px;
+  color: #222;
+}
+
+.view-history {
+  color: #00b3b3;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* =========================
+   LOYALTY SECTION
+========================= */
+.loyalty-section {
+  margin-top: 25px;
+  padding-bottom: 30px;
+}
+
+.loyalty-section h3 {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+.progress-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  padding: 20px;
+  margin-top: 15px;
+  position: relative;
+}
+
+/* ✅ Circle Layout */
+.progress-circles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  text-align: center;
+  color: #666;
+  padding: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.circle.filled {
+  background-color: cyan;
+  color: #000000;
+}
+
+/* ✅ Text styling */
+.progress-text-inside {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.progress-text-below {
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* =========================
+   EXCLUSIVE VOUCHERS
+========================= */
+.exclusive-section {
+  margin-top: 30px;
+  border-top: 6px solid #ddd; /* ✅ Add matching gray line */
+  padding-top: 25px;
+}
+
+.exclusive-section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.voucher-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.voucher-card {
+  background-color: #f9f9f9;
+  border: 3px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.voucher-grid :hover {
+  border-color: #00b3b3;
+  box-shadow: 0 2px 6px rgba(0,179,179,0.15);
+}
+
+.voucher-card h4 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #222;
+}
+
+.voucher-card p {
+  font-size: 14px;
+  color: #555;
+  margin: 5px 0;
+}
+
+.voucher-card .condition {
+  font-size: 13px;
+  color: #777;
+  margin-top: 8px;
+}

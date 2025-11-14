@@ -1,3 +1,8 @@
+<?php require_once __DIR__ . '/includes/auth.php'; ?>
+<?php
+$cid = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$cstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,10 +37,9 @@
       </header>
         <!-- Tabs -->
       <div class="tabs">
-        <button>Profile</button>
-        <button>Bookings</button>
-        <button>Activity</button>
-        <button class="active">Voucher</button>
+        <button data-target="manage_client_profile.php?id=<?php echo $cid; ?>&status=<?php echo $cstatus; ?>">Profile</button>
+        <button data-target="manage_client_booking.php?id=<?php echo $cid; ?>&status=<?php echo $cstatus; ?>">Bookings</button>
+        <button class="active" data-target="manage_client_voucher.php?id=<?php echo $cid; ?>&status=<?php echo $cstatus; ?>">Voucher</button>
       </div>
 
       <!-- Search and Filter -->
@@ -134,6 +138,21 @@
       dropdownContent.classList.remove('show');
 filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
     });
+    
+    // Tabs navigation: navigate to pages specified in data-target
+    (function(){
+      const tabsContainer = document.querySelector('.tabs');
+      if (!tabsContainer) return;
+      const btns = Array.from(tabsContainer.querySelectorAll('button'));
+      btns.forEach(btn => {
+        btn.addEventListener('click', function(e){
+          const target = btn.getAttribute('data-target');
+          if (target) { try { window.location.href = target; } catch(err) { console.error('Navigation failed', err); } return; }
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    })();
   </script>
 </body>
 </html>

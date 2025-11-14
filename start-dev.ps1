@@ -18,5 +18,13 @@ $env:APP_DEBUG = $env:APP_DEBUG -as [string]
 if (-not $env:APP_DEBUG) { $env:APP_DEBUG = 'true' }
 
 # Launch PHP built-in server
-php -S 127.0.0.1:$Port -t $Root $Router
+# Prefer a bundled portable PHP under tools/php8/php.exe if present, otherwise use system php
+$localPhp = Join-Path $Root 'tools\php8\php.exe'
+if (Test-Path $localPhp) {
+	Write-Host "Using bundled PHP: $localPhp" -ForegroundColor Green
+	& $localPhp -S 127.0.0.1:$Port -t $Root $Router
+} else {
+	Write-Host "Using system PHP (php on PATH)" -ForegroundColor Yellow
+	php -S 127.0.0.1:$Port -t $Root $Router
+}
 

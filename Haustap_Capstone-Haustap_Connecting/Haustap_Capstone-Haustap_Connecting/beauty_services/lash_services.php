@@ -35,7 +35,7 @@
             <input type="radio" name="lashes" checked />
             <div class="service-content">
               <h3>Classic Lash Extensions</h3>
-              <p class="price">Starts at â‚±500</p>
+              <p class="price"> â‚±500</p>
               <p><strong>Inclusions:</strong><br>
                 1:1 lash application for a natural look<br>
                 Lightweight and comfortable for daily wear<br>
@@ -48,7 +48,7 @@
             <input type="radio" name="lashes" />
             <div class="service-content">
               <h3>Hybrid Lash Extensions</h3>
-              <p class="price">Starts at â‚±800</p>
+              <p class="price"> â‚±800</p>
               <p><strong>Inclusions:</strong><br>
                 Combination of classic and volume lash techniques<br>
                 Fuller and more textured effect<br>
@@ -61,7 +61,7 @@
             <input type="radio" name="lashes" />
             <div class="service-content">
               <h3>Volume Lash Extensions</h3>
-              <p class="price">Starts at â‚±1,000</p>
+              <p class="price"> â‚±1,000</p>
               <p><strong>Inclusions:</strong><br>
             3D&ndash;6D lash fans applied for dramatic volume<br>
                 Creates a glamorous, eye-catching effect<br>
@@ -74,7 +74,7 @@
             <input type="radio" name="lashes" />
             <div class="service-content">
               <h3>Mega Volume Lash Extensions</h3>
-              <p class="price">Starts at â‚±1,500</p>
+              <p class="price"> â‚±1,500</p>
               <p><strong>Inclusions:</strong><br>
                 Multiple ultra-fine lash fans for extra density<br>
                 Intense, dramatic lash look<br>
@@ -87,7 +87,7 @@
             <input type="radio" name="lashes" />
             <div class="service-content">
               <h3>Lash Lift + Tint</h3>
-              <p class="price">Starts at â‚±500</p>
+              <p class="price"> â‚±500</p>
               <p><strong>Inclusions:</strong><br>
                 Lifts and curls natural lashes from the root<br>
                 Tint adds depth and mascara-like effect<br>
@@ -100,7 +100,7 @@
             <input type="radio" name="lashes" />
             <div class="service-content">
               <h3>Lower Lash Extensions</h3>
-              <p class="price">Starts at â‚±300</p>
+              <p class="price"> â‚±300</p>
               <p><strong>Inclusions:</strong><br>
                 Extensions applied to bottom lashes<br>
                 Enhances definition and balance to eye look<br>
@@ -113,7 +113,7 @@
             <input type="radio" name="lashes" />
             <div class="service-content">
               <h3>Lash Removal</h3>
-              <p class="price">Starts at â‚±500</p>
+              <p class="price"> â‚±500</p>
               <p><strong>Inclusions:</strong><br>
                 Gentle and safe removal of extensions<br>
                 Protects natural lashes from damage<br>
@@ -126,7 +126,7 @@
             <input type="radio" name="lashes" />
             <div class="service-content">
             <h3>Lash Retouch / Refill (2&ndash;3 weeks)</h3>
-              <p class="price">Starts at â‚±800</p>
+              <p class="price"> â‚±800</p>
               <p><strong>Inclusions:</strong><br>
                 Fills in gaps from natural lash shedding<br>
                 Maintains fullness and shape of extensions<br>

@@ -23,9 +23,9 @@
   <nav class="subcategory-nav">
     <ul>
       <li class="active">Mobile Phone</li>
-      <li>Laptop & Desktop PC</li>
-      <li>Tablet & iPad</li>
-      <li>Game & Console</li>
+  <li><a href="/tech_gadget/laptop_desktop.php">Laptop & Desktop PC</a></li>
+      <li><a href="/tech_gadget/tablet_ipad.php">Tablet & iPad</a></li>
+      <li><a href="/tech_gadget/game_console.php">Game & Console</a></li>
     </ul>
   </nav>
 
@@ -110,7 +110,7 @@
             <p><strong>Inclusions:</strong><br>
               Diagnosis of charging port issue<br>
               Cleaning or replacement of charging port<br>
-              Soldering work if required<br>
+              Soldering work (if required)<br>
               Testing for charging stability and USB connection
             </p>
           </div>

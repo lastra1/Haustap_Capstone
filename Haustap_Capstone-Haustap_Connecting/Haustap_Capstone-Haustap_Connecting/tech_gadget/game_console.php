@@ -96,27 +96,15 @@
             <h3>Software Reinstallation / Update </h3>
             <p class="price">â‚±300 per unit</p>
             <p><strong>Inclusions:</strong><br>
-                Diagnosis of controller issues (buttons, joystick, triggers, or connectivity)<br>
-                Cleaning and calibration of internal parts<br>
-                Replacement of minor components/parts (if provided by client)<br>
-                Functionality test and gameplay test after repair
+                System software update/reinstallation (PlayStation, Xbox, Nintendo, etc.) <br>
+                Installation of latest firmware version <br>
+                Optimization of console performance <br>
+                Testing of system functions and online connectivity <br>
             </p>
           </div>
         </label>
 
-        <label class="service-card">
-          <input type="radio" name="tech" />
-          <div class="service-content">
-            <h3>HDMI port repair</h3>
-            <p class="price">â‚±600 per unit</p>
-            <p><strong>Inclusions:</strong><br>
-                System software update/reinstallation (PlayStation, Xbox, Nintendo, etc.)<br>
-                Installation of latest firmware version<br>
-                Optimization of console performance<br>
-                Testing of system functions and online connectivity
-            </p>
-          </div>
-        </label>
+        
       </div>
     </section>
   </div>

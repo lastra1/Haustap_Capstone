@@ -144,6 +144,19 @@ body {
   gap: 12px;
   color: #fff;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.status-cards .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.status-cards .card.active {
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .status-cards .card i {
@@ -511,4 +524,78 @@ th, td {
 
 .approve-btn:hover {
   background: #388e3c;
+}
+
+/* Cancelled popup footer actions */
+.popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.cancel-popup-footer button {
+  min-width: 140px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.reject-cancel-btn {
+  background: #f44336;
+  color: #fff;
+}
+
+.reject-cancel-btn:hover {
+  background: #d32f2f;
+}
+
+.approve-cancel-btn {
+  background: #4caf50;
+  color: #fff;
+}
+
+.approve-cancel-btn.primary:hover {
+  background: #388e3c;
+}
+
+/* Small screens: stack footer buttons */
+@media (max-width: 480px) {
+  .popup-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .cancel-popup-footer button {
+    width: 100%;
+  }
+}
+
+/* Visual marker for approved cancellations */
+.status.cancel-approved {
+  background: #ffd6d6 !important;
+  color: #8a0000 !important;
+  font-weight: 700;
+  border: 1px solid #c33;
+}
+
+.row-cancel-approved {
+  background: #fff6f6;
+  transition: background 0.12s ease-in-out;
+}
+
+/* Visual marker for approved returns */
+.status.return-approved {
+  background: #fff4d6 !important;
+  color: #6a4b00 !important;
+  font-weight: 700;
+  border: 1px solid #e0b340;
+}
+
+.row-return-approved {
+  background: #fffaf0;
+  transition: background 0.12s ease-in-out;
 }

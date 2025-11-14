@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/includes/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,10 +23,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -33,8 +34,8 @@
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab">Service Provider</button>
-        <button class="tab active">Client</button>
+        <button class="tab" data-target="feedback_reviews.php">Service Provider</button>
+        <button class="tab active" data-target="feedback_reviews_client.php">Client</button>
       </div>
 
       <!-- Search and Filter -->
@@ -112,21 +113,21 @@
           <p>Showing 10–10 of 120 Clients</p>
           <span>[ Next ▶ ]</span>
         </div>
+      </div>
 
-        <!-- Summary Cards -->
-        <div class="summary-section">
-          <div class="summary-card">
-            <h4>Average Rating</h4>
-            <p class="highlight">4.8 / 5</p>
-          </div>
-          <div class="summary-card">
-            <h4>Total Reviews</h4>
-            <p class="highlight">92</p>
-          </div>
-          <div class="summary-card">
-            <h4>Recent Feedback</h4>
-            <p class="highlight">Oct 27, 2025</p>
-          </div>
+      <!-- Summary Cards -->
+      <div class="summary-section">
+        <div class="summary-card">
+          <h4>Average Rating</h4>
+          <p class="highlight">4.8 / 5</p>
+        </div>
+        <div class="summary-card">
+          <h4>Total Reviews</h4>
+          <p class="highlight">92</p>
+        </div>
+        <div class="summary-card">
+          <h4>Recent Feedback</h4>
+          <p class="highlight">Oct 27, 2025</p>
         </div>
       </div>
     </main>
@@ -151,53 +152,221 @@
   </div>
 
   <script>
-    // === USER DROPDOWN ===
-    const dropdownBtn = document.getElementById("userDropdownBtn");
-    const dropdown = document.getElementById("userDropdown");
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
-    });
-
-    // === FILTER DROPDOWN ===
-    const filterBtn = document.querySelector('.filter-btn');
-    const dropdownContent = document.querySelector('.dropdown-content');
-    filterBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownContent.classList.toggle('show');
-      filterBtn.innerHTML = dropdownContent.classList.contains('show')
-        ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
-        : '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
-    window.addEventListener('click', () => {
-      dropdownContent.classList.remove('show');
-filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
-    });
-
-    // === FEEDBACK MODAL ===
-    const modal = document.getElementById("feedbackModal");
-    const closeBtn = document.querySelector(".close-btn");
-    const openPopupButtons = document.querySelectorAll(".open-popup");
-
-    openPopupButtons.forEach(button => {
-      button.addEventListener("click", (e) => {
-        e.stopPropagation();
-        modal.style.display = "flex";
-      });
-    });
-
-    closeBtn.addEventListener("click", () => {
-      modal.style.display = "none";
-    });
-
-    window.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        modal.style.display = "none";
+    // === USER DROPDOWN (defensive) ===
+    (function(){
+      const dropdownBtn = document.getElementById("userDropdownBtn");
+      const dropdown = document.getElementById("userDropdown");
+      if (dropdownBtn && dropdown) {
+        dropdownBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle("show");
+        });
+        window.addEventListener("click", (e) => {
+          if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
+        });
       }
-    });
+    })();
+
+    // Tabs: navigate between client and provider feedback pages (robust by data-target)
+    (function(){
+      const tabs = document.querySelectorAll('.tabs .tab[data-target]');
+      if (!tabs || tabs.length === 0) return;
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          try {
+            e.stopPropagation();
+            const dst = tab.getAttribute('data-target');
+            if (!dst) return;
+            console.debug('Feedback tab clicked, navigating to', dst);
+            window.location.assign(dst);
+          } catch (err) { console.error('Tab navigation failed', err); }
+        });
+      });
+    })();
+
+    // === FILTER DROPDOWN (defensive) ===
+    (function(){
+      const filterBtn = document.querySelector('.filter-btn');
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!filterBtn || !dropdownContent) return;
+      filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.classList.toggle('show');
+        filterBtn.innerHTML = dropdownContent.classList.contains('show')
+          ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
+          : '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      });
+      window.addEventListener('click', () => {
+        dropdownContent.classList.remove('show');
+        filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      });
+
+      // === DATE FILTER ===
+      const fromInput = document.getElementById('from-date');
+      const toInput = document.getElementById('to-date');
+      const applyBtn = dropdownContent.querySelector('.apply-btn');
+
+      function parseRowDate(text) {
+        if (!text) return null;
+        const m = text.match(/(\d{4})\D(\d{2})\D(\d{2})(?:[^\d]*(\d{2}):?(\d{2}))?/);
+        if (m) {
+          const y = m[1], mo = m[2], d = m[3];
+          const hh = m[4] || '00', mm = m[5] || '00';
+          const iso = `${y}-${mo}-${d}T${hh}:${mm}:00`;
+          const dt = new Date(iso);
+          if (!isNaN(dt.getTime())) return dt;
+        }
+        const p = Date.parse(text);
+        if (!isNaN(p)) return new Date(p);
+        return null;
+      }
+
+      function applyDateFilter() {
+        const fromVal = fromInput ? fromInput.value : '';
+        const toVal = toInput ? toInput.value : '';
+        const fromDate = fromVal ? new Date(fromVal) : null;
+        const toDateRaw = toVal ? new Date(toVal) : null;
+        const toDate = toDateRaw ? new Date(toDateRaw.getTime() + 86399999) : null;
+
+        const rows = document.querySelectorAll('.reviews-table tbody tr');
+        let matched = 0;
+        rows.forEach(row => {
+          const dateCell = row.querySelector('td:nth-child(5)');
+          const rowDate = parseRowDate(dateCell ? dateCell.textContent.trim() : '');
+          if (!rowDate) { row.dataset.filterHidden = ''; return; }
+          const within = (!fromDate || rowDate >= fromDate) && (!toDate || rowDate <= toDate);
+          row.dataset.filterHidden = within ? '' : 'true';
+          if (within) matched++;
+        });
+        // Update visibility composing with search
+        rows.forEach(row => {
+          const fHidden = row.dataset.filterHidden === 'true';
+          const sHidden = row.dataset.searchHidden === 'true';
+          row.style.display = (fHidden || sHidden) ? 'none' : '';
+        });
+        console.debug('Feedback client filter applied:', { fromVal, toVal, matched, total: rows.length });
+      }
+
+      if (applyBtn && fromInput && toInput) {
+        applyBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          applyDateFilter();
+          dropdownContent.classList.remove('show');
+          filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
+        });
+        fromInput.addEventListener('change', applyDateFilter);
+        toInput.addEventListener('change', applyDateFilter);
+      }
+    })();
+
+    // === SEARCH (debounced + immediate) ===
+    (function(){
+      const input = document.querySelector('.search-filter input[type="text"]');
+      if (!input) return;
+      const searchBtn = document.querySelector('.search-filter .search-btn');
+      const rows = Array.from(document.querySelectorAll('.reviews-table tbody tr'));
+      const norm = s => (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase();
+      let timer = null;
+
+      // expose a simple composer so other filters can call it later
+      window.updateReviewsRowVisibility = function(row){
+        try {
+          const searchHidden = row.dataset.searchHidden === 'true';
+          row.style.display = searchHidden ? 'none' : '';
+        } catch (err) { row.style.display = ''; }
+      };
+
+      function applySearch(q){
+        const text = norm(q);
+        rows.forEach(row => {
+          const id = norm(row.querySelector('td:nth-child(1)')?.textContent);
+          const provider = norm(row.querySelector('td:nth-child(2)')?.textContent);
+          const service = norm(row.querySelector('td:nth-child(3)')?.textContent);
+          const matches = !text || id.indexOf(text) !== -1 || provider.indexOf(text) !== -1 || service.indexOf(text) !== -1;
+          row.dataset.searchHidden = matches ? '' : 'true';
+          window.updateReviewsRowVisibility(row);
+        });
+      }
+
+      input.addEventListener('input', (e) => { clearTimeout(timer); timer = setTimeout(() => applySearch(e.target.value), 180); });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape'){ input.value = ''; applySearch(''); }
+        if (e.key === 'Enter'){ e.preventDefault(); clearTimeout(timer); applySearch(input.value); }
+      });
+      if (searchBtn) searchBtn.addEventListener('click', (ev) => { ev.preventDefault(); clearTimeout(timer); applySearch(input.value); });
+
+      // initialize
+      applySearch(input.value || '');
+    })();
+
+    // === FEEDBACK MODAL (defensive) ===
+    (function(){
+      const modal = document.getElementById("feedbackModal");
+      const closeBtn = document.querySelector(".close-btn");
+      const openPopupButtons = document.querySelectorAll(".open-popup");
+      const markReviewedBtn = document.querySelector(".modal-actions .btn.green");
+      const sendWarningBtn = document.querySelector(".modal-actions .btn.red");
+      let currentRow = null; // Track which row is being viewed
+      
+      if (modal && closeBtn && openPopupButtons && openPopupButtons.length) {
+        openPopupButtons.forEach(button => {
+          button.addEventListener("click", (e) => {
+            e.stopPropagation();
+            // Store reference to the clicked row
+            currentRow = button.closest('tr');
+            modal.style.display = "flex";
+          });
+        });
+
+        closeBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+          currentRow = null;
+        });
+
+        window.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            modal.style.display = "none";
+            currentRow = null;
+          }
+        });
+      }
+
+      // Mark as Reviewed button
+      if (markReviewedBtn) {
+        markReviewedBtn.addEventListener("click", () => {
+          if (confirm("Mark this feedback as reviewed?")) {
+            const clientName = document.querySelector(".modal-content p:nth-child(3)")?.textContent?.replace("Client: ", "").trim();
+            
+            // Update the status in the table row
+            if (currentRow) {
+              const statusCell = currentRow.querySelector('.status');
+              if (statusCell) {
+                statusCell.textContent = 'Reviewed';
+                statusCell.className = 'status reviewed';
+              }
+            }
+            
+            alert(`Feedback from ${clientName} has been marked as reviewed.`);
+            modal.style.display = "none";
+            currentRow = null;
+            // Here you could add API call to update the backend
+          }
+        });
+      }
+
+      // Send Warning button
+      if (sendWarningBtn) {
+        sendWarningBtn.addEventListener("click", () => {
+          if (confirm("Send warning to this client?")) {
+            const clientName = document.querySelector(".modal-content p:nth-child(3)")?.textContent?.replace("Client: ", "").trim();
+            alert(`Warning sent to ${clientName}.`);
+            modal.style.display = "none";
+            currentRow = null;
+            // Here you could add API call to send the warning
+          }
+        });
+      }
+    })();
   </script>
 </body>
 </html>

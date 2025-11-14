@@ -23,10 +23,10 @@
   <!-- Subcategory Navigation -->
   <nav class="subcategory-nav">
     <ul>
-      <li>Hair Services</li>
-      <li>Nail Care</li>
-      <li>Make-up</li>
-      <li>Lashes</li>
+  <li><a href="/beauty_services/hair_services.php">Hair Services</a></li>
+  <li><a href="/beauty_services/nail_services.php">Nail Care</a></li>
+      <li><a href="/beauty_services/makeup_services.php">Make-up</a></li>
+      <li><a href="/beauty_services/lash_services.php">Lashes</a>a</li>
       <li class="active">Packages</li>
     </ul>
   </nav>
@@ -38,7 +38,7 @@
           <input type="radio" name="packages" checked />
           <div class="service-content">
             <h3>Basic Care Package</h3>
-            <p class="price">Starts at â‚±1,000</p>
+            <p class="price"> â‚±1,000</p>
             <p><strong>Inclusions:</strong><br>
               Haircut (Ladies or Men)<br>
               Manicure with trimming, shaping, and polish<br>
@@ -51,7 +51,7 @@
           <input type="radio" name="packages" />
           <div class="service-content">
             <h3>Glam Essentials Package</h3>
-            <p class="price">Starts at â‚±2,200</p>
+            <p class="price"> â‚±2,200</p>
             <p><strong>Inclusions:</strong><br>
               Professional blow-dry and hairstyling<br>
               Gel manicure with long-lasting polish<br>
@@ -64,7 +64,7 @@
           <input type="radio" name="packages" />
           <div class="service-content">
             <h3>Event Ready Package</h3>
-            <p class="price">Starts at â‚±3,500</p>
+            <p class="price"> â‚±3,500</p>
             <p><strong>Inclusions:</strong><br>
               Full make-up for special occasions<br>
               Hybrid lash extensions for fuller eyes<br>
@@ -77,7 +77,7 @@
           <input type="radio" name="packages" />
           <div class="service-content">
             <h3>Bridal Radiance Package</h3>
-            <p class="price">Starts at â‚±8,000</p>
+            <p class="price"> â‚±8,000</p>
             <p><strong>Inclusions:</strong><br>
               Bridal make-up (trial + wedding day)<br>
               Volume lash extensions for elegant eyes<br>
@@ -90,7 +90,7 @@
           <input type="radio" name="packages" />
           <div class="service-content">
             <h3>Mani + Pedi Combo</h3>
-            <p class="price">Starts at â‚±500</p>
+            <p class="price"> â‚±500</p>
             <p><strong>Inclusions:</strong><br>
               Complete hand and foot nail cleaning<br>
               Nail shaping, cuticle care, and polish<br>
@@ -103,7 +103,7 @@
           <input type="radio" name="packages" />
           <div class="service-content">
             <h3>Gel Mani + Pedi Combo</h3>
-            <p class="price">Starts at â‚±1,300</p>
+            <p class="price"> â‚±1,300</p>
             <p><strong>Inclusions:</strong><br>
               Gel manicure with long-lasting polish<br>
               Gel pedicure with durable glossy finish<br>

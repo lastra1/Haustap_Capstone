@@ -23,7 +23,7 @@
       <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="inspection-fee">
         <label for="inspection-fee" class="radio-label"></label>
-        <div class="service-title">Inspection Fee</div>
+        <div class="service-title">Inspection</div>
         <div class="service-price">₱300</div>
         <div class="service-details">
           Individually by a plumber.<br>
@@ -96,29 +96,6 @@
           Installation of new shower head (if any).<br>
           Removal of old shower head.<br>
           Water pressure test to ensure function.
-        </div>
-      </div>
-      <div class="service-card">
-        <input type="radio" name="service" class="service-radio" id="water-heater">
-        <label for="water-heater" class="radio-label"></label>
-        <div class="service-title">Water heater installation - Basic</div>
-        <div class="service-price">₱1,500 per unit</div>
-        <div class="service-details">
-          Basic installation of heater unit.<br>
-          Connection of water lines to water line.<br>
-          Leak & functionality checks.<br>
-          Electrical wiring not included (separate fee).
-        </div>
-      </div>
-      <div class="service-card">
-        <input type="radio" name="service" class="service-radio" id="pipe-install">
-        <label for="pipe-install" class="radio-label"></label>
-        <div class="service-title">Pipe installation - New connection</div>
-        <div class="service-price">₱200 per unit</div>
-        <div class="service-details">
-          Installation of short pipes (any kind, faucet connection).<br>
-          Testing of water flow.<br>
-          Water pressure test.
         </div>
       </div>
       <div class="service-card">

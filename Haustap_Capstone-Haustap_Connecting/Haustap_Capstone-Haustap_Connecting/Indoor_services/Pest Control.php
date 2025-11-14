@@ -26,23 +26,23 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="termite-450">
           <label for="termite-450" class="radio-label"></label>
-          <div class="service-title">Termite Treatment: Floor Area &lt; 450 sqm</div>
-          <div class="service-price">â‚±15,000</div>
+          <div class="service-title">Termite Treatment: Floor Area &lt; 50 sqm</div>
+          <div class="service-price">â‚±6,450</div>
           <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring<br>
-            Warranty: 1 year
+              <strong>Inclusions:</strong><br>Site inspection
+              one-spot treatment of affected areas
+              Wood & cement drenching Mound destruction
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="termite-450-900">
           <label for="termite-450-900" class="radio-label"></label>
-          <div class="service-title">Termite Treatment: Floor Area 450-900 sqm</div>
-          <div class="service-price">â‚±28,000</div>
+          <div class="service-title">Termite Treatment: Floor Area  51-100 sqm</div>
+          <div class="service-price">â‚±8,950</div>
           <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring<br>
-            Warranty: 1 year
+            <strong>Inclusions:</strong><br>Site inspection
+              one-spot treatment of affected areas
+              Wood & cement drenching Mound destruction
           </div>
         </div>
       </div>
@@ -50,23 +50,24 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="termite-900-1500">
           <label for="termite-900-1500" class="radio-label"></label>
-          <div class="service-title">Termite Treatment: Floor Area 900-1500 sqm</div>
-          <div class="service-price">â‚±42,000</div>
+          <div class="service-title">Termite Treatment: Floor Area 101-150 sqm</div>
+          <div class="service-price">â‚±12,450 per unit</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring<br>
-            Warranty: 1 year
+            Site inspection
+            One-spot treatment of affected areas
+            Wood & cement drenching Mound destruction
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="termite-1500-2000">
           <label for="termite-1500-2000" class="radio-label"></label>
-          <div class="service-title">Termite Treatment: Floor Area 1500-2000 sqm</div>
-          <div class="service-price">â‚±60,000</div>
+          <div class="service-title">Termite Treatment: Floor Area 151-200 sqm</div>
+          <div class="service-price">â‚±15,450 per unit</div>
           <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring<br>
-            Warranty: 1 year
+            <strong>Inclusions:</strong><br>Site inspection
+              one-spot treatment of affected areas
+              Wood & cement drenching Mound destruction
           </div>
         </div>
       </div>
@@ -76,21 +77,25 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="ants-450">
           <label for="ants-450" class="radio-label"></label>
-          <div class="service-title">Ant Treatment: Floor Area &lt; 450 sqm</div>
-          <div class="service-price">â‚±4,000</div>
+          <div class="service-title">Ant Treatment: Floor Area &lt; 50 sqm</div>
+          <div class="service-price">â‚±1,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
+            Application of baits & residual spray
+            Crack & crevice treatment
+            Prevention tips
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="ants-450-900">
           <label for="ants-450-900" class="radio-label"></label>
-          <div class="service-title">Ant Treatment: Floor Area 450-900 sqm</div>
-          <div class="service-price">â‚±7,000</div>
+          <div class="service-title">Ant Treatment: Floor Area 51-100 sqm</div>
+          <div class="service-price">â‚±2,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
+            Application of baits & residual spray
+            Crack & crevice treatment
+            Prevention tips
           </div>
         </div>
       </div>
@@ -98,21 +103,25 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="ants-900-1500">
           <label for="ants-900-1500" class="radio-label"></label>
-          <div class="service-title">Ant Treatment: Floor Area 900-1500 sqm</div>
-          <div class="service-price">â‚±10,000</div>
+          <div class="service-title">Ant Treatment: Floor Area 101-150 sqm</div>
+          <div class="service-price">â‚±3,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
+            Application of baits & residual spray
+            Crack & crevice treatment
+            Prevention tips
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="ants-1500-2000">
           <label for="ants-1500-2000" class="radio-label"></label>
-          <div class="service-title">Ant Treatment: Floor Area 1500-2000 sqm</div>
-          <div class="service-price">â‚±14,000</div>
+          <div class="service-title">Ant Treatment: Floor Area 151-200 sqm</div>
+          <div class="service-price">â‚±4,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
+            Application of baits & residual spray
+            Crack & crevice treatment
+            Prevention tips
           </div>
         </div>
       </div>
@@ -122,21 +131,25 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="cockroach-450">
           <label for="cockroach-450" class="radio-label"></label>
-          <div class="service-title">Cockroaches Treatment: Floor Area &lt; 450 sqm</div>
-          <div class="service-price">â‚±4,000</div>
+          <div class="service-title">Cockroaches Treatment: Floor Area &lt; 50 sqm</div>
+          <div class="service-price">â‚±1,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
+            Spraying for kitchens, bathrooms, and food areas
+            Bait application
+            Prevention tips
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="cockroach-450-900">
           <label for="cockroach-450-900" class="radio-label"></label>
-          <div class="service-title">Cockroaches Treatment: Floor Area 450-900 sqm</div>
-          <div class="service-price">â‚±7,000</div>
+          <div class="service-title">Cockroaches Treatment: Floor Area 51-100 sqm</div>
+          <div class="service-price">â‚±2,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
+            Spraying for kitchens, bathrooms, and food areas
+            Bait application
+            Prevention tips
           </div>
         </div>
       </div>
@@ -144,113 +157,25 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="cockroach-900-1500">
           <label for="cockroach-900-1500" class="radio-label"></label>
-          <div class="service-title">Cockroaches Treatment: Floor Area 900-1500 sqm</div>
-          <div class="service-price">â‚±10,000</div>
+          <div class="service-title">Cockroaches Treatment: Floor Area 101-150 sqm</div>
+          <div class="service-price">â‚±3,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
+            Spraying for kitchens, bathrooms, and food areas
+            Bait application
+            Prevention tips
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="cockroach-1500-2000">
           <label for="cockroach-1500-2000" class="radio-label"></label>
-          <div class="service-title">Cockroaches Treatment: Floor Area 1500-2000 sqm</div>
-          <div class="service-price">â‚±14,000</div>
+          <div class="service-title">Cockroaches Treatment: Floor Area 151-200 sqm</div>
+          <div class="service-price">â‚±4,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, baiting, monitoring
-          </div>
-        </div>
-      </div>
-      <!-- Mosquitoes -->
-      <h2>Mosquitoes</h2>
-      <div class="services-row">
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="mosquito-450">
-          <label for="mosquito-450" class="radio-label"></label>
-          <div class="service-title">Mosquitoes Treatment: Floor Area &lt; 450 sqm</div>
-          <div class="service-price">â‚±4,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Spraying, fogging, monitoring
-          </div>
-        </div>
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="mosquito-450-900">
-          <label for="mosquito-450-900" class="radio-label"></label>
-          <div class="service-title">Mosquitoes Treatment: Floor Area 450-900 sqm</div>
-          <div class="service-price">â‚±7,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Spraying, fogging, monitoring
-          </div>
-        </div>
-      </div>
-      <div class="services-row">
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="mosquito-900-1500">
-          <label for="mosquito-900-1500" class="radio-label"></label>
-          <div class="service-title">Mosquitoes Treatment: Floor Area 900-1500 sqm</div>
-          <div class="service-price">â‚±10,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Spraying, fogging, monitoring
-          </div>
-        </div>
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="mosquito-1500-2000">
-          <label for="mosquito-1500-2000" class="radio-label"></label>
-          <div class="service-title">Mosquitoes Treatment: Floor Area 1500-2000 sqm</div>
-          <div class="service-price">â‚±14,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Spraying, fogging, monitoring
-          </div>
-        </div>
-      </div>
-      <!-- Rats -->
-      <h2>Rats</h2>
-      <div class="services-row">
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="rats-450">
-          <label for="rats-450" class="radio-label"></label>
-          <div class="service-title">Rats Treatment: Floor Area &lt; 450 sqm</div>
-          <div class="service-price">â‚±4,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Baiting, trapping, monitoring
-          </div>
-        </div>
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="rats-450-900">
-          <label for="rats-450-900" class="radio-label"></label>
-          <div class="service-title">Rats Treatment: Floor Area 450-900 sqm</div>
-          <div class="service-price">â‚±7,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Baiting, trapping, monitoring
-          </div>
-        </div>
-      </div>
-      <div class="services-row">
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="rats-900-1500">
-          <label for="rats-900-1500" class="radio-label"></label>
-          <div class="service-title">Rats Treatment: Floor Area 900-1500 sqm</div>
-          <div class="service-price">â‚±10,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Baiting, trapping, monitoring
-          </div>
-        </div>
-        <div class="service-card">
-          <input type="radio" name="service" class="service-radio" id="rats-1500-2000">
-          <label for="rats-1500-2000" class="radio-label"></label>
-          <div class="service-title">Rats Treatment: Floor Area 1500-2000 sqm</div>
-          <div class="service-price">â‚±14,000</div>
-          <div class="service-details">
-            <strong>Inclusions:</strong><br>
-            Baiting, trapping, monitoring
+            Spraying for kitchens, bathrooms, and food areas
+            Bait application
+            Prevention tips
           </div>
         </div>
       </div>
@@ -260,21 +185,25 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="bedbugs-450">
           <label for="bedbugs-450" class="radio-label"></label>
-          <div class="service-title">Bed Bugs Treatment: Floor Area &lt; 450 sqm</div>
-          <div class="service-price">â‚±6,000</div>
+          <div class="service-title">Bed Bugs Treatment: Floor Area &lt; 50 sqm</div>
+          <div class="service-price">â‚±2,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, steaming, monitoring
+            Heat/steam treatment
+            Residual spray Vacuuming
+            Prevention tips
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="bedbugs-450-900">
           <label for="bedbugs-450-900" class="radio-label"></label>
-          <div class="service-title">Bed Bugs Treatment: Floor Area 450-900 sqm</div>
-          <div class="service-price">â‚±11,000</div>
+          <div class="service-title">Bed Bugs Treatment: Floor Area 51-100 sqm</div>
+          <div class="service-price">â‚±3,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, steaming, monitoring
+            Heat/steam treatment
+            Residual spray Vacuuming
+            Prevention tips
           </div>
         </div>
       </div>
@@ -282,21 +211,25 @@
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="bedbugs-900-1500">
           <label for="bedbugs-900-1500" class="radio-label"></label>
-          <div class="service-title">Bed Bugs Treatment: Floor Area 900-1500 sqm</div>
-          <div class="service-price">â‚±17,000</div>
+          <div class="service-title">Bed Bugs Treatment: Floor Area 101-150 sqm</div>
+          <div class="service-price">â‚±4,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, steaming, monitoring
+            Heat/steam treatment
+            Residual spray Vacuuming
+            Prevention tips
           </div>
         </div>
         <div class="service-card">
           <input type="radio" name="service" class="service-radio" id="bedbugs-1500-2000">
           <label for="bedbugs-1500-2000" class="radio-label"></label>
-          <div class="service-title">Bed Bugs Treatment: Floor Area 1500-2000 sqm</div>
-          <div class="service-price">â‚±24,000</div>
+          <div class="service-title">Bed Bugs Treatment: Floor Area 151-200 sqm</div>
+          <div class="service-price">â‚±5,899</div>
           <div class="service-details">
             <strong>Inclusions:</strong><br>
-            Spraying, steaming, monitoring
+            Heat/steam treatment
+            Residual spray Vacuuming
+            Prevention tips
           </div>
         </div>
       </div>

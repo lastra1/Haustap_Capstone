@@ -175,80 +175,89 @@ body {
 }
 
 .filter-btn {
-  background: none;
-  border: none;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 12px;
   cursor: pointer;
-  font-size: 18px;
-  padding: 5px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* updated dropdown: better padding, box-sizing, and constrained width */
+.filter-btn:hover {
+  background: #f7f7f7;
+}
+
 .dropdown-content {
   display: none;
   position: absolute;
   right: 0;
-  top: 35px;
-  background: #ffffff;
+  top: 40px;
+  background: white;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  padding: 6px 8px;       /* increased padding for touch area */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 15px;
   width: 200px;
-  box-sizing: border-box;
-  z-index: 999;
-  overflow: hidden;
+  z-index: 100;
 }
 
-/* show on hover / when toggled */
-.filter-dropdown:hover .dropdown-content,
-.filter-dropdown .dropdown-content.show {
+.dropdown-content.show {
   display: block;
 }
 
+/* Filter titles */
 .dropdown-content p.filter-title {
   font-size: 13px;
-  font-weight: 800;
-  margin: 0 0 8px 0;
-  padding-bottom: 4px;
+  font-weight: 700;
+  margin: 10px 0 8px;
 }
 
-/* align checkbox to the left and tighten spacing to label text */
 .dropdown-content label {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* left align row */
-  gap: 8px;                     /* small space between checkbox and text */
+  gap: 3px;
   font-size: 13px;
-  margin: 0;
-  padding: 6px 4px;             /* clickable row area */
+  margin-bottom: 6px;
   cursor: pointer;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-.dropdown-content input[type="checkbox"] {
-  margin: 0;                    /* remove native margin */
-  flex: 0 0 auto;
-  width: 16px;
-  height: 16px;
-  accent-color: #007b8f;        /* modern browsers: colored checkbox */
+.filter-date {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
 }
 
-/* subtle hover to indicate row is interactive */
-.dropdown-content label:hover {
-  background: #f6f6f6;
+.filter-date label {
+  font-size: 12px;
+}
+
+.filter-date input[type="date"] {
+  padding: 4px;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 12px;
+  width: 150px;
 }
 
+/* Apply button */
 .apply-btn {
-  margin-top: 8px;
+  margin-top: 12px;
   background: #fff;
   border: 1px solid #333;
   border-radius: 6px;
   padding: 6px 20px;
   font-size: 13px;
-  display: inline-block;
+  cursor: pointer;
 }
+
+.apply-btn:hover {
+  background: #f0f0f0;
+}
+
 
 /* Table */
 .table-container {

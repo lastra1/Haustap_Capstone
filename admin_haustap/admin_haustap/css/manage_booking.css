@@ -176,7 +176,7 @@ body {
 
 .filter-btn {
   background: #fff;
-  border: 1px solid #ccc;
+  border: none; /* removed border for a cleaner look */
   border-radius: 6px;
   padding: 6px 12px;
   cursor: pointer;
@@ -266,14 +266,67 @@ body {
   border-radius: 4px;
 }
 
-.apply-btn {
-  margin-top: 8px;
-  background: #fff;
-  border: 1px solid #333;
-  border-radius: 6px;
-  padding: 6px 20px;
+/* Date filter styling */
+.date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.date-row label {
   font-size: 13px;
-  display: inline-block;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  background: transparent !important;
+  cursor: default;
+}
+
+.date-row input[type="date"] {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  background: #fff;
+  cursor: pointer;
+  flex: 1;
+  min-width: 120px;
+}
+
+.date-row input[type="date"]:hover {
+  border-color: #999;
+}
+
+.date-row input[type="date"]:focus {
+  outline: none;
+  border-color: #007b8f;
+  box-shadow: 0 0 4px rgba(0, 123, 143, 0.3);
+}
+
+.apply-btn {
+  margin-top: 10px;
+  width: 100%;
+  background: #007b8f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.apply-btn:hover {
+  background: #005a6a;
+}
+
+.apply-btn:active {
+  transform: scale(0.98);
 }
 
 /* TABLE */
@@ -301,4 +354,62 @@ th, td {
   padding-top: 10px;
   font-size: 13px;
   color: #555;
+}
+
+/* Modal for booking details */
+.modal-backdrop { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); z-index: 120; }
+.modal-backdrop.show { display: flex; }
+.modal-card {
+  background: #fff;
+  /* fixed design width for consistent sizing across modals */
+  width: 760px;
+  max-width: 760px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 18px 20px;
+  box-shadow: 0 12px 40px rgba(2,6,23,0.2);
+  position: relative;
+  /* limit height and allow scrolling for smaller viewports */
+  max-height: 80vh;
+  overflow: auto;
+}
+.modal-close { background: transparent; border: 0; font-size: 20px; cursor: pointer; color: #6b7280; position: absolute; right: 12px; top: 10px; }
+.modal-inner { padding: 8px 6px 6px 6px; }
+.modal-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; padding:8px 6px 12px 6px; }
+.modal-top-left .meta-line { margin-bottom:6px; color:#111827; }
+.modal-top-right { min-width:130px; text-align:right; }
+.status-pill { display:inline-block; padding:8px 12px; border-radius:18px; color:#fff; font-weight:700; font-size:13px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.status-complete { background:#0dbd76; }
+.status-ongoing { background:#4fd1c5; color:#064e48; }
+.status-pending { background:#d1d5db; color:#374151; }
+.status-cancelled { background:#f44336; }
+.modal-section { padding:8px 6px; border-top:1px solid #eef2f2; }
+.two-cols { display:flex; gap:16px; }
+.two-cols > div { flex:1; }
+.small-label { font-weight:700; margin-bottom:8px; }
+.info-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #edf2f2; }
+.info-label { color:#6b7280; width:120px; font-size:13px; }
+.info-val { color:#111827; text-align:right; }
+.notes-row label { display:block; margin-bottom:6px; color:#374151; }
+.notes-row textarea { width:100%; border:1px solid #e6e6e6; border-radius:6px; padding:8px; resize:none; }
+.voucher-box { margin-top:8px; padding:10px; background:#fff; border:1px solid #e6e6e6; border-radius:6px; }
+.totals-grid { margin-top:10px; width:260px; margin-left:auto; text-align:right; }
+.tot-row { display:flex; justify-content:space-between; padding:6px 0; color:#374151; }
+.tot-row.total { font-weight:900; font-size:18px; }
+.tot-row.total .tot-val { font-size:20px; }
+.photos-grid { display:flex; gap:12px; margin-top:10px; }
+.photo-col { flex:1; }
+.photo-label { font-size:13px; color:#6b7280; margin-bottom:6px; }
+.photo-box { background:#fff; border:1px dashed #e6e6e6; border-radius:6px; padding:18px; text-align:center; min-height:56px; display:flex; align-items:center; justify-content:center; }
+.photo-box input { border:0; background:transparent; text-align:center; width:100%; }
+.cancel-details { background:#fff4f4; border:1px solid #fde2e2; padding:10px; border-radius:6px; margin-top:12px; }
+.cancel-title { font-weight:800; margin-bottom:8px; }
+.cancel-row { display:flex; gap:12px; padding:4px 0; }
+.cancel-label { color:#6b7280; width:72px; }
+
+/* Responsive tweaks for modal */
+@media (max-width:720px){
+  .modal-card { width:92%; padding:12px; }
+  .two-cols { flex-direction:column; }
+  .totals-grid { width:100%; margin-left:0; }
 }

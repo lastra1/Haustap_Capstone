@@ -197,6 +197,17 @@ body {
   z-index: 100;
 }
 
+/* Rating star styles (kept outside dropdown rule to avoid CSS parsing issues) */
+.rating-filter .star {
+  display: inline-block;
+  font-size: 20px;
+  color: #ddd;
+  margin-right: 6px;
+  line-height: 1;
+}
+.rating-filter .star.selected { color: #f59e0b; }
+.rating-filter .star:focus { outline: 2px solid #86d0d8; outline-offset: 2px; }
+
 .dropdown-content.show {
   display: block;
 }
@@ -297,19 +308,70 @@ tr:hover {
   font-weight: bold;
 }
 
+.delete-btn {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.delete-btn:hover {
+  color: #b71c1c;
+  text-decoration: underline;
+}
+
 /* ===== TABLE FOOTER ===== */
 .table-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 10px;
   font-size: 13px;
   color: #444;
 }
 
-.pagination span {
-  margin: 0 5px;
+.pagination {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
 }
+
+/* Ensure Prev/Next align left/right respectively */
+.pagination > .prev {
+  justify-self: start;
+}
+.pagination > .next {
+  justify-self: end;
+}
+
+/* Centered page-number container */
+.page-numbers {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.page-numbers .page {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  min-width: 36px;
+  text-align: center;
+}
+.page-numbers .page:hover { background:#f3f9fb; }
+.page-numbers .page.active { background:#06b6d4; color:#fff; border-color:#06b6d4; }
+.page-numbers .dots { color:#999; padding:0 4px; }
 
 .summary span {
   margin-right: 15px;

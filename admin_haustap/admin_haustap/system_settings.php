@@ -1,4 +1,4 @@
-<?php
+<?php require_once __DIR__ . '/includes/auth.php';
   // Load saved settings (file-based dev storage)
   // Prefer absolute base path to avoid issues under different routers
   if (defined('BASE_PATH')) {
@@ -43,10 +43,10 @@
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+           <a href="admin_profile.php">View Profile</a>
+           <a href="change_password.php">Change Password</a>
+           <a href="activity_logs.php">Activity Logs</a>
+           <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
@@ -65,7 +65,16 @@
 
           <div class="form-group">
             <label>System Logo:</label>
-<button class="upload-btn"><i class="fa-solid fa-upload"></i></button>
+            <div class="logo-upload">
+              <div class="logo-preview" id="logoPreview">
+                <span class="placeholder-text">No logo</span>
+              </div>
+              <div class="logo-actions">
+                <input type="file" id="systemLogoInput" accept="image/*" style="display:none">
+                <button type="button" class="upload-btn" id="uploadBtn"><i class="fa-solid fa-upload"></i> Upload</button>
+                <button type="button" class="remove-btn" id="removeLogoBtn"><i class="fa-solid fa-trash"></i> Remove</button>
+              </div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -188,18 +197,21 @@
     const cancelPopup = document.getElementById("cancelPopup");
     const verifyPopup = document.getElementById("verifyPopup");
     const saveButtons = document.querySelectorAll(".save-btn");
+    let isVerified = false;
 
-    // Show popup when Save is clicked
-    saveButtons.forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        popup.style.display = "flex";
-      });
+    // Show popup on page load (when entering system settings)
+    window.addEventListener('DOMContentLoaded', () => {
+      popup.style.display = "flex";
     });
 
-    // Close popup
+    // Close popup and prevent access
     cancelPopup.addEventListener("click", () => {
-      popup.style.display = "none";
+      // If not verified, redirect back
+      if (!isVerified) {
+        window.location.href = 'dashboard.php';
+      } else {
+        popup.style.display = "none";
+      }
     });
 
     // Toast helper (HausTap themed)
@@ -258,17 +270,77 @@
       showToast(lastError, 'error');
     }
 
-    // Verify password (development logic) then save
+    // Verify password (development logic) then allow access
     verifyPopup.addEventListener("click", () => {
       const password = document.getElementById("adminPassword").value;
       const allowedPassword = "Admin123!"; // dev credential used in login.php
       if (password.trim() === allowedPassword) {
+        isVerified = true;
         popup.style.display = "none";
-        saveSettings();
+        document.getElementById("adminPassword").value = '';
+        showToast('Access verified', 'success');
       } else {
         showToast("Incorrect password!", "error");
       }
     });
+
+    // Save buttons now just save without showing popup
+    saveButtons.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (isVerified) {
+          saveSettings();
+        } else {
+          showToast('Please verify your password first', 'error');
+        }
+      });
+    });
+
+    // Allow Enter key in password field to verify
+    document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        verifyPopup.click();
+      }
+    });
+
+    // Logo upload behavior: preview + remove
+    (function(){
+      const input = document.getElementById('systemLogoInput');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const removeBtn = document.getElementById('removeLogoBtn');
+      const preview = document.getElementById('logoPreview');
+
+      function setPreview(src){
+        preview.innerHTML = '';
+        if (!src) {
+          const span = document.createElement('span');
+          span.className = 'placeholder-text';
+          span.textContent = 'No logo';
+          preview.appendChild(span);
+          return;
+        }
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'System logo';
+        preview.appendChild(img);
+      }
+
+      uploadBtn && uploadBtn.addEventListener('click', (e)=>{ e.preventDefault(); input && input.click(); });
+      removeBtn && removeBtn.addEventListener('click', (e)=>{ e.preventDefault(); setPreview(null); input && (input.value=''); });
+
+      if (input) {
+        input.addEventListener('change', (e)=>{
+          const f = e.target.files && e.target.files[0];
+          if (!f) return setPreview(null);
+          if (!f.type.startsWith('image/')) return showToast('Please select an image file', 'error');
+          const url = URL.createObjectURL(f);
+          setPreview(url);
+        });
+      }
+
+      // init: no logo
+      setPreview(null);
+    })();
   </script>
 </body>
 </html>

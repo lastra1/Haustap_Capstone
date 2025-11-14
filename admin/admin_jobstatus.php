@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Status Monitor</title>
+  <link rel="stylesheet" href="css/admin_dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="images/logo.png" alt="Haustap Logo" />
+    </div>
+    <ul class="menu">
+      <li>DashBoard Overview</li>
+      <li>Manage Users</li>
+      <li>Manage Providers</li>
+      <li>View All Bookings</li>
+      <li class="active">Job Status Monitor</li>
+      <li>Analytics & Report</li>
+      <li>System Settings</li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h2>Job Status Monitor</h2>
+      <div class="header-buttons">
+        <button class="btn admin">Admin</button>
+        <button class="btn logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="status-summary">
+      <div class="status-box pending">
+        <i class="fa-regular fa-clock"></i>
+        <p>Pending Jobs</p>
+        <h3>4</h3>
+      </div>
+      <div class="status-box in-progress">
+        <i class="fa-solid fa-gears"></i>
+        <p>In-Progress Jobs</p>
+        <h3>5</h3>
+      </div>
+      <div class="status-box completed">
+        <i class="fa-solid fa-check"></i>
+        <p>Completed Jobs</p>
+        <h3>4</h3>
+      </div>
+      <div class="status-box canceled">
+        <i class="fa-solid fa-xmark"></i>
+        <p>Canceled Jobs</p>
+        <h3>5</h3>
+      </div>
+    </section>
+
+    <section class="timeline-section">
+      <h3>Service Provider Timeline</h3>
+      <div class="timeline-table">
+        <table>
+          <thead>
+            <tr>
+              <th>BOOKING ID</th>
+              <th>CLIENT</th>
+              <th>SERVICE PROVIDER</th>
+              <th>SERVICE TYPE</th>
+              <th>TIME BOOKED</th>
+              <th>ARRIVED</th>
+              <th>COMPLETED</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A32514</td>
+              <td>Jenn Bornilla</td>
+              <td>Ana Santos</td>
+              <td>Home Cleaning - Basic Cleaning</td>
+              <td>7:00 AM - 10:00 AM</td>
+              <td>7:00 AM</td>
+              <td>10:00 AM</td>
+            </tr>
+            <tr>
+              <td>A32516</td>
+              <td>CJ Garcia</td>
+              <td>
+                Carl Mirabueno<br>
+                MJ Punzalan<br>
+                Mc Organo
+              </td>
+              <td>Home Cleaning - Deep Cleaning</td>
+              <td>11:00 AM - 2:00 PM</td>
+              <td>11:00 AM</td>
+              <td>2:00 PM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="delayed-section">
+      <h3>Delayed Jobs</h3>
+      <div class="delayed-list">
+        <p><i class="fa-solid fa-triangle-exclamation"></i> BOOKING ID A32514 – In progress 2 hrs beyond ETA</p>
+        <p><i class="fa-solid fa-triangle-exclamation"></i> BOOKING ID A32516 – No provider assigned yet</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

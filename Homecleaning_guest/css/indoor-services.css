@@ -1,0 +1,340 @@
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background: #f7f7f7;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 24px 36px 0 36px;
+  background: #fff;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  min-width: 120px;
+}
+.logo a {
+  display: flex;
+  align-items: center;
+  height: auto;
+}
+.logo img,
+.logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+.nav {
+  display: flex;
+  gap: 32px;
+  margin-left: 24px;
+}
+.nav a {
+  text-decoration: none;
+  color: #222;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+.nav a:hover {
+  color: #009999;
+}
+
+.header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+.search-box {
+      display: flex;
+      align-items: center;
+      background: #f5f5f5;
+      border-radius: 30px;
+      padding: 4px 12px;
+      box-shadow:  7px 5px rgba(0, 0, 0, 0.15);
+    }
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 15px;
+      padding: 6px 0;
+      width: 120px;
+    }
+    .search-icon {
+      font-size: 18px;
+      color: #888;
+    }
+    .account-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #222;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .account-icon {
+      font-size: 20px;
+      color: cyan;
+    }
+
+.main-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 28px;
+}
+
+.subcategory-btn {
+  display: block;
+  margin: 18px auto 12px auto;
+  padding: 6px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid #222;
+  border-radius: 18px;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s;
+}
+.subcategory-btn:hover {
+  background: #009999;
+  color: #fff;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 18px auto;
+  font-size: 1.05rem;
+  width: fit-content;
+}
+.tab {
+  padding: 8px 16px 6px 16px;
+  cursor: pointer;
+  color: #222;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+.tab.active {
+  border-bottom: 2px solid #009999;
+  color: #009999;
+}
+
+.services-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px auto 36px auto;
+  max-width: 980px;
+}
+
+.service-card {
+  background: #e2e3e2;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  padding: 18px 24px 18px 24px;
+  width: 440px;
+  box-sizing: border-box;
+  min-height: 90px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.service-radio {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  accent-color: #009999;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+.radio-label {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.service-title {
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  padding-right: 30px;
+}
+
+.service-price {
+  font-weight: 700;
+  font-size: 1.08rem;
+  margin-bottom: 6px;
+}
+
+.service-details {
+  font-size: 0.98rem;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* Mapping for house card markup in cleaning_services.php */
+.centered-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 18px 20px;
+}
+.breadcrumbs{margin-bottom:12px}
+.breadcrumbs a{color:#168;text-decoration:underline;margin-right:6px}
+.section-title{font-weight:600;margin:6px 0 18px}
+.house-group h2{font-size:20px;margin:18px 0 12px}
+.house-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 40px;margin-bottom:8px}
+.house-card{background: #e9efef;box-shadow: 2px 6px 12px rgba(0,0,0,0.06);border-radius:12px;padding:14px;position:relative;min-height:72px}
+.house-title{font-weight:700;margin-bottom:6px}
+.house-desc{font-size:13px;color:#555}
+.house-radio{display:none}
+.radio-label{position:absolute;right:12px;top:12px;width:18px;height:18px;border-radius:50%;border:2px solid #8b8b8b;display:block}
+.house-radio:checked + .radio-label{background:#222}
+
+/* Pagination */
+.pagination {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+.pagination button {
+  background: white;
+  border: 1px solid #ccc;
+  margin: 0 4px;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination .active {
+  background: cyan;
+  color: rgb(10, 10, 10);
+  border-color: #009999;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #e6e6e6;
+  padding: 50px 70px 25px;
+  color: #000;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* LEFT SECTION */
+.footer-left h4 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.footer-left ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-left li {
+  margin-bottom: 5px;
+}
+
+.footer-left a {
+  text-decoration: none;
+  color: #000;
+}
+
+.footer-left a:hover {
+  color: #10bfc9;
+}
+
+/* CENTER SECTION */
+.footer-center {
+  text-align: center;
+}
+
+.footer-center img {
+  width: 100px;
+}
+
+.footer-center p {
+  font-size: 13px;
+}
+
+/* RIGHT SECTION */
+.footer-right {
+  text-align: right;
+}
+
+.footer-right h4 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.footer-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-right li {
+  margin-bottom: 6px;
+}
+
+.footer-right .contact-info p {
+  font-size: 13px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* FOOTER BOTTOM */
+.footer-bottom {
+  text-align: center;
+  font-weight: 600;
+  margin-top: -10px;
+  border-top: 1px solid #d1d1d1;
+  padding-top: 10px;
+  font-size: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-right {
+    text-align: center;
+  }
+}

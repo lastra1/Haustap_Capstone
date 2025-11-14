@@ -23,7 +23,7 @@
   <!-- Subcategory Navigation -->
   <nav class="subcategory-nav">
     <ul>
-      <li>Massage</li>
+  <li><a href="/wellness_services/massage_services.php">Massage</a></li>
       <li class="active">Packages</li>
     </ul>
   </nav>

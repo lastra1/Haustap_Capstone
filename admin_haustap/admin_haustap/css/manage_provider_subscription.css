@@ -258,6 +258,7 @@ body {
   background: #f0f0f0;
 }
 
+/* Table */
 .subscription-table {
   width: 100%;
   border-collapse: collapse;
@@ -286,11 +287,6 @@ body {
   color: #c20000;
 }
 
-.status.inactive {
-  background: #f0f0f0;
-  color: #c20000;
-}
-
 .details-btn {
   background: none;
   border: none;
@@ -312,18 +308,20 @@ body {
   background: #fff;
   border-radius: 10px;
   padding: 25px 30px;
-  width: 400px;
+  width: 420px;
   margin: 8% auto;
   position: relative;
   line-height: 1.6;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
 .close {
   position: absolute;
   top: 12px;
   right: 16px;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
+  color: #555;
 }
 
 .modal-content h3 {
@@ -336,9 +334,4 @@ body {
 .modal-content p {
   margin: 4px 0;
   font-size: 14px;
-}
-
-.modal-content a {
-  color: #0073e6;
-  text-decoration: underline;
 }

@@ -141,20 +141,57 @@ body {
   max-width: 980px;
 }
 
+/* New helpers for pages that use grouped rows */
+.services-group {
+  max-width: 980px;
+  margin: 20px auto 36px auto;
+  padding: 0 12px;
+}
+.services-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
 .service-card {
   background: #e2e3e2;
   box-shadow: 2px 4px 8px rgba(0,0,0,0.08);
   border-radius: 10px;
   padding: 18px 24px 18px 24px;
-  width: 440px;
+  flex: 1 1 420px; /* allow cards to wrap responsively */
+  max-width: 480px;
   box-sizing: border-box;
-  min-height: 90px;
+  min-height: 160px; /* ensure similar heights for alignment */
   position: relative;
   display: flex;
   flex-direction: column;
   text-align: left;
 }
 
+/* make rows stretch cards to equal height */
+.services-row { align-items: stretch; }
+
+/* push details down so title/price align consistently */
+.service-details { margin-top: auto; }
+
+.service-card {
+  background: #e2e3e2;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  padding: 18px 24px;
+  /* make card sizing consistent so rows align */
+  flex: 0 1 calc(50% - 16px); /* two cards per row where space allows */
+  max-width: 480px;
+  box-sizing: border-box;
+  min-height: 140px; /* increase baseline so short cards align with taller ones */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+/* radio input and its label placed in the top-right of each card */
 .service-radio {
   position: absolute;
   top: 18px;
@@ -175,7 +212,7 @@ body {
 }
 
 .service-title {
-  font-size: 1.08rem;
+  font-size: 1.00rem;
   font-weight: 600;
   margin-bottom: 6px;
   padding-right: 30px;

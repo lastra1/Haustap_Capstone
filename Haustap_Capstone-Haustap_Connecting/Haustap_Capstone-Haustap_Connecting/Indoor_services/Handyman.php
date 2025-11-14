@@ -14,16 +14,16 @@
     <button class="subcategory-btn">SUBCATEGORY</button>
     <div class="tabs">
       <span class="tab active">Handyman</span>
-      <span class="tab">Plumbing</span>
-      <span class="tab">Electrical</span>
-      <span class="tab">Appliance Repair</span>
-      <span class="tab">Pest Control</span>
+  <a class="tab" href="/Indoor_services/Plumbing.php">Plumbing</a>
+  <a class="tab" href="/Indoor_services/Electrical.php">Electrical</a>
+  <a class="tab" href="/Indoor_services/Appliances repair.php">Appliance Repair</a>
+  <a class="tab" href="/Indoor_services/Pest Control.php">Pest Control</a>
     </div>
     <div class="services-container">
       <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="inspection-fee">
         <label for="inspection-fee" class="radio-label"></label>
-        <div class="service-title">Inspection Fee</div>
+        <div class="service-title">Inspection</div>
         <div class="service-price">₱300</div>
         <div class="service-details">
           Evaluation by a handyman.<br>
@@ -35,7 +35,7 @@
       <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="furniture-small">
         <label for="furniture-small" class="radio-label"></label>
-        <div class="service-title">Furniture Assembly - Small Items</div>
+        <div class="service-title">Furniture Assembly - Small Items (<1 m³)  </div>
         <div class="service-price">₱350 per unit</div>
         <div class="service-details">
           Includes assembly of stools, side tables, shelves<br>
@@ -46,7 +46,7 @@
       <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="furniture-medium">
         <label for="furniture-medium" class="radio-label"></label>
-        <div class="service-title">Furniture Assembly - Medium Items</div>
+        <div class="service-title">Furniture Assembly - Medium Items ( 1- 3.5 m³)</div>
         <div class="service-price">₱500 per unit</div>
         <div class="service-details">
           Includes chairs, study table, cabinet<br>
@@ -57,7 +57,7 @@
       <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="furniture-large">
         <label for="furniture-large" class="radio-label"></label>
-        <div class="service-title">Furniture Assembly - Large Items</div>
+        <div class="service-title">Furniture Assembly - Large Items ( >3.5 m³ )</div>
         <div class="service-price">₱800 per unit</div>
         <div class="service-details">
           Includes beds, sofa, cabinets<br>
@@ -102,37 +102,12 @@
         </div>
       </div>
       <div class="service-card">
-        <input type="radio" name="service" class="service-radio" id="loose-chair">
-        <label for="loose-chair" class="radio-label"></label>
-        <div class="service-title">Loose chair / Desk repair</div>
-        <div class="service-price">₱400 per unit</div>
-        <div class="service-details">
-          Repair/replacement of screws, bolts, or hinges<br>
-          Refastening of parts, legs, arms, or doors<br>
-          Tightening of loose components<br>
-          Functionality check after repair
-        </div>
-      </div>
-      <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="cabinet-align">
         <label for="cabinet-align" class="radio-label"></label>
         <div class="service-title">Cabinet alignment / Fix</div>
         <div class="service-price">₱400 per unit</div>
         <div class="service-details">
           Realignment of panels, drawers, or doors<br>
-          Replacement of broken, bent, or stuck hinges<br>
-          Lubrication of moving parts if needed<br>
-          Functionality check after repair
-        </div>
-      </div>
-      <div class="service-card">
-        <input type="radio" name="service" class="service-radio" id="minor-wood">
-        <label for="minor-wood" class="radio-label"></label>
-        <div class="service-title">Minor wooden repairs</div>
-        <div class="service-price">₱400 per panel/part</div>
-        <div class="service-details">
-          Refitting of panels, drawers, or doors<br>
-          Repairing of cracks, splits, or chips<br>
           Replacement of broken, bent, or stuck hinges<br>
           Lubrication of moving parts if needed<br>
           Functionality check after repair
@@ -152,8 +127,30 @@
       <div class="service-card">
         <input type="radio" name="service" class="service-radio" id="mirror-install">
         <label for="mirror-install" class="radio-label"></label>
-        <div class="service-title">Mirror installation</div>
+        <div class="service-title">Mirror installation - Small (below 2ft.) </div>
         <div class="service-price">₱300 per unit</div>
+        <div class="service-details">
+          Measuring and securing proper placement<br>
+          Drilling and screwing with safety screws/anchors<br>
+          Clean-up of minor dust/debris after work
+        </div>
+      </div>
+      <div class="service-card">
+        <input type="radio" name="service" class="service-radio" id="mirror-install">
+        <label for="mirror-install" class="radio-label"></label>
+        <div class="service-title">Mirror installation - medium (2 - 4ft.) </div>
+        <div class="service-price">₱500 per unit</div>
+        <div class="service-details">
+          Measuring and securing proper placement<br>
+          Drilling and screwing with safety screws/anchors<br>
+          Clean-up of minor dust/debris after work
+        </div>
+      </div>
+      <div class="service-card">
+        <input type="radio" name="service" class="service-radio" id="mirror-install">
+        <label for="mirror-install" class="radio-label"></label>
+        <div class="service-title">Mirror installation Large (above 4ft.) </div>
+        <div class="service-price">₱800 per unit</div>
         <div class="service-details">
           Measuring and securing proper placement<br>
           Drilling and screwing with safety screws/anchors<br>

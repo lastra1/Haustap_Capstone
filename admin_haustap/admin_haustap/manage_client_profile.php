@@ -1,3 +1,32 @@
+<?php require_once __DIR__ . '/includes/auth.php';
+
+// Load client data from storage by id (basic server-side connect)
+$client = null;
+$clientId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$storePath = realpath(__DIR__ . '/../../storage/data/clients.json');
+if ($storePath && is_file($storePath)) {
+  $raw = @file_get_contents($storePath);
+  $items = json_decode($raw ?: '[]', true);
+  if (is_array($items)) {
+    foreach ($items as $it) {
+      if (isset($it['id']) && (int)$it['id'] === $clientId) { $client = $it; break; }
+    }
+  }
+}
+
+// Fallback default when not found
+if (!$client) {
+  $client = [
+    'id' => $clientId ?: 0,
+    'name' => 'Unknown',
+    'email' => '',
+    'phone' => '',
+    'joined_at' => '',
+    'status' => isset($_GET['status']) ? $_GET['status'] : 'active'
+  ];
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,84 +39,147 @@
 </head>
 <body>
 <div class="dashboard-container">
-    <!-- Sidebar -->
-    <?php $active = 'clients'; include 'includes/sidebar.php'; ?>
+  <!-- Sidebar -->
+  <?php $active = 'clients'; include 'includes/sidebar.php'; ?>
 
     <!-- Main Content -->
     <main class="main-content">
       <!-- Topbar -->
       <header class="topbar">
-        <h3>Manage of Clients</h3>
+        <h3>Manage Clients</h3>
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
             <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
             <div class="user-dropdown" id="userDropdown">
-              <a href="#">View Profile</a>
-              <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
-              <a href="#" class="logout">Log out</a>
+              <a href="admin_profile.php">View Profile</a>
+              <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+              <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+              <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
         </div>
       </header>
         <!-- Tabs -->
       <div class="tabs">
-        <button class="active">Profile</button>
-        <button>Bookings</button>
-        <button>Activity</button>
-        <button>Voucher</button>
+        <?php $cid = (int)($client['id'] ?? 0); $cstatus = urlencode($client['status'] ?? ''); ?>
+        <button class="active" data-target="manage_client_profile.php?id=<?php echo $cid; ?>&status=<?php echo $cstatus; ?>">Profile</button>
+        <button data-target="manage_client_booking.php?id=<?php echo $cid; ?>&status=<?php echo $cstatus; ?>">Bookings</button>
+        <button data-target="manage_client_voucher.php?id=<?php echo $cid; ?>&status=<?php echo $cstatus; ?>">Voucher</button>
       </div>
 
         <!-- Profile Content -->
         <div class="profile-box">
 
-            <div class="left-info">
-                <div class="profile-img">
-<i class="fa-solid fa-user"></i>
-                </div>
-                <p class="register-date">Registered on:<br><strong>January 01, 2025</strong></p>
-            </div>
+      <div class="left-info">
+        <div class="profile-img">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <p class="register-date">Registered on:<br><strong><?php echo !empty($client['joined_at']) ? htmlspecialchars(date('F d, Y', strtotime($client['joined_at']))) : '—'; ?></strong></p>
+      </div>
 
-            <div class="right-info">
-                <p><strong>Status:</strong> Active</p>
-                <p><strong>ID:</strong> 01</p>
-                <p><strong>Full name:</strong> Jenn Bornilla</p>
-                <p><strong>Email:</strong> <a href="#">jennbornilla@gmail.com</a></p>
-                <p><strong>Mobile number:</strong> 09489129312</p>
-                <p><strong>Date of Birth:</strong> May 04 2003</p>
-                <p><strong>Gender:</strong> Female</p>
-                <p><strong>Address:</strong> Blk 1 Lot 50 Mango St. Saint Joseph Village 10 Brgy Langgam City of San Pedro Laguna</p>
-            </div>
+      <div class="right-info">
+        <p id="clientStatus"><strong>Status:</strong> <?php echo htmlspecialchars(ucfirst($client['status'] ?? '')); ?></p>
+        <p><strong>ID:</strong> <?php echo htmlspecialchars($client['id']); ?></p>
+        <p><strong>Full name:</strong> <?php echo htmlspecialchars($client['name']); ?></p>
+        <p><strong>Email:</strong> <?php if (!empty($client['email'])): ?><a href="mailto:<?php echo htmlspecialchars($client['email']); ?>"><?php echo htmlspecialchars($client['email']); ?></a><?php else: ?>—<?php endif; ?></p>
+        <p><strong>Mobile number:</strong> <?php echo htmlspecialchars($client['phone'] ?? '—'); ?></p>
+        <p><strong>Date of Birth:</strong> —</p>
+        <p><strong>Gender:</strong> —</p>
+        <p><strong>Address:</strong> —</p>
+      </div>
 
-            <button class="submit-btn">Submit</button>
+            
 
         </div>
 
         <!-- Account Actions -->
         <div class="actions">
             <h4>Account Actions:</h4>
-            <button class="btn suspend">Suspend</button>
-            <button class="btn banned">Banned</button>
-            <button class="btn delete">Delete</button>
+        <button class="btn suspend">Suspend</button>
+          <button class="btn banned">Banned</button>
+          <button class="btn delete">Delete</button>
         </div>
 
     </main>
 
 </div>
 
-        <script>
-    const dropdownBtn = document.getElementById("userDropdownBtn");
-    const dropdown = document.getElementById("userDropdown");
+  <script>
+    (function(){
+      // User dropdown (defensive)
+      const dropdownBtn = document.getElementById("userDropdownBtn");
+      const dropdown = document.getElementById("userDropdown");
+      if (dropdownBtn && dropdown) {
+        dropdownBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle("show");
+        });
+        window.addEventListener("click", (e) => {
+          if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
+        });
+      }
 
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
+      // Tabs navigation: navigate to pages specified in data-target (includes id & status)
+      const tabsContainer = document.querySelector('.tabs');
+      if (tabsContainer) {
+        const buttons = Array.from(tabsContainer.querySelectorAll('button'));
+        buttons.forEach(btn => {
+          btn.addEventListener('click', function(e){
+            const target = btn.getAttribute('data-target');
+            if (target) {
+              try { window.location.href = target; } catch (err) { console.error('Navigation failed', err); }
+              return;
+            }
+            // Toggle active state for client-side-only tabs
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      }
 
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
-    });
+      // Account actions: suspend / banned / delete
+      (function(){
+        const id = '<?php echo (int)($client['id'] ?? 0); ?>';
+        const suspendBtn = document.querySelector('.btn.suspend');
+        const bannedBtn = document.querySelector('.btn.banned');
+        const deleteBtn = document.querySelector('.btn.delete');
+        const statusEl = document.getElementById('clientStatus');
+
+        function doAction(action){
+          if (!id) { alert('Invalid client id'); return; }
+          const ok = confirm('Are you sure you want to ' + action + ' this account?');
+          if (!ok) return;
+          // disable buttons while request runs
+          [suspendBtn, bannedBtn, deleteBtn].forEach(b => b && (b.disabled = true));
+
+          fetch('api/update_client_status.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'id=' + encodeURIComponent(id) + '&action=' + encodeURIComponent(action)
+          }).then(r => r.json()).then(data => {
+            if (!data || !data.success) throw new Error((data && data.error) ? data.error : 'Server error');
+            if (action === 'delete') {
+              // navigate back to client list
+              window.location.href = 'manage_client.php';
+              return;
+            }
+            // update status in UI
+            if (statusEl) statusEl.innerHTML = '<strong>Status:</strong> ' + (data.status ? (data.status.charAt(0).toUpperCase()+data.status.slice(1)) : '');
+            alert('Action completed: ' + action);
+          }).catch(err => {
+            console.error(err);
+            alert('Failed to ' + action + ': ' + (err.message || err));
+          }).finally(() => {
+            [suspendBtn, bannedBtn, deleteBtn].forEach(b => b && (b.disabled = false));
+          });
+        }
+
+        suspendBtn && suspendBtn.addEventListener('click', () => doAction('suspended'));
+        bannedBtn && bannedBtn.addEventListener('click', () => doAction('banned'));
+        deleteBtn && deleteBtn.addEventListener('click', () => doAction('delete'));
+      })();
+    })();
   </script>
 
 </body>

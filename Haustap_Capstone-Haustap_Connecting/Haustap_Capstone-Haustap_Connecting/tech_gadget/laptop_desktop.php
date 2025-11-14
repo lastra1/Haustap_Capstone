@@ -38,7 +38,7 @@
           <input type="radio" name="tech" checked />
           <div class="service-content">
             <h3>Fan / Cooling Repair (Laptop)</h3>
-            <p class="price">â‚±500 per unit</p>
+            <p class="price">â‚±700 per unit</p>
             <p><strong>Inclusions:</strong><br>
               Diagnosis of cooling system (fan, vents, heat sink)<br>
               Cleaning of dust and minor obstructions<br>
@@ -53,7 +53,7 @@
           <input type="radio" name="tech" />
           <div class="service-content">
             <h3>Keyboard Replacement (Laptop)</h3>
-            <p class="price">â‚±500 per unit</p>
+            <p class="price">â‚±700 per unit</p>
             <p><strong>Inclusions:</strong><br>
               Removal of defective keyboard<br>
               Installation of new keyboard (client-provided or stock)<br>
@@ -67,7 +67,7 @@
           <input type="radio" name="tech" />
           <div class="service-content">
             <h3>OS Reformat + Software Installation (Laptop)</h3>
-            <p class="price">â‚±700 per unit</p>
+            <p class="price">â‚±1000 per unit</p>
             <p><strong>Inclusions:</strong><br>
               Full OS reinstallation (Windows/macOS/Linux as provided)<br>
               Installation of basic drivers (audio, display, network, etc.)<br>
@@ -82,7 +82,7 @@
           <input type="radio" name="tech" />
           <div class="service-content">
             <h3>Fan / Cooling Repair (Desktop PC)</h3>
-            <p class="price">â‚±500 per unit</p>
+            <p class="price">â‚±700 per unit</p>
             <p><strong>Inclusions:</strong><br>
               Diagnosis of cooling system (fan, vents, heat sink)<br>
               Cleaning of dust and minor obstructions<br>
@@ -97,7 +97,7 @@
           <input type="radio" name="tech" />
           <div class="service-content">
             <h3>Keyboard Replacement (Desktop PC)</h3>
-            <p class="price">â‚±500 per unit</p>
+            <p class="price">â‚±300 per unit</p>
             <p><strong>Inclusions:</strong><br>
               Replacement of external desktop keyboard<br>
               Installation of new keyboard (client-provided or stock)<br>
@@ -110,7 +110,7 @@
           <input type="radio" name="tech" />
           <div class="service-content">
             <h3>OS Reformat + Software Installation (Desktop PC)</h3>
-            <p class="price">â‚±700 per unit</p>
+            <p class="price">â‚±800 per unit</p>
             <p><strong>Inclusions:</strong><br>
               Full OS reinstallation (Windows/Linux as provided)<br>
               Installation of basic drivers (audio, display, network, etc.)<br>
