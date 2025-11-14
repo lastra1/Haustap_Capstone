@@ -18,7 +18,11 @@
     <main class="main-content">
       <!-- Topbar -->
       <header class="topbar">
+<<<<<<< Updated upstream
         <h3>Reports & Violations</h3>
+=======
+        <h3>Reports </h3>
+>>>>>>> Stashed changes
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
@@ -27,7 +31,10 @@
               <a href="admin_profile.php">View Profile</a>
               <a href="change_password.php">Change Password</a>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
               <a href="logout.php" class="logout">Log out</a>
@@ -49,7 +56,11 @@
           <div class="search-box">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <input type="text" id="reportSearch" placeholder="Search Provider" />
+=======
+            <input type="text" id="reportSearch" placeholder="Search Name" />
+>>>>>>> Stashed changes
 =======
             <input type="text" id="reportSearch" placeholder="Search Name" />
 >>>>>>> Stashed changes

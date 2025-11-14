@@ -20,7 +20,7 @@ $pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
     <main class="main-content">
       <!-- Topbar -->
       <header class="topbar">
-        <h3>Manage of Provider > name </h3>
+        <h3>Manage Providers</h3>
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">

@@ -27,7 +27,10 @@
               <a href="admin_profile.php">View Profile</a>
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
               <a href="logout.php" class="logout">Log out</a>
@@ -45,9 +48,15 @@
             <p class="filter-title">Filter by Status</p>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <label><input type="checkbox"> Active</label>
             <label><input type="checkbox"> Expired</label>
             <label><input type="checkbox"> Inactive</label>
+=======
+            <label><input type="checkbox" value="active" checked> Active</label>
+            <label><input type="checkbox" value="expired" checked> Expired</label>
+            <label><input type="checkbox" value="inactive" checked> Inactive</label>
+>>>>>>> Stashed changes
 =======
             <label><input type="checkbox" value="active" checked> Active</label>
             <label><input type="checkbox" value="expired" checked> Expired</label>
@@ -224,6 +233,7 @@
     const dropdown = document.getElementById("userDropdown");
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     dropdownBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -238,6 +248,8 @@
 
     // Modals
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     if (dropdownBtn && dropdown) {
@@ -347,6 +359,9 @@
 
     // MODALS
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

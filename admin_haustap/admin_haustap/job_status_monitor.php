@@ -108,7 +108,10 @@ $statusCounts = array_count_values(array_map(function($b) { return $b['status'] 
               <a href="admin_profile.php">View Profile</a>
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
               <a href="logout.php" class="logout">Log out</a>
