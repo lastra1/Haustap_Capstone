@@ -24,7 +24,10 @@
             <div class="dropdown" id="userDropdown">
               <a href="admin_profile.php">View Profile</a>
                <a href="change_password.php">Change Password</a>
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
               <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>

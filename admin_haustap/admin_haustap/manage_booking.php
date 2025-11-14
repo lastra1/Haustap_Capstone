@@ -25,7 +25,10 @@
             <div class="user-dropdown" id="userDropdown">
               <a href="admin_profile.php">View Profile</a>
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
+<<<<<<< Updated upstream
               <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
               <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
@@ -49,6 +52,7 @@
 <button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</button>
     <div class="dropdown-content">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <p class="filter-title">Filter by Status</p>
             <label><input type="checkbox"> Pending</label>
             <label><input type="checkbox"> Ongoing</label>
@@ -58,6 +62,8 @@
             <button class="apply-btn">Apply</button>
           </div>
 =======
+=======
+>>>>>>> Stashed changes
       <!-- Filter by Date -->
       <div class="filter-date">
         <p class="filter-title">Filter by Date</p>
@@ -68,6 +74,9 @@
         <div class="date-row">
           <label for="to-date">To:</label>
           <input type="date" id="to-date" value="2025-06-30">
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         </div>
       </div>
@@ -590,6 +599,9 @@
     }
     catch(err){ console.error('manage_booking top-level error', err); }
     });
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   </script>
 </body>

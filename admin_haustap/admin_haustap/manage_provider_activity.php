@@ -29,7 +29,6 @@ $pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
             <div class="user-dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>
-              <a href="#">Activity Logs</a>
               <a href="#" class="logout">Log out</a>
             </div>
           </div>

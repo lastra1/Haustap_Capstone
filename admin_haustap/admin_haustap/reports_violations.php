@@ -26,7 +26,10 @@
             <div class="user-dropdown" id="userDropdown">
               <a href="admin_profile.php">View Profile</a>
               <a href="change_password.php">Change Password</a>
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
               <a href="logout.php" class="logout">Log out</a>
             </div>
           </div>
@@ -45,7 +48,11 @@
         <div class="controls">
           <div class="search-box">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+<<<<<<< Updated upstream
             <input type="text" id="reportSearch" placeholder="Search Provider" />
+=======
+            <input type="text" id="reportSearch" placeholder="Search Name" />
+>>>>>>> Stashed changes
           </div>
           <div class="filter-box filter-dropdown">
             <button id="filterBtn" class="filter-btn" title="Filter"><i class="fa-solid fa-sliders"></i></button>

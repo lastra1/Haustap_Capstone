@@ -78,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <input type="email" id="email" name="email" autocomplete="username" required>
       <label for="password">Password</label>
       <input type="password" id="password" name="password" autocomplete="current-password" required>
-      <a href="verification_code.php" class="forgot">Forgot Password?</a>
       <button type="submit" id="loginBtn">Log In</button>
     </form>
   </div>
