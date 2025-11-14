@@ -74,7 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <a href="change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======

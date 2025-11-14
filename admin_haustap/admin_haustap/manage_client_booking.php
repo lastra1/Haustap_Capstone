@@ -149,7 +149,7 @@ $cstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
 
       <!-- Search and Filter -->
       <div class="search-filter">
-        <input type="text" placeholder="Search Services">
+        <input id="searchInput" type="text" placeholder="Search Services">
 
         <div class="filter-dropdown">
 <div class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</div>
@@ -544,6 +544,49 @@ $cstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
 
       checkboxes.forEach(cb => cb.addEventListener('change', applyFilter));
       if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyFilter(); });
+    })();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+
+    // Search input filtering
+    (function(){
+      const input = document.getElementById('searchInput') || document.querySelector('.search-filter input[type="text"]');
+      if (!input) return;
+
+      function searchRows(){
+        const q = (input.value || '').trim().toLowerCase();
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          // If row is hidden by status filter, keep it hidden unless search matches explicitly
+          const currentlyHidden = row.style.display === 'none';
+
+          const id = (row.getAttribute('data-booking-id') || '').toLowerCase();
+          const provider = (row.getAttribute('data-provider') || '').toLowerCase();
+          const service = (row.getAttribute('data-service') || '').toLowerCase();
+          const date = (row.getAttribute('data-date') || '').toLowerCase();
+          const total = (row.getAttribute('data-total') || '').toLowerCase();
+
+          const hay = `${id} ${provider} ${service} ${date} ${total}`;
+
+          const matches = q === '' || hay.indexOf(q) !== -1;
+
+          // If a status filter hides the row (and search doesn't match), keep hidden
+          row.style.display = matches ? '' : 'none';
+        });
+      }
+
+      // Filter as user types
+      input.addEventListener('input', searchRows);
+
+      // Re-run search when status filter changes (checkbox events already call applyFilter)
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (dropdownContent) {
+        const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.addEventListener('change', searchRows));
+        const applyBtnLocal = dropdownContent.querySelector('.apply-btn');
+        if (applyBtnLocal) applyBtnLocal.addEventListener('click', (e) => { e.preventDefault(); searchRows(); });
+      }
     })();
 >>>>>>> Stashed changes
   </script>

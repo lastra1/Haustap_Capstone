@@ -18,7 +18,11 @@
       <!-- Topbar -->
       <header class="topbar">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <h3>Manage Provider</h3>
+=======
+        <h3>Manage Providers</h3>
+>>>>>>> Stashed changes
 =======
         <h3>Manage Providers</h3>
 >>>>>>> Stashed changes
@@ -31,7 +35,10 @@
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -80,6 +87,9 @@
                   <label><input type="checkbox" value="banned"> Banned</label>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -458,6 +468,9 @@
     // Provider modal handlers removed (no popups to open/close)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

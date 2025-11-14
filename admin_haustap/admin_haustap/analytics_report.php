@@ -216,7 +216,10 @@ $js_activity_providers = array_values($activityProviders);
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======

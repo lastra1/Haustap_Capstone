@@ -5,7 +5,12 @@
         "email": "pagod@example.com",
         "phone": "09170000002",
         "joined_at": "2024-01-24",
+<<<<<<< Updated upstream
         "status": "inactive"
+=======
+        "status": "banned",
+        "updated_at": "2025-11-14T22:04:22+00:00"
+>>>>>>> Stashed changes
     },
     {
         "id": 3,

@@ -43,7 +43,7 @@ $cstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
 
       <!-- Search and Filter -->
 <div class="search-filter">
-  <input type="text" placeholder="Search">
+  <input id="searchInput" type="text" placeholder="Search">
 
   <div class="filter-dropdown">
 <button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter ▼</button>
@@ -152,6 +152,70 @@ filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
         });
       });
     })();
+<<<<<<< Updated upstream
+=======
+
+    // Search input filtering for vouchers
+    (function(){
+      const input = document.getElementById('searchInput') || document.querySelector('.search-filter input[type="text"]');
+      if (!input) return;
+
+      function searchRows(){
+        const q = (input.value || '').trim().toLowerCase();
+        const rows = document.querySelectorAll('.voucher-table tbody tr');
+
+        // Read date range inputs (if present)
+        const fromInput = document.getElementById('from-date');
+        const toInput = document.getElementById('to-date');
+        const fromVal = fromInput ? fromInput.value : '';
+        const toVal = toInput ? toInput.value : '';
+
+        // Normalize date range
+        let fromDate = null, toDate = null;
+        if (fromVal) fromDate = new Date(fromVal + 'T00:00:00');
+        if (toVal) toDate = new Date(toVal + 'T23:59:59');
+        if (fromDate && toDate && fromDate > toDate) {
+          // swap to make a valid range
+          const tmp = fromDate; fromDate = toDate; toDate = tmp;
+        }
+
+        rows.forEach(row => {
+          const code = (row.cells[0] && row.cells[0].textContent || '').toLowerCase();
+          const discount = (row.cells[1] && row.cells[1].textContent || '').toLowerCase();
+          const expiryText = (row.cells[2] && row.cells[2].textContent || '').trim();
+          const expiry = expiryText.toLowerCase();
+          const status = (row.querySelector('.status') && row.querySelector('.status').textContent || '').toLowerCase();
+
+          const hay = `${code} ${discount} ${expiry} ${status}`;
+          const textMatches = q === '' || hay.indexOf(q) !== -1;
+
+          // Date range check
+          let dateMatches = true;
+          if ((fromDate || toDate) && expiryText) {
+            const rowDate = new Date(expiryText + 'T00:00:00');
+            if (isNaN(rowDate.getTime())) {
+              dateMatches = false;
+            } else {
+              if (fromDate && rowDate < fromDate) dateMatches = false;
+              if (toDate && rowDate > toDate) dateMatches = false;
+            }
+          }
+
+          const matches = textMatches && dateMatches;
+          row.style.display = matches ? '' : 'none';
+        });
+      }
+
+      input.addEventListener('input', searchRows);
+
+      // If filter dropdown has an apply button (date filters), re-run search after apply
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (dropdownContent) {
+        const applyBtn = dropdownContent.querySelector('.apply-btn');
+        if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); searchRows(); });
+      }
+    })();
+>>>>>>> Stashed changes
   </script>
 </body>
 </html>

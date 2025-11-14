@@ -19,7 +19,11 @@
       <!-- Topbar -->
       <header class="topbar">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <h3>Reports & Violations</h3>
+=======
+        <h3>Reports </h3>
+>>>>>>> Stashed changes
 =======
         <h3>Reports </h3>
 >>>>>>> Stashed changes
@@ -32,7 +36,10 @@
               <a href="change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -57,7 +64,11 @@
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <input type="text" id="reportSearch" placeholder="Search Provider" />
+=======
+            <input type="text" id="reportSearch" placeholder="Search Name" />
+>>>>>>> Stashed changes
 =======
             <input type="text" id="reportSearch" placeholder="Search Name" />
 >>>>>>> Stashed changes

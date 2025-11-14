@@ -28,7 +28,10 @@
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -49,9 +52,15 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <label><input type="checkbox"> Active</label>
             <label><input type="checkbox"> Expired</label>
             <label><input type="checkbox"> Inactive</label>
+=======
+            <label><input type="checkbox" value="active" checked> Active</label>
+            <label><input type="checkbox" value="expired" checked> Expired</label>
+            <label><input type="checkbox" value="inactive" checked> Inactive</label>
+>>>>>>> Stashed changes
 =======
             <label><input type="checkbox" value="active" checked> Active</label>
             <label><input type="checkbox" value="expired" checked> Expired</label>
@@ -234,6 +243,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     dropdownBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -248,6 +258,8 @@
 
     // Modals
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -360,6 +372,9 @@
     // MODALS
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

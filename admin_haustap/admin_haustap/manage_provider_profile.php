@@ -57,7 +57,10 @@ if (!$provider) {
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -106,9 +109,9 @@ if (!$provider) {
         <!-- Account Actions -->
         <div class="actions">
             <h4>Account Actions:</h4>
-            <button class="btn suspend">Suspend</button>
-            <button class="btn banned">Banned</button>
-            <button class="btn delete">Delete</button>
+            <button type="button" class="btn suspend">Suspend</button>
+            <button type="button" class="btn banned">Banned</button>
+            <button type="button" class="btn delete">Delete</button>
         </div>
 
     </main>
@@ -162,6 +165,10 @@ if (!$provider) {
       const deleteBtn = document.querySelector('.btn.delete');
 
       function handleAction(action, buttonEl) {
+<<<<<<< Updated upstream
+=======
+        if (!providerId) { alert('Provider id is missing; cannot perform action.'); return; }
+>>>>>>> Stashed changes
         const confirmed = confirm(`Are you sure you want to ${action} this provider?`);
         if (!confirmed) return;
 
@@ -171,11 +178,21 @@ if (!$provider) {
 
         const apiUrl = 'api/update_provider_status.php';
 
+<<<<<<< Updated upstream
+=======
+        // Disable button(s) while working
+        const buttons = [document.querySelector('.btn.suspend'), document.querySelector('.btn.banned'), document.querySelector('.btn.delete')].filter(Boolean);
+        buttons.forEach(b => b.disabled = true);
+        const originalText = buttonEl && buttonEl.textContent;
+        if (buttonEl) buttonEl.textContent = 'Processing...';
+
+>>>>>>> Stashed changes
         fetch(apiUrl, {
           method: 'POST',
           body: formData,
           credentials: 'same-origin'
         })
+<<<<<<< Updated upstream
         .then(res => res.json())
         .then(data => {
           if (data.success) {
@@ -189,11 +206,42 @@ if (!$provider) {
             }
           } else {
             alert('Error: ' + (data.error || 'Unknown error'));
+=======
+        .then(async res => {
+          let bodyText = '';
+          try { bodyText = await res.text(); } catch(e) { bodyText = ''; }
+          // try to parse JSON, but handle non-json responses gracefully
+          let data = null;
+          try { data = bodyText ? JSON.parse(bodyText) : null; } catch(e) { data = null; }
+
+          if (!res.ok) {
+            const msg = data && data.error ? data.error : (bodyText || res.statusText || 'Unknown server error');
+            throw new Error(msg);
+          }
+
+          if (data && data.success) return data;
+          throw new Error((data && data.error) ? data.error : 'Unexpected response from server');
+        })
+        .then(data => {
+          alert(`Provider ${action === 'delete' ? 'deleted' : 'status updated to ' + action} successfully!`);
+          if (action === 'delete') {
+            window.location.href = 'manage_provider.php';
+          } else {
+            window.location.reload();
+>>>>>>> Stashed changes
           }
         })
         .catch(err => {
           console.error('Action failed:', err);
+<<<<<<< Updated upstream
           alert('Failed to perform action. Check console for details.');
+=======
+          alert('Failed: ' + (err && err.message ? err.message : 'Check console for details'));
+        })
+        .finally(() => {
+          buttons.forEach(b => b.disabled = false);
+          if (buttonEl) buttonEl.textContent = originalText || buttonEl.textContent;
+>>>>>>> Stashed changes
         });
       }
 

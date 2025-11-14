@@ -59,7 +59,10 @@
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -91,8 +94,11 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
           <span class="filter-icon">⚙️ Filter</span>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -158,10 +164,49 @@
 
     // Tabs (highlight only; data loading handled in app.js)
     const tabs = document.querySelectorAll(".tab");
+
+    // Apply tab filter: show rows matching the tab's status
+    function applyTabFilter(label){
+      const key = (label || '').toString().trim().toLowerCase();
+      const tbody = document.getElementById('applicantTableBody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+
+      // Map tab label to status class used in the table
+      const map = {
+        'all': null,
+        'pending review': 'pending',
+        'scheduled': 'scheduled',
+        'hired': 'hired',
+        'rejected': 'rejected'
+      };
+      const want = map[key] || null;
+
+      rows.forEach(row => {
+        // If row hidden by other filters (e.g. date), keep it hidden
+        if (row.dataset && row.dataset.filterHidden === 'true') { row.style.display = 'none'; return; }
+
+        if (!want) { row.style.display = ''; return; }
+        const badge = row.querySelector('.status');
+        let s = '';
+        if (badge) {
+          if (badge.classList.contains('pending')) s = 'pending';
+          else if (badge.classList.contains('scheduled')) s = 'scheduled';
+          else if (badge.classList.contains('hired')) s = 'hired';
+          else if (badge.classList.contains('rejected')) s = 'rejected';
+        }
+        row.style.display = (s === want) ? '' : 'none';
+      });
+
+      // Update counts if available
+      window.updateClientCounts && window.updateClientCounts();
+    }
+
     tabs.forEach(tab => {
       tab.addEventListener("click", () => {
         tabs.forEach(t => t.classList.remove("active"));
         tab.classList.add("active");
+        applyTabFilter(tab.textContent || tab.innerText || 'All');
       });
     });
 
@@ -434,8 +479,41 @@
             rejected: 'Rejected'
           }[newStatus] || newStatus;
           statusCell.textContent = label;
+<<<<<<< Updated upstream
           statusCell.className = 'status ' + (newStatus === 'pending_review' ? 'pending' : newStatus);
         }
+=======
+          // normalize class: pending_review -> pending, others use their value
+          const cls = (newStatus === 'pending_review') ? 'pending' : newStatus;
+          // remove existing status classes and set new
+          statusCell.className = 'status ' + cls;
+        }
+        // Switch to the tab that corresponds to the new status and re-filter
+        const statusToTab = {
+          pending_review: 'Pending Review',
+          scheduled: 'Scheduled',
+          hired: 'Hired',
+          rejected: 'Rejected'
+        };
+        const targetTabLabel = statusToTab[newStatus] || 'All';
+        // activate the matching tab
+        let activated = false;
+        tabs.forEach(t => {
+          const text = (t.textContent || t.innerText || '').toString().trim();
+          if (text.toLowerCase() === targetTabLabel.toLowerCase()) {
+            tabs.forEach(x => x.classList.remove('active'));
+            t.classList.add('active');
+            applyTabFilter(text);
+            activated = true;
+          }
+        });
+        if (!activated) {
+          // fallback: show All
+          tabs.forEach(x => x.classList.remove('active'));
+          if (tabs[0]) { tabs[0].classList.add('active'); applyTabFilter('All'); }
+        }
+
+>>>>>>> Stashed changes
         // Close modal
         closeModal();
       });

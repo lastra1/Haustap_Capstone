@@ -44,7 +44,7 @@ $pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
 
       <!-- Search and Filter -->
       <div class="search-filter">
-        <input type="text" placeholder="Search Services">
+        <input id="searchInput" type="text" placeholder="Search Services">
 
         <div class="filter-dropdown">
 <div class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</div>
@@ -337,12 +337,12 @@ $pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
       });
     })();
 
-    // Status filter: show rows matching selected statuses
+    // Combined status + search filter: apply both filters consistently
     (function(){
       const dropdownContent = document.querySelector('.dropdown-content');
-      if (!dropdownContent) return;
-      const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]');
-      const applyBtn = dropdownContent.querySelector('.apply-btn');
+      const input = document.getElementById('searchInput') || document.querySelector('.search-filter input[type="text"]');
+      const checkboxes = dropdownContent ? dropdownContent.querySelectorAll('input[type="checkbox"]') : [];
+      const applyBtn = dropdownContent ? dropdownContent.querySelector('.apply-btn') : null;
 
       function rowStatus(badge){
         if (!badge) return '';
@@ -356,18 +356,131 @@ $pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
         return '';
       }
 
-      function applyFilter(){
-        const selected = new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
+      function getSelectedStatuses(){
+        return new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
+      }
+
+      function applyCombined(){
+        const q = (input && input.value || '').trim().toLowerCase();
+        const selected = getSelectedStatuses();
         const rows = document.querySelectorAll('.table-container tbody tr');
         rows.forEach(row => {
           const badge = row.querySelector('.status');
           const s = rowStatus(badge);
-          row.style.display = (selected.size === 0 || selected.has(s)) ? '' : 'none';
+
+          const id = (row.getAttribute('data-booking-id') || '').toLowerCase();
+          const client = (row.getAttribute('data-client') || '').toLowerCase();
+          const service = (row.getAttribute('data-service') || '').toLowerCase();
+          const date = (row.getAttribute('data-date') || '').toLowerCase();
+          const total = (row.getAttribute('data-total') || '').toLowerCase();
+
+          const hay = `${id} ${client} ${service} ${date} ${total}`;
+
+          const statusMatch = (selected.size === 0 || selected.has(s));
+          const textMatch = (q === '' || hay.indexOf(q) !== -1);
+
+          row.style.display = (statusMatch && textMatch) ? '' : 'none';
         });
       }
 
-      checkboxes.forEach(cb => cb.addEventListener('change', applyFilter));
-      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyFilter(); });
+      if (input) input.addEventListener('input', applyCombined);
+      if (checkboxes.length) checkboxes.forEach(cb => cb.addEventListener('change', applyCombined));
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyCombined(); });
+
+      // run once on load to set initial visibility
+      applyCombined();
+    })();
+
+    // Tabs navigation handler: navigate to pages using data-target
+    (function(){
+      const tabsContainer = document.querySelector('.tabs');
+      if (!tabsContainer) return;
+      const buttons = Array.from(tabsContainer.querySelectorAll('button'));
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function(e){
+          const target = btn.getAttribute('data-target');
+          if (target) { window.location.href = target; return; }
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    })();
+
+    // Modal Management
+    (function() {
+      const modal = document.getElementById('bookingModal');
+      const modalClose = document.querySelector('.modal-close');
+      const rowActions = document.querySelectorAll('.row-action');
+
+      // Open modal on row action button click
+      rowActions.forEach(action => {
+        action.addEventListener('click', function() {
+          const row = this.closest('tr');
+          const bookingData = {
+            id: row.getAttribute('data-booking-id'),
+            client: row.getAttribute('data-client'),
+            service: row.getAttribute('data-service'),
+            date: row.getAttribute('data-date'),
+            total: row.getAttribute('data-total'),
+            status: row.getAttribute('data-status')
+          };
+          openModal(bookingData);
+        });
+      });
+
+      // Close modal on X button click
+      if (modalClose) {
+        modalClose.addEventListener('click', function() {
+          modal.style.display = 'none';
+        });
+      }
+
+      // Close modal on outside click
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+
+      function openModal(data) {
+        // Hide all modal views
+        document.querySelectorAll('.modal-view').forEach(view => view.style.display = 'none');
+
+        const status = data.status.toLowerCase();
+        const viewId = `modal-${status}`;
+        const view = document.getElementById(viewId);
+
+        if (!view) {
+          console.error('Modal view not found for status:', status);
+          return;
+        }
+
+        // Populate status-specific data
+        populateModalData(data, status);
+
+        // Show the appropriate view
+        view.style.display = 'block';
+        modal.style.display = 'flex';
+      }
+
+      function populateModalData(data, status) {
+        // Update client name
+        document.getElementById(`${status}-client`).textContent = data.client;
+        
+        // Update date
+        const dateDisplay = data.date.replace('-', ' - ').split(' ').slice(0, 3).join(' ');
+        document.getElementById(`${status}-date`).textContent = dateDisplay;
+
+        // For cancelled, also update cancel date
+        if (status === 'cancelled') {
+          document.getElementById('cancelled-cancel-date').textContent = dateDisplay;
+        }
+
+        // For return, also update return date
+        if (status === 'return') {
+          document.getElementById('return-return-date').textContent = dateDisplay;
+        }
+      }
     })();
 
     // Tabs navigation handler: navigate to pages using data-target

@@ -28,7 +28,10 @@
               <a href="/admin_haustap/admin_haustap/change_password.php">Change Password</a>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <a href="/admin_haustap/admin_haustap/activity_logs.php">Activity Logs</a>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -63,6 +66,9 @@
                 <label><input type="checkbox" value="banned"> Banned</label>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -195,8 +201,121 @@ document.addEventListener('click', (event) => {
   });
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 =======
+=======
+})();
+
+// Update footer counts to match current visible list
+(function(){
+  const totalEl = document.getElementById('countTotal');
+  const activeEl = document.getElementById('countActive');
+  const inactiveEl = document.getElementById('countInactive');
+  const suspendedEl = document.getElementById('countSuspended');
+
+  function updateCounts(){
+    const rows = Array.from(document.querySelectorAll('.table-wrapper tbody tr'));
+    const visible = rows.filter(r => r.style.display !== 'none');
+    const counts = { total: visible.length, active:0, inactive:0, suspended:0 };
+    visible.forEach(r => {
+      const badge = r.querySelector('.status');
+      if (!badge) return;
+      if (badge.classList.contains('active')) counts.active++;
+      else if (badge.classList.contains('inactive')) counts.inactive++;
+      else if (badge.classList.contains('suspended')) counts.suspended++;
+    });
+    if (totalEl) totalEl.textContent = 'Total Clients: ' + counts.total;
+    if (activeEl) activeEl.textContent = 'Active: ' + counts.active;
+    if (inactiveEl) inactiveEl.textContent = 'Inactive: ' + counts.inactive;
+    if (suspendedEl) suspendedEl.textContent = 'Suspend: ' + counts.suspended;
+  }
+
+  // expose for other scripts to call if needed
+  window.updateClientCounts = updateCounts;
+
+  // run on load
+  setTimeout(updateCounts, 30);
+
+  // re-run when filters change: observe mutations of tbody or listen for clicks on apply/checkboxes
+  const observer = new MutationObserver(() => updateCounts());
+  const tbody = document.querySelector('.table-wrapper tbody');
+  if (tbody) observer.observe(tbody, { attributes: true, childList: true, subtree: true, characterData: true });
+
+  // also update when filter controls are used
+  const filterBox = document.getElementById('filterBox');
+  if (filterBox){
+    filterBox.addEventListener('change', updateCounts);
+    const applyBtn = filterBox.querySelector('.apply-btn');
+    if (applyBtn) applyBtn.addEventListener('click', updateCounts);
+  }
+})();
+
+// Arrow cell: navigate to client profile when last cell (>) is clicked
+(function(){
+  const tbody = document.querySelector('.table-wrapper tbody');
+  if (!tbody) return;
+  tbody.addEventListener('click', function(e){
+    // allow clicking the text '>' or the last td in a row
+    const td = e.target.closest('td');
+    if (!td) return;
+    const tr = td.closest('tr');
+    if (!tr) return;
+    const cells = Array.from(tr.children);
+    const isArrowCell = (td === cells[cells.length - 1]) || td.classList.contains('arrow') || (td.textContent && td.textContent.trim() === '>');
+    if (!isArrowCell) return;
+    const idCell = tr.querySelector('td:first-child');
+    const id = idCell ? idCell.textContent.trim() : '';
+    const badge = tr.querySelector('.status');
+    let status = '';
+    if (badge) {
+      if (badge.classList.contains('active')) status = 'active';
+      else if (badge.classList.contains('inactive')) status = 'inactive';
+      else if (badge.classList.contains('suspended')) status = 'suspended';
+    }
+    const url = `manage_client_profile.php?id=${encodeURIComponent(id)}&status=${encodeURIComponent(status)}`;
+    try { window.location.href = url; } catch(err) { console.error('Navigation failed', err); }
+  });
+})();
+
+// ----------------------
+// Search input: live filter for clients
+// ----------------------
+(function(){
+  const input = document.querySelector('.search-input');
+  const tbody = document.querySelector('.table-wrapper tbody');
+  if (!input || !tbody) return;
+
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+
+  function normalize(s){ return (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase(); }
+
+  function applySearch(q){
+    const text = normalize(q);
+    // If empty query, show all rows
+    if (!text){
+      rows.forEach(r => r.style.display = '');
+      window.updateClientCounts && window.updateClientCounts();
+      return;
+    }
+
+    // Match against the Name column (second column) so typing names returns results
+    rows.forEach(r => {
+      const name = normalize(r.querySelector('td:nth-child(2)')?.textContent);
+      r.style.display = name.indexOf(text) !== -1 ? '' : 'none';
+    });
+    window.updateClientCounts && window.updateClientCounts();
+  }
+
+  let timer = null;
+  input.addEventListener('input', function(e){
+    clearTimeout(timer);
+    timer = setTimeout(() => applySearch(e.target.value), 150);
+  });
+
+  // support clearing with Esc
+  input.addEventListener('keydown', function(e){ if (e.key === 'Escape'){ input.value = ''; applySearch(''); } });
+>>>>>>> Stashed changes
 })();
 
 // Update footer counts to match current visible list

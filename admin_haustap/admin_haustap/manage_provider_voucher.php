@@ -43,7 +43,7 @@ $pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
 
       <!-- Search and Filter -->
 <div class="search-filter">
-  <input type="text" placeholder="Search">
+  <input id="searchInput" type="text" placeholder="Search">
 
   <div class="filter-dropdown">
 <button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter ▼</button>
@@ -152,6 +152,62 @@ $pstatus = isset($_GET['status']) ? urlencode($_GET['status']) : '';
         });
       });
     })();
+<<<<<<< Updated upstream
+=======
+    
+    // Search + date filter for vouchers
+    (function(){
+      const input = document.getElementById('searchInput') || document.querySelector('.search-filter input[type="text"]');
+      const dropdownContent = document.querySelector('.dropdown-content');
+      const applyBtn = dropdownContent ? dropdownContent.querySelector('.apply-btn') : null;
+      const fromInput = document.getElementById('from-date');
+      const toInput = document.getElementById('to-date');
+
+      function parseRowDate(text){
+        if (!text) return null;
+        const d = new Date(text + 'T00:00:00');
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      function applyFilters(){
+        const q = (input && input.value || '').trim().toLowerCase();
+        const fromVal = fromInput ? fromInput.value : '';
+        const toVal = toInput ? toInput.value : '';
+        let fromDate = fromVal ? new Date(fromVal + 'T00:00:00') : null;
+        let toDate = toVal ? new Date(toVal + 'T23:59:59') : null;
+        if (fromDate && toDate && fromDate > toDate){ const t = fromDate; fromDate = toDate; toDate = t; }
+
+        const rows = document.querySelectorAll('.voucher-table tbody tr');
+        rows.forEach(row => {
+          const code = (row.cells[0] && row.cells[0].textContent || '').toLowerCase();
+          const discount = (row.cells[1] && row.cells[1].textContent || '').toLowerCase();
+          const expiryText = (row.cells[2] && row.cells[2].textContent || '').trim();
+          const status = (row.querySelector('.status') && row.querySelector('.status').textContent || '').toLowerCase();
+
+          const hay = `${code} ${discount} ${expiryText} ${status}`.toLowerCase();
+          const textMatch = q === '' || hay.indexOf(q) !== -1;
+
+          let dateMatch = true;
+          if ((fromDate || toDate) && expiryText) {
+            const rowDate = parseRowDate(expiryText);
+            if (!rowDate) dateMatch = false;
+            else {
+              if (fromDate && rowDate < fromDate) dateMatch = false;
+              if (toDate && rowDate > toDate) dateMatch = false;
+            }
+          }
+
+          row.style.display = (textMatch && dateMatch) ? '' : 'none';
+        });
+      }
+
+      if (input) input.addEventListener('input', applyFilters);
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyFilters(); });
+
+      // initial run
+      applyFilters();
+    })();
+>>>>>>> Stashed changes
   </script>
 </body>
 </html>
