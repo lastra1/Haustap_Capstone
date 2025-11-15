@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Support\FileJsonStore;
+use App\Repositories\Firebase\UsersRepository;
+use App\Services\Firebase\FirestoreClient;
 
 class ModeController extends Controller
 {
@@ -68,6 +70,28 @@ class ModeController extends Controller
 
         $rolesStore->write($rolesMap);
         $modesStore->write($modeMap);
+
+        try {
+            $fs = new FirestoreClient();
+            $users = new UsersRepository($fs);
+            $userId = preg_replace('/[^a-z0-9]+/i', '-', strtolower($email));
+            $userId = trim((string)$userId ?: 'user-' . md5($email), '-');
+            $primaryRole = in_array('admin', $roles, true) ? 'admin' : ($mode === 'provider' ? 'provider' : 'client');
+            if (!$users->exists($userId)) {
+                $users->create([
+                    'email' => $email,
+                    'name' => $email,
+                    'roles' => $roles,
+                    'role' => $primaryRole,
+                    'mode' => $mode,
+                ], $userId);
+            } else {
+                $users->setRoles($userId, $roles, $primaryRole);
+                $fs->patch('users', $userId, [ 'mode' => ['stringValue' => $mode] ]);
+            }
+        } catch (\Throwable $e) {
+            // ignore Firestore errors
+        }
 
         return response()->json([
             'success' => true,

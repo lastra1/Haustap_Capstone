@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Repositories\Firebase\UsersRepository;
+use App\Services\Firebase\FirestoreClient;
 use App\Support\FileJsonStore;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -38,6 +40,21 @@ class PasswordController extends BaseController
             'role' => 'client',
         ]);
 
+        try {
+            $fs = new FirestoreClient();
+            $usersRepo = new UsersRepository($fs);
+            $userId = preg_replace('/[^a-z0-9]+/i', '-', strtolower($email ?: $name));
+            $userId = trim((string)$userId ?: 'client-' . md5($email), '-');
+            $usersRepo->create([
+                'email' => $email,
+                'name' => $name,
+                'roles' => ['client'],
+                'role' => 'client'
+            ], $userId);
+        } catch (\Throwable $e) {
+            // ignore Firestore errors for registration flow
+        }
+
         return response()->json([
             'success' => true,
             'user' => [
@@ -64,6 +81,27 @@ class PasswordController extends BaseController
             // Persist token to remember_token for middleware auth
             $user->remember_token = $token;
             $user->save();
+
+            // Ensure Firestore user doc exists and has role
+            try {
+                $fs = new FirestoreClient();
+                $usersRepo = new UsersRepository($fs);
+                $userId = preg_replace('/[^a-z0-9]+/i', '-', strtolower($user->email ?: $user->name));
+                $userId = trim((string)$userId ?: 'client-' . md5($user->email), '-');
+                $roleVal = $user->role ?: 'client';
+                if (!$usersRepo->exists($userId)) {
+                    $usersRepo->create([
+                        'email' => $user->email,
+                        'name' => $user->name,
+                        'roles' => [$roleVal],
+                        'role' => $roleVal
+                    ], $userId);
+                } else {
+                    $usersRepo->setRoles($userId, [$roleVal], $roleVal);
+                }
+            } catch (\Throwable $e) {
+                // ignore Firestore errors for login flow
+            }
 
             return response()->json([
                 'success' => true,

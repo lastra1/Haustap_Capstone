@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: haustap_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: haustap_db
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_PASSWORD: haustap_password
+      MYSQL_USER: haustap_user
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "3306:3306"
+    networks:
+      - haustap_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: haustap_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: haustap_user
+      PMA_PASSWORD: haustap_password
+      PMA_ARBITRARY: 1
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - haustap_network
+
+networks:
+  haustap_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,6 +30,17 @@ return [
     */
 
     'connections' => [
+
+        'firestore' => [
+            'driver' => 'firestore',
+            'project_id' => env('FIREBASE_PROJECT_ID', 'haustap-booking-system'),
+            'api_key' => env('FIREBASE_API_KEY'),
+            'auth_domain' => env('FIREBASE_AUTH_DOMAIN'),
+            'storage_bucket' => env('FIREBASE_STORAGE_BUCKET'),
+            'messaging_sender_id' => env('FIREBASE_MESSAGING_SENDER_ID'),
+            'app_id' => env('FIREBASE_APP_ID'),
+            'measurement_id' => env('FIREBASE_MEASUREMENT_ID'),
+        ],
 
         'sqlite' => [
             'driver' => 'sqlite',
@@ -109,8 +120,6 @@ return [
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            // 'encrypt' => env('DB_ENCRYPT', 'yes'),
-            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
     ],
