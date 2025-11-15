@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Auth Debug - HausTap</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #fafafa; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; color: #856404; }
+        input { margin: 5px; padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; border: none; border-radius: 4px; background-color: #007bff; color: white; }
+        button:hover { background-color: #0056b3; }
+        .log-output { margin-top: 10px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+        .config-display { background-color: #e9ecef; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; word-break: break-all; }
+        .user-info { background-color: #e7f3ff; padding: 15px; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Firebase Authentication Debugger</h1>
+        <p>This page will help debug the auth/invalid-credential error step by step.</p>
+        
+        <!-- Firebase Configuration Check -->
+        <div class="debug-section">
+            <h3>1. Firebase Configuration Check</h3>
+            <div id="config-status">Checking configuration...</div>
+            <div id="config-details" class="config-display" style="display:none;"></div>
+            <button onclick="checkFirebaseConfig()">Check Configuration</button>
+        </div>
+        
+        <!-- User Account Check -->
+        <div class="debug-section">
+            <h3>2. User Account Verification</h3>
+            <p>Enter the email you want to test:</p>
+            <input type="email" id="debug-email" placeholder="Enter test email">
+            <button onclick="checkUserAccount()">Check User Account</button>
+            <div id="user-check-result"></div>
+        </div>
+        
+        <!-- Authentication Test -->
+        <div class="debug-section">
+            <h3>3. Authentication Test</h3>
+            <input type="email" id="test-email" placeholder="Enter test email">
+            <input type="password" id="test-password" placeholder="Enter test password">
+            <br>
+            <button onclick="testAuthentication()">Test Login</button>
+            <button onclick="testPasswordReset()">Test Password Reset</button>
+            <button onclick="createTestUser()">Create Test User</button>
+            <div id="auth-test-result"></div>
+        </div>
+        
+        <!-- Current User Status -->
+        <div class="debug-section">
+            <h3>4. Current Authentication Status</h3>
+            <button onclick="checkCurrentUser()">Check Current User</button>
+            <div id="current-user-status"></div>
+        </div>
+        
+        <!-- Debug Log -->
+        <div class="debug-section">
+            <h3>📝 Debug Log</h3>
+            <div id="debug-log" class="log-output"></div>
+            <button onclick="clearDebugLog()">Clear Log</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK v9 - Modular SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, fetchSignInMethodsForEmail } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+        
+        // Make Firebase available globally
+        window.firebaseDebug = {
+            initializeApp,
+            getAuth,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            sendPasswordResetEmail,
+            fetchSignInMethodsForEmail
+        };
+        
+        // Your Firebase configuration
+        window.firebaseConfig = {
+            apiKey: "AIzaSyCfhR1vIh8_z4TAmdaQRESHB459CsVqJ9M",
+            authDomain: "haustap-booking-system.firebaseapp.com",
+            projectId: "haustap-booking-system",
+            storageBucket: "haustap-booking-system.firebasestorage.app",
+            messagingSenderId: "515769404711",
+            appId: "1:515769404711:web:ddf0b32df0498eb18aad02"
+        };
+    </script>
+
+    <script>
+        let firebaseApp = null;
+        let firebaseAuth = null;
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('debug-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = type;
+            entry.innerHTML = `[${timestamp}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        function checkFirebaseConfig() {
+            log('Starting Firebase configuration check...', 'info');
+            
+            try {
+                // Check if config exists
+                if (!window.firebaseConfig) {
+                    log('❌ Firebase configuration not found', 'error');
+                    document.getElementById('config-status').innerHTML = '<div class="error">❌ Configuration not found</div>';
+                    return;
+                }
+                
+                // Display configuration (hide API key for security)
+                const safeConfig = { ...window.firebaseConfig };
+                safeConfig.apiKey = safeConfig.apiKey.substring(0, 10) + '...';
+                
+                document.getElementById('config-details').innerHTML = `
+                    <strong>Project ID:</strong> ${safeConfig.projectId}<br>
+                    <strong>Auth Domain:</strong> ${safeConfig.authDomain}<br>
+                    <strong>API Key:</strong> ${safeConfig.apiKey}<br>
+                    <strong>Storage Bucket:</strong> ${safeConfig.storageBucket}<br>
+                    <strong>Messaging Sender ID:</strong> ${safeConfig.messagingSenderId}
+                `;
+                document.getElementById('config-details').style.display = 'block';
+                
+                // Test initialization
+                firebaseApp = window.firebaseDebug.initializeApp(window.firebaseConfig);
+                firebaseAuth = window.firebaseDebug.getAuth(firebaseApp);
+                
+                log('✅ Firebase configuration is valid', 'success');
+                log('✅ Firebase app initialized successfully', 'success');
+                document.getElementById('config-status').innerHTML = '<div class="success">✅ Configuration valid and Firebase initialized</div>';
+                
+            } catch (error) {
+                log(`❌ Firebase configuration error: ${error.message}`, 'error');
+                document.getElementById('config-status').innerHTML = `<div class="error">❌ Configuration error: ${error.message}</div>`;
+            }
+        }
+        
+        async function checkUserAccount() {
+            const email = document.getElementById('debug-email').value.trim();
+            const resultDiv = document.getElementById('user-check-result');
+            
+            if (!email) {
+                resultDiv.innerHTML = '<div class="error">Please enter an email address</div>';
+                return;
+            }
+            
+            if (!firebaseAuth) {
+                resultDiv.innerHTML = '<div class="error">Firebase not initialized. Click "Check Configuration" first.</div>';
+                return;
+            }
+            
+            log(`Checking user account for: ${email}`, 'info');
+            
+            try {
+                // Check if user exists by trying to get sign-in methods
+                const methods = await window.firebaseDebug.fetchSignInMethodsForEmail(firebaseAuth, email);
+                
+                if (methods.length === 0) {
+                    log(`❌ No user found with email: ${email}`, 'error');
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <strong>❌ User not found</strong><br>
+                            No account exists with email: ${email}<br>
+                            <strong>Suggestions:</strong><br>
+                            - Check if the email is spelled correctly<br>
+                            - Create a new test user using the "Create Test User" button<br>
+                            - Check Firebase Console > Authentication > Users
+                        </div>
+                    `;
+                } else {
+                    log(`✅ User found with email: ${email}`, 'success');
+                    log(`✅ Sign-in methods: ${methods.join(', ')}`, 'success');
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ User account found</strong><br>
+                            Email: ${email}<br>
+                            Sign-in methods: ${methods.join(', ')}<br>
+                            <strong>Next step:</strong> Test authentication with password
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                log(`❌ Error checking user: ${error.message}`, 'error');
+                resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testAuthentication() {
+            const email = document.getElementById('test-email').value.trim();
+            const password = document.getElementById('test-password').value;
+            const resultDiv = document.getElementById('auth-test-result');
+            
+            if (!email || !password) {
+                resultDiv.innerHTML = '<div class="error">Please enter both email and password</div>';
+                return;
+            }
+            
+            if (!firebaseAuth) {
+                resultDiv.innerHTML = '<div class="error">Firebase not initialized</div>';
+                return;
+            }
+            
+            log(`Testing authentication for: ${email}`, 'info');
+            
+            try {
+                const userCredential = await window.firebaseDebug.signInWithEmailAndPassword(
+                    firebaseAuth, email, password
+                );
+                
+                const user = userCredential.user;
+                const token = await user.getIdToken();
+                
+                log(`✅ Authentication successful!`, 'success');
+                log(`✅ User UID: ${user.uid}`, 'success');
+                log(`✅ Email: ${user.email}`, 'success');
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <strong>✅ Authentication Successful!</strong><br>
+                        <div class="user-info">
+                            <strong>User Details:</strong><br>
+                            UID: ${user.uid}<br>
+                            Email: ${user.email}<br>
+                            Email Verified: ${user.emailVerified}<br>
+                            Token: ${token.substring(0, 20)}...<br>
+                        </div>
+                        <strong>✅ Your credentials are correct!</strong>
+                    </div>
+                `;
+                
+                // Store in localStorage (like your login.php does)
+                localStorage.setItem('haustap_token', token);
+                const userData = { 
+                    uid: user.uid, 
+                    email: user.email, 
+                    name: (user.displayName || (email.split('@')[0])) 
+                };
+                localStorage.setItem('haustap_user', JSON.stringify(userData));
+                
+                log(`✅ User data saved to localStorage`, 'success');
+                
+            } catch (error) {
+                log(`❌ Authentication failed: ${error.message}`, 'error');
+                log(`❌ Error code: ${error.code}`, 'error');
+                
+                let errorAdvice = '';
+                switch (error.code) {
+                    case 'auth/invalid-credential':
+                        errorAdvice = `
+                            <strong>Possible causes:</strong><br>
+                            - Wrong password (most common)<br>
+                            - User account doesn't exist<br>
+                            - Email not verified<br>
+                            <strong>Solution:</strong> Check password or create new user
+                        `;
+                        break;
+                    case 'auth/user-not-found':
+                        errorAdvice = `
+                            <strong>User not found</strong><br>
+                            <strong>Solution:</strong> Create a new test user or check email spelling
+                        `;
+                        break;
+                    case 'auth/wrong-password':
+                        errorAdvice = `
+                            <strong>Wrong password</strong><br>
+                            <strong>Solution:</strong> Try password reset or create new user
+                        `;
+                        break;
+                    case 'auth/invalid-email':
+                        errorAdvice = `
+                            <strong>Invalid email format</strong><br>
+                            <strong>Solution:</strong> Check email format (e.g., user@example.com)
+                        `;
+                        break;
+                    default:
+                        errorAdvice = `
+                            <strong>Error:</strong> ${error.message}<br>
+                            <strong>Code:</strong> ${error.code}
+                        `;
+                }
+                
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Authentication Failed</strong><br>
+                        ${errorAdvice}
+                    </div>
+                `;
+            }
+        }
+        
+        async function createTestUser() {
+            const email = document.getElementById('test-email').value.trim();
+            const password = document.getElementById('test-password').value;
+            const resultDiv = document.getElementById('auth-test-result');
+            
+            if (!email || !password) {
+                resultDiv.innerHTML = '<div class="error">Please enter both email and password</div>';
+                return;
+            }
+            
+            if (password.length < 6) {
+                resultDiv.innerHTML = '<div class="error">Password must be at least 6 characters</div>';
+                return;
+            }
+            
+            if (!firebaseAuth) {
+                resultDiv.innerHTML = '<div class="error">Firebase not initialized</div>';
+                return;
+            }
+            
+            log(`Creating test user: ${email}`, 'info');
+            
+            try {
+                const userCredential = await window.firebaseDebug.createUserWithEmailAndPassword(
+                    firebaseAuth, email, password
+                );
+                
+                const user = userCredential.user;
+                log(`✅ Test user created successfully!`, 'success');
+                log(`✅ User UID: ${user.uid}`, 'success');
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <strong>✅ Test User Created Successfully!</strong><br>
+                        <div class="user-info">
+                            <strong>New User Details:</strong><br>
+                            UID: ${user.uid}<br>
+                            Email: ${user.email}<br>
+                            <strong>✅ You can now login with these credentials!</strong>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                log(`❌ User creation failed: ${error.message}`, 'error');
+                resultDiv.innerHTML = `<div class="error">❌ Failed to create user: ${error.message}</div>`;
+            }
+        }
+        
+        async function testPasswordReset() {
+            const email = document.getElementById('test-email').value.trim();
+            const resultDiv = document.getElementById('auth-test-result');
+            
+            if (!email) {
+                resultDiv.innerHTML = '<div class="error">Please enter an email address</div>';
+                return;
+            }
+            
+            if (!firebaseAuth) {
+                resultDiv.innerHTML = '<div class="error">Firebase not initialized</div>';
+                return;
+            }
+            
+            log(`Testing password reset for: ${email}`, 'info');
+            
+            try {
+                await window.firebaseDebug.sendPasswordResetEmail(firebaseAuth, email);
+                log(`✅ Password reset email sent!`, 'success');
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <strong>✅ Password Reset Email Sent!</strong><br>
+                        Check your inbox and spam folder for the reset email.<br>
+                        <strong>Email:</strong> ${email}
+                    </div>
+                `;
+            } catch (error) {
+                log(`❌ Password reset failed: ${error.message}`, 'error');
+                resultDiv.innerHTML = `<div class="error">❌ Password reset failed: ${error.message}</div>`;
+            }
+        }
+        
+        function checkCurrentUser() {
+            const resultDiv = document.getElementById('current-user-status');
+            
+            // Check localStorage
+            const token = localStorage.getItem('haustap_token');
+            const userData = localStorage.getItem('haustap_user');
+            
+            if (token && userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    log(`✅ Found authenticated user in localStorage`, 'success');
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Currently Authenticated User</strong><br>
+                            <div class="user-info">
+                                UID: ${user.uid}<br>
+                                Email: ${user.email}<br>
+                                Name: ${user.name}<br>
+                                Token: ${token.substring(0, 20)}...<br>
+                            </div>
+                            <strong>✅ User is logged in!</strong>
+                        </div>
+                    `;
+                } catch (error) {
+                    log(`❌ Error parsing user data: ${error.message}`, 'error');
+                    resultDiv.innerHTML = `<div class="error">Error parsing user data</div>`;
+                }
+            } else {
+                log(`ℹ️ No authenticated user found`, 'info');
+                resultDiv.innerHTML = `
+                    <div class="info">
+                        <strong>ℹ️ No Authenticated User</strong><br>
+                        No user is currently logged in.<br>
+                        <strong>Next step:</strong> Test authentication or create a new user
+                    </div>
+                `;
+            }
+        }
+        
+        function clearDebugLog() {
+            document.getElementById('debug-log').innerHTML = '';
+        }
+        
+        // Auto-initialize on page load
+        window.addEventListener('load', function() {
+            log('Debug page loaded', 'info');
+            checkFirebaseConfig();
+        });
+    </script>
+</body>
+</html>

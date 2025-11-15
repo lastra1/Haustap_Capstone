@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enter Verification Code | HausTap</title>
+<link rel="stylesheet" href="/css/global.css">
 <link rel="stylesheet" href="/login_sign%20up/css/re-password.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="/client/css/homepage.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
 <body>
 
   <!-- Header -->
@@ -16,7 +17,7 @@
   <!-- Verification Box -->
   <main>
     <div class="verify-box">
-      <div class="back-arrow">â†</div>
+      <div class="back-arrow" aria-label="Back">&larr;</div>
       <h4>Enter Verification Code</h4>
       <p>Your verification code is sent via Email to<br>
         <strong>JennBornilla@gmail.com</strong>

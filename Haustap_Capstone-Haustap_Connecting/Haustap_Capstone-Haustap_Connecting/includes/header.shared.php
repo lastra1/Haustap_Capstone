@@ -46,7 +46,7 @@ if ($context === 'client') {
     <?php endforeach; ?>
   </nav>
 
-  <!-- Right side: search, notifications, account -->
+  <!-- Right side: restore original simplified layout -->
   <div class="header-right">
     <!-- Search -->
     <div class="search-box">
@@ -54,25 +54,28 @@ if ($context === 'client') {
       <button class="search-btn" aria-label="Search"><i class="fa-solid fa-search"></i></button>
     </div>
 
-    <!-- Notifications Bell -->
-    <a href="#" id="notifBellBtn" class="icon-link" aria-expanded="false" aria-controls="notifDropdown" title="Notifications">
-      <i class="fa-solid fa-bell"></i>
-      <span id="notifCount" style="display:none;background:#3dbfc3;color:#fff;border-radius:10px;font-size:12px;padding:0 6px;margin-left:4px;">0</span>
-    </a>
-
-    <!-- Account Link -->
-    <a href="<?= $context === 'client' ? '/account' : '/login' ?>" class="account-link" title="<?= $context === 'client' ? 'My Account' : 'Login' ?>">
-      <i class="fa-solid fa-user account-icon"></i>
-      <span class="account-name"><?= $context === 'client' ? 'My Account' : 'Login' ?></span>
-    </a>
-
-    <!-- Notifications Dropdown -->
-    <div id="notifDropdown" class="hidden" style="position:absolute;right:48px;top:72px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);width:320px;z-index:1000;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f1f5f9;">
-        <strong>Notifications</strong>
-        <button id="notifMarkAll" style="background:transparent;border:none;color:#3dbfc3;cursor:pointer">Mark all read</button>
+    <?php if ($context === 'guest'): ?>
+      <div class="auth-links">
+        <div class="signup-link"><a href="/signup">Sign up</a></div>
+        <span>|</span>
+        <div class="login-link"><a href="/login">Login</a></div>
       </div>
-      <ul id="notifList" style="list-style:none;margin:0;padding:0;max-height:360px;overflow:auto"></ul>
-    </div>
+    <?php else: ?>
+      <a href="#" id="notifBellBtn" class="icon-link" aria-expanded="false" aria-controls="notifDropdown" title="Notifications">
+        <i class="fa-solid fa-bell"></i>
+        <span id="notifCount" style="display:none;background:#3dbfc3;color:#fff;border-radius:10px;font-size:12px;padding:0 6px;margin-left:4px;">0</span>
+      </a>
+      <a href="/account" class="account-link" title="My Account">
+        <i class="fa-solid fa-user account-icon"></i>
+        <span class="account-name">My Account</span>
+      </a>
+      <div id="notifDropdown" class="hidden" style="position:absolute;right:48px;top:72px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);width:320px;z-index:1000;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f1f5f9;">
+          <strong>Notifications</strong>
+          <button id="notifMarkAll" style="background:transparent;border:none;color:#3dbfc3;cursor:pointer">Mark all read</button>
+        </div>
+        <ul id="notifList" style="list-style:none;margin:0;padding:0;max-height:360px;overflow:auto"></ul>
+      </div>
+    <?php endif; ?>
   </div>
 </header>

@@ -4,6 +4,7 @@ services:
     container_name: haustap_web
     depends_on:
       - db
+      - api
     ports:
       - "8088:80"
     volumes:
@@ -11,7 +12,11 @@ services:
       - ./docker/web/apache.conf:/etc/apache2/sites-available/000-default.conf:ro
     environment:
       - TZ=Asia/Manila
-    command: ["bash","-lc","a2enmod rewrite headers && apache2-foreground"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   db:
@@ -44,5 +49,29 @@ services:
       - "8080:8080"
     restart: unless-stopped
 
+  api:
+    build: ./docker/api
+    container_name: haustap_api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    working_dir: /var/www
+    environment:
+      - TZ=Asia/Manila
+      - COMPOSER_MEMORY_LIMIT=-1
+    volumes:
+      - ./backend/api:/var/www
+      - composer_cache:/root/.composer/cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    command: ["bash","-lc","[ -f .env ] || cp .env.docker.example .env; if [ ! -d vendor ]; then composer install --no-interaction --prefer-dist; fi; php artisan key:generate --force || true; php artisan migrate --force || true; if [ -f .env ] && grep -q '^APP_ENV=production' .env; then php artisan config:cache && php artisan route:cache; fi; php artisan serve --host 0.0.0.0 --port 8001"]
+
 volumes:
   db_data:
+  composer_cache:

@@ -1,5 +1,8 @@
 <?php
 session_start();
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/auth.php';
+
 // If already logged in, go straight to dashboard
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header('Location: dashboard.php');
@@ -11,14 +14,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    // Simple static credentials (adjust to use your backend later)
-    $allowedEmail = 'admin@haustap.local';
-    $allowedPassword = 'Admin123!';
+    $loginSuccess = false;
+    $userId = null;
+    $userName = 'Admin';
 
-    if ($email === $allowedEmail && $password === $allowedPassword) {
+    try {
+        $user = find_admin_user_by_email($email);
+        if ($user && isset($user['password'])) {
+            if (password_verify($password, $user['password'])) {
+                $loginSuccess = true;
+                $userId = (int)$user['id'];
+                $userName = $user['name'] ?? $userName;
+            }
+        } else {
+            // Development fallback: allow static credentials and seed admin into DB if used
+            $allowedEmail = 'admin@haustap.local';
+            $allowedPassword = 'Admin123!';
+            if ($email === $allowedEmail && $password === $allowedPassword) {
+                $seed = upsert_admin_user($email, $password, $userName);
+                $loginSuccess = true;
+                $userId = (int)$seed['id'];
+                $userName = $seed['name'] ?? $userName;
+            }
+        }
+    } catch (Throwable $e) {
+        // On DB errors, no login; we still record the attempt below
+    }
+
+    // Record login event regardless of outcome
+    record_login_event($userId, $email, $loginSuccess);
+
+    if ($loginSuccess) {
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_email'] = $email;
-        $_SESSION['admin_name'] = 'Admin';
+        $_SESSION['admin_name'] = $userName;
+        if ($userId) {
+            $_SESSION['admin_user_id'] = $userId;
+        }
         header('Location: dashboard.php');
         exit;
     } else {
@@ -32,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login</title>
-  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/login.css" />
   <style>
     /* Keep page consistent with client login styling */

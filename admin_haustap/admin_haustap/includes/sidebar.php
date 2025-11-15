@@ -30,7 +30,7 @@ $active = isset($active) ? $active : '';
       <li class="<?= $active === 'subscription' ? 'active' : '' ?>"><a href="subscription_management.php">Subscription Management</a></li>
       <li class="<?= $active === 'feedback' ? 'active' : '' ?>"><a href="feedback_reviews.php">Feedback & Reviews</a></li>
       <li class="<?= $active === 'settings' ? 'active' : '' ?>"><a href="system_settings.php">System Settings</a></li>
-      <li><a href="filament_redirect.php">Open Filament Admin</a></li>
+      <li class="<?= $active === 'backend_admin' ? 'active' : '' ?>"><a href="filament_redirect.php">Backend Admin</a></li>
     </ul>
   </nav>
 </aside>
@@ -39,12 +39,26 @@ $active = isset($active) ? $active : '';
   window.SOCKET_URL = window.SOCKET_URL || 'http://localhost:3000';
 </script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-<!-- Real-time notifications wiring (shared client modules) -->
-<script src="/client/js/notify.js" defer></script>
-<script src="/client/js/toast.js" defer></script>
+<!-- Removed cross-root client script references to avoid 404s on admin dev server -->
 <!-- Admin-specific UI injection to add dropdown markup and count bubble -->
 <script src="js/notify-admin.js" defer></script>
 <!-- UI binding that renders dropdown and handles unread count -->
-<script src="/client/js/notify-ui.js" defer></script>
+<!-- If shared client UI binding is needed later, serve it under admin/js to keep paths consistent -->
 <!-- Make the topbar Log out link functional -->
 <script src="js/logout-admin.js" defer></script>
+<script>
+  // Normalize user dropdown links across pages to real endpoints
+  document.addEventListener('DOMContentLoaded', function(){
+    try {
+      var dd = document.getElementById('userDropdown');
+      if (!dd) return;
+      var links = dd.querySelectorAll('a');
+      links.forEach(function(link){
+        var t = (link.textContent || '').trim().toLowerCase();
+        if (t === 'view profile') link.setAttribute('href', 'admin_profile.php');
+        else if (t === 'change password') link.setAttribute('href', 'change_password.php');
+        else if (t === 'activity logs') link.setAttribute('href', 'activity_logs.php');
+      });
+    } catch(e){}
+  });
+</script>

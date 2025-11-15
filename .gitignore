@@ -23,6 +23,17 @@ Desktop.ini
 logs/
 storage/logs/*
 !storage/logs/.gitkeep
+# Ephemeral local logs and snapshots
+.compose_*.txt
+.docker_*.txt
+.db_logs.txt
+.ps.txt
+.web_logs.txt
+patch_test.txt
+# Node/Yarn debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Composer / PHP
 vendor/
@@ -50,6 +61,7 @@ coverage/
 .tmp/
 temp/
 tmp/
+.nyc_output/
  
 # Local tooling
 tools/
@@ -57,6 +69,9 @@ tools/
 # Docker local overrides
 docker-compose.override.yml
 .docker/
+
+# Hosting/CI artifacts
+.vercel/
 
 # PHP caches
 .phpunit.result.cache

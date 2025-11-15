@@ -9,6 +9,7 @@ COPY apache.conf /etc/apache2/sites-available/000-default.conf
 # Useful PHP extensions required by the app
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libonig-dev \
+        curl \
     && docker-php-ext-install mbstring pdo_mysql mysqli \
     && rm -rf /var/lib/apt/lists/*
 

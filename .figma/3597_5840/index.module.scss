@@ -1,0 +1,248 @@
+* {
+  box-sizing: border-box;
+}
+
+.termsAndConditions {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #ffffff;
+  width: 440px;
+  height: 3615px;
+  overflow: hidden;
+
+  .lastUpdatedOctober204 {
+    letter-spacing: 0;
+    color: #1e1e1e;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .lastUpdatedOctober203 {
+    letter-spacing: 0;
+    color: #1e1e1e;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .lastUpdatedOctober202 {
+    letter-spacing: 0;
+    color: #1e1e1e;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .lastUpdatedOctober20 {
+    letter-spacing: 0;
+    color: #1e1e1e;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .statusBarIPhone13 {
+    display: flex;
+    align-items: flex-start;
+    align-self: stretch;
+    justify-content: space-between;
+    margin: -4px -7px 0px -19px;
+    padding: 14px 40px;
+    min-width: 466px;
+    overflow: hidden;
+
+    .aStatusBarTime {
+      display: flex;
+      align-items: center;
+      padding-top: 1px;
+
+      .a941 {
+        width: 54px;
+        height: 20px;
+        text-align: center;
+        line-height: 22px;
+        letter-spacing: -0.41px;
+        color: #000000;
+        font-family: "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+        font-size: 17px;
+        font-weight: 600;
+      }
+    }
+
+    .rightSide {
+      margin-top: 5px;
+      width: 77px;
+      height: 13px;
+    }
+  }
+
+  .autoWrapper {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding-right: 158px;
+    padding-left: 13px;
+
+    .backLogoRemovebgPrev {
+      width: 40px;
+      height: 40px;
+    }
+
+    .termsAgreement {
+      line-height: 22px;
+      letter-spacing: -0.41px;
+      color: #000000;
+      font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+      font-size: 23px;
+      font-weight: 700;
+    }
+  }
+
+  .autoWrapper2 {
+    position: relative;
+    margin-top: 15px;
+    margin-left: 28px;
+    width: 388px;
+    height: 1685px;
+
+    .lastUpdatedOctober206 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 388px;
+      height: 1685px;
+      letter-spacing: 0;
+      color: #1e1e1e;
+      font-size: 0;
+
+      .lastUpdatedOctober205 {
+        letter-spacing: 0;
+        color: #1e1e1e;
+        font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+      }
+    }
+
+    .privacyPolicy {
+      position: absolute;
+      top: 1661px;
+      left: 1px;
+      width: 172px;
+      height: 22px;
+      line-height: 22px;
+      letter-spacing: -0.41px;
+      color: #000000;
+      font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+      font-size: 23px;
+      font-weight: 700;
+    }
+  }
+
+  .autoWrapper3 {
+    position: relative;
+    margin-top: 15px;
+    margin-left: 29px;
+    width: 387px;
+    height: 2122px;
+
+    .lastUpdatedOctober209 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 387px;
+      height: 2122px;
+      letter-spacing: 0;
+      color: #1e1e1e;
+      font-size: 0;
+
+      .lastUpdatedOctober207 {
+        letter-spacing: 0;
+        color: #1e1e1e;
+        font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .lastUpdatedOctober208 {
+        letter-spacing: 0;
+        color: #1e1e1e;
+        font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+
+    .aGreementacceptancei3 {
+      position: absolute;
+      bottom: -1374px;
+      left: 0;
+      width: 387px;
+      height: 1930px;
+      letter-spacing: 0;
+      color: #000000;
+      font-size: 15px;
+
+      .aGreementacceptancei {
+        letter-spacing: 0;
+        color: #000000;
+        font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .aGreementacceptancei2 {
+        letter-spacing: 0;
+        color: #000000;
+        font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+        font-size: 15px;
+      }
+    }
+  }
+
+  .autoWrapper4 {
+    position: absolute;
+    top: 3408px;
+    left: 37px;
+    width: 350px;
+    height: 156px;
+
+    .checkBox {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 18px;
+      height: 18px;
+    }
+
+    .rectangle266 {
+      display: flex;
+      position: absolute;
+      top: 123px;
+      left: 217px;
+      align-items: center;
+      border: 1px solid #000000;
+      border-radius: 10px;
+      background: #3dc1c6;
+      padding: 8px 32px;
+      width: 133px;
+      height: 33px;
+
+      .agree {
+        width: 67px;
+        height: 16px;
+        text-align: center;
+        letter-spacing: 0;
+        color: #000000;
+        font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+      }
+    }
+  }
+}

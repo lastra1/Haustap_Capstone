@@ -199,6 +199,9 @@ body {
     text-align: center;
     transition: all 0.3s ease;
     height: fit-content;
+    display: block;           /* make anchor cards fill the grid cell */
+    text-decoration: none;    /* remove default link underline */
+    color: inherit;           /* keep text colors consistent */
 }
 
 .category-card:hover {
@@ -367,7 +370,7 @@ body {
 /* Testimonials Section */
 .testimonials-section {
     text-align: center;
-    margin: 48px 0;
+    margin: 48px 0 0;
 }
 
 .testimonials-btn {
@@ -453,12 +456,14 @@ footer {
   background: #e6e6e6;
   padding: 50px 70px 25px;
   color: #000;
+  margin: 0;
 }
 
 .footer-content {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 24px;
 }
 
 .footer-left,
@@ -495,10 +500,13 @@ footer {
 /* CENTER SECTION */
 .footer-center {
   text-align: center;
+  justify-self: center;
 }
 
 .footer-center img {
   width: 100px;
+  display: block;
+  margin: 0 auto;
 }
 
 .footer-center p {
@@ -535,7 +543,7 @@ footer {
 .footer-bottom {
   text-align: center;
   font-weight: 600;
-  margin-top: -15px;
+  margin-top: 0;
   border-top: 1px solid #d1d1d1;
   padding-top: 10px;
   font-size: 14px;

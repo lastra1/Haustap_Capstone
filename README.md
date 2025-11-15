@@ -35,9 +35,10 @@ Create local `.env` files from the provided examples and fill credentials as nee
    - Open Admin: `http://localhost:8001/admin/dashboard.php`
    - Mock API: available under `http://localhost:8001/mock-api/*` (no separate server needed)
 2. Mobile app:
-   - `cd android-capstone-main/HausTap`
-   - `npm install`
-   - `npm run start` (or `npx expo start`)
+  - `cd android-capstone-main/HausTap`
+  - `npm install`
+  - `npm run start` (or `npx expo start`)
+  - APK builds (Client & Provider): trigger GitHub Actions workflow "Build Android APKs (Client & Provider)"; download artifacts after the run completes.
 3. Backend libraries (optional):
    - `cd backend`
    - `composer install`
@@ -71,6 +72,28 @@ If authentication is required, use a Personal Access Token (PAT) with `repo` sco
 - If `localhost` refuses to connect, try `http://127.0.0.1:8001/`.
 - After pulling, run `composer install` (for PHP) and `npm install` (for JS) on each relevant project.
 - Review `docs/environment-setup.md` for machine-specific setup notes.
+
+## APK Builds & Download Links
+
+- The workflow `.github/workflows/android-apk.yml` builds two debug APKs: Client and Provider.
+- To generate download links:
+  - Go to GitHub → Actions → "Build Android APKs (Client & Provider)" → Run workflow.
+  - After it finishes, open the run and download artifacts named:
+    - `haustap-client-debug-apk`
+    - `haustap-provider-debug-apk`
+- These debug APKs are unsigned but installable on most Android devices when "Install from unknown sources" is enabled.
+- The mobile app’s API base (`EXPO_PUBLIC_API_BASE`) defaults to `http://26.242.103.174:8001` for both variants.
+
+## Docker API & Database
+
+- Start stack: `docker compose up -d`.
+- The API container auto-initializes on first start:
+  - Copies `backend/api/.env.docker.example` to `.env` if missing.
+  - Runs `composer install`.
+  - Generates `APP_KEY` if empty.
+  - Runs `php artisan migrate --force`.
+- Database credentials (inside Docker): host `db`, user `haustap`, pass `haustap`, db `haustap`.
+- Adminer: `http://localhost:8080/` for inspecting tables and data.
 
 ## Notes
 

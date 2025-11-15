@@ -3,12 +3,15 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { accountsStore } from '../src/services/accountsStore';
 import { authService } from '../src/services/auth.service';
 import { flowStore } from '../src/services/flowStore';
+import { useAuth } from './context/AuthContext';
 
 export default function PartnerVerification() {
-  const { services, email } = useLocalSearchParams();
+  const { email } = useLocalSearchParams();
   const router = useRouter();
+  const { setApplicationPending, user } = useAuth();
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [otpError, setOtpError] = useState('');
@@ -46,25 +49,8 @@ export default function PartnerVerification() {
   // decoded email for display and sending
   const decodedEmail = email ? decodeURIComponent(email as string) : '';
 
-  // Send initial OTP when email becomes available (try query param first, then flowStore)
-  useEffect(() => {
-    if (decodedEmail) {
-      console.log('[partner-verification] received email param:', decodedEmail);
-      void sendOTP(decodedEmail);
-      return;
-    }
-
-    const fallbackEmail = flowStore.getEmail();
-    if (fallbackEmail) {
-      console.log('[partner-verification] no email in params, using flowStore email:', fallbackEmail);
-      void sendOTP(fallbackEmail);
-    } else {
-      console.log('[partner-verification] no email param received and flowStore empty');
-    }
-  }, [decodedEmail]);
-
   // accept an optional email param (decoded) to ensure we send to the correct address
-  const sendOTP = async (decodedEmail?: string) => {
+  const sendOTP = React.useCallback(async (decodedEmail?: string) => {
     const targetEmail = decodedEmail || (email ? decodeURIComponent(email as string) : '');
     if (!targetEmail) {
       Alert.alert('Error', 'Email address is required');
@@ -87,7 +73,24 @@ export default function PartnerVerification() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [email]);
+
+  // Send initial OTP when email becomes available (try query param first, then flowStore)
+  useEffect(() => {
+    if (decodedEmail) {
+      console.log('[partner-verification] received email param:', decodedEmail);
+      void sendOTP(decodedEmail);
+      return;
+    }
+
+    const fallbackEmail = flowStore.getEmail();
+    if (fallbackEmail) {
+      console.log('[partner-verification] no email in params, using flowStore email:', fallbackEmail);
+      void sendOTP(fallbackEmail);
+    } else {
+      console.log('[partner-verification] no email param received and flowStore empty');
+    }
+  }, [decodedEmail, sendOTP]);
 
   const verifyOtp = async () => {
     if (!otp || otp.length !== 6) {
@@ -111,14 +114,26 @@ export default function PartnerVerification() {
           [
             {
               text: 'OK',
-              onPress: () => {
-                router.push({
-                  pathname: '/partner-form',
-                  params: {
-                    email: email,
-                    services: services
+                onPress: async () => {
+                try {
+                  // mark the account as having a pending application
+                  const target = decodedEmail || flowStore.getEmail();
+                  if (target) {
+                    await accountsStore.updateAccount(target, { isApplicationPending: true });
+                    // if the currently-authenticated user matches, update in-memory auth state as well
+                    try {
+                      if (user && user.email === target && setApplicationPending) {
+                        await setApplicationPending(true);
+                      }
+                    } catch {
+                      // ignore
+                    }
                   }
-                });
+                  // if the current app has an authenticated user matching this email, update auth state immediately
+                } catch {
+                  // ignore update failure
+                }
+                router.replace('/partner-onboarding-success');
               }
             }
           ]
@@ -126,7 +141,7 @@ export default function PartnerVerification() {
       } else {
         setOtpError('Invalid verification code. Please try again.');
       }
-    } catch (error) {
+    } catch {
       setOtpError('Failed to verify code. Please try again.');
     } finally {
       setIsLoading(false);

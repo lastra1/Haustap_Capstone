@@ -24,36 +24,36 @@
   </div>
   <div class="section-title">CATEGORY</div>
   <div class="category-grid">
-    <div class="category-card">
+    <a class="category-card" href="/services/cleaning">
       <img src="images/cleaning.png" alt="Cleaning Services">
       <div class="category-card-title">Cleaning Services</div>
       <div class="category-card-desc">Professional cleaning for homes, offices, and more. Book trusted cleaners for sparkling results.</div>
-    </div>
-    <div class="category-card">
+    </a>
+    <a class="category-card" href="/services/outdoor">
       <img src="images/outdoor.png" alt="Outdoor Services">
       <div class="category-card-title">Outdoor Services</div>
       <div class="category-card-desc">Gardening, landscaping, and outdoor maintenance to keep your surroundings beautiful and safe.</div>
-    </div>
-    <div class="category-card">
+    </a>
+    <a class="category-card" href="/services/repairs">
       <img src="images/repair.png" alt="Home Repairs">
       <div class="category-card-title">Home Repairs</div>
       <div class="category-card-desc">Quick and reliable repair services for plumbing, electrical, and general home maintenance.</div>
-    </div>
-    <div class="category-card">
+    </a>
+    <a class="category-card" href="/services/beauty">
       <img src="images/beauty service.png" alt="Beauty Services">
       <div class="category-card-title">Beauty Services</div>
       <div class="category-card-desc">Pamper yourself with at-home beauty treatments from certified professionals.</div>
-    </div>
-    <div class="category-card">
+    </a>
+    <a class="category-card" href="/services/wellness">
       <img src="images/wellness.png" alt="Wellness Services">
       <div class="category-card-title">Wellness Services</div>
       <div class="category-card-desc">Enjoy massage, therapy, and wellness sessions in the comfort of your home.</div>
-    </div>
-    <div class="category-card">
+    </a>
+    <a class="category-card" href="/services/tech">
       <img src="images/tech.png" alt="Tech & Gadget Services">
       <div class="category-card-title">Tech & Gadget Services</div>
       <div class="category-card-desc">Get help with device setup, troubleshooting, and smart home installations.</div>
-    </div>
+    </a>
   </div>
   <div class="promotions-section">
     <div class="promotions-title">PROMOTIONS<br>Get a Sparkling Home At A Special Promotion!</div>

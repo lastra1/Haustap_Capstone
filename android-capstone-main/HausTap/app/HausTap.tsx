@@ -95,9 +95,7 @@ export default function HausTap() {
   };
 
   // Generate a new OTP and start timer
-  const API_URL = Platform.OS === 'android' 
-  ? 'http://192.168.1.8:3000' // Your local IP address
-  : 'http://localhost:3000'; // iOS simulator or web
+  const API_URL = 'https://us-central1-haustap-booking-system.cloudfunctions.net/api'; // Live Firebase Functions URL
 
 // Add debug logging
 console.log('Platform:', Platform.OS);

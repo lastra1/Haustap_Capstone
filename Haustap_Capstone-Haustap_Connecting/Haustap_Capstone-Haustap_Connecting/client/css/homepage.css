@@ -1,4 +1,4 @@
-﻿/* Common Styles */
+/* Common Styles */
 body {    font-family: Georgia, 'Times New Roman', Times, serif;
     margin: 0;
     background: #fff;
@@ -197,6 +197,9 @@ body {    font-family: Georgia, 'Times New Roman', Times, serif;
     text-align: center;
     transition: all 0.3s ease;
     height: fit-content;
+    display: block;           /* make anchor cards fill the grid cell */
+    text-decoration: none;    /* remove default link underline */
+    color: inherit;           /* keep text colors consistent */
 }
 
 .category-card:hover {
@@ -497,6 +500,8 @@ footer {
 
 .footer-center img {
   width: 100px;
+  display: block;
+  margin: 0 auto;
 }
 
 .footer-center p {

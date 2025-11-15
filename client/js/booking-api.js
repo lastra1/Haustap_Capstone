@@ -1,7 +1,9 @@
 // Lightweight Booking API helper for the legacy UI
 // Relies on window.API_BASE configured by /login_sign up/js/api.js
 (function() {
-  const API_BASE = (window.API_BASE || '').replace(/\/+$/, '') || 'http://127.0.0.1:8001';
+  const API_BASE = (
+    (window.FIREBASE_API_BASE || (((window.API_BASE||'').replace(/\/+$/, '')) + '/firebase'))
+  ).replace(/\/+$/, '') || 'http://127.0.0.1:8000/api/firebase';
 
   function getToken() {
     return localStorage.getItem('haustap_token') || '';

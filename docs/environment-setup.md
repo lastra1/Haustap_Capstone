@@ -29,33 +29,47 @@ Sensitive values (`DB_PASSWORD`, `SMTP_PASS`) must be set on each server; never 
 
 ## 3) Development
 
-Run Client app locally:
+Monorepo dev quickstart (Windows):
 
 ```powershell
 # From repo root
-php -S localhost:8080 -t "C:\Users\mozom\OneDrive\Desktop\Haustap_Capstone\Haustap_Capstone-Haustap_Connecting\Haustap_Capstone-Haustap_Connecting"
+./start-all.ps1 -LegacyPort 5001 -ApiPort 8001 -ExpoPort 8082
 ```
 
-Run Admin app locally:
+Manual start:
 
 ```powershell
-php -S localhost:8081 -t "C:\Users\mozom\OneDrive\Desktop\Haustap_Capstone\admin_haustap\admin_haustap"
+# Legacy PHP (friendly router at repo root)
+php -S localhost:5001 router.php
+
+# Laravel API
+cd backend/api
+php artisan serve --port 8001
+
+# Expo Web (uses react-native-maps web stub)
+cd android-capstone-main/HausTap
+npx expo start --web --port 8082 --clear
 ```
 
-Optional: run the friendly router (maps clean URLs) from `public`:
+Backend env:
+- Copy `backend/api/.env.example` to `backend/api/.env`, then set:
+  - `DB_CONNECTION=mysql`, `DB_HOST=127.0.0.1`, `DB_PORT=3306`
+  - `DB_DATABASE=haustap`, `DB_USERNAME=haustap`, `DB_PASSWORD=haustap`
+  - `STORE_DRIVER=mysql`
+  - Optional: `LEGACY_ADMIN_URL=http://localhost:5001/admin_haustap/admin_haustap/dashboard.php`
+
+Migrations and data sync:
 
 ```powershell
-php -S localhost:8000 -t public public/index.php
-```
+# Generate app key (once)
+cd backend/api
+php artisan key:generate
 
-Backend (Laravel-like):
-- Ensure `backend/.env` exists (use `backend/.env.development`).
-- If Composer is available, run typical commands (optional):
+# Ensure MySQL is running, then migrate
+php artisan migrate --force
 
-```powershell
-cd "Haustap_Capstone-Haustap_Connecting/Haustap_Capstone-Haustap_Connecting/backend"
-# composer install
-# php artisan migrate
+# Optional: import existing JSON files into DB-backed store
+php artisan store:sync
 ```
 
 ## 4) Staging
@@ -105,7 +119,7 @@ Same layout as staging with production `.env` files and hardening:
 
 ## 6) Database strategy
 
-- Development: `sqlite` (simple, file-based) or local MySQL
+- Development: local MySQL recommended (Docker or native). If unavailable, controllers fall back to file JSON stores.
 - Staging: MySQL schema mirroring production
 - Production: MySQL with backups and migrations
 
@@ -152,3 +166,19 @@ The mobile app lives in `android-capstone-main/HausTap/`.
 Notes:
 - `.env` is intentionally ignored by Git; only `.env.example` is committed.
 - `process.env.EXPO_OS` comes from Expo; you do not need to set it.
+
+### Operational Notes
+- Services and Ports
+  - Legacy PHP: `http://localhost:5001/`
+  - Laravel API: `http://127.0.0.1:8001/` (admin wrapper at `/admin`)
+  - Expo Web: `http://localhost:8082/`
+- CORS
+  - `backend/api/config/cors.php` allows `localhost` and `127.0.0.1` across dev ports 5001 and 8082 by default.
+- MySQL
+  - If Docker Desktop is installed: `docker compose up -d db` (see `docker-compose.yml`).
+  - Otherwise install MySQL locally, create DB `haustap`, user `haustap` with password `haustap`, then run migrations.
+- Data persistence
+  - When `STORE_DRIVER=mysql`, data is stored in `json_store` table.
+  - If DB is unavailable, controllers use file JSON under `storage/data/*` automatically.
+- Admin UI
+  - The admin UI is unchanged; Laravel serves a Blade iframe wrapper at `/admin` pointing to the legacy admin.

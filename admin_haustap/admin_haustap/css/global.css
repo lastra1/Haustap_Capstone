@@ -1,0 +1,110 @@
+/* Copied for admin dev server docroot so login.php can reference this asset locally. */
+html, body,
+h1, h2, h3, h4, h5, h6,
+p, span, a, li, label,
+button, input, textarea, select,
+div {
+  font-family: Georgia, 'Times New Roman', Times, serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 40px 60px !important;
+  background: #ffffff !important;
+  border-bottom: none !important;
+  box-sizing: border-box !important;
+}
+
+.logo-img {
+  height: 100px !important;
+  width: auto !important;
+  object-fit: contain !important;
+}
+
+.nav {
+  display: flex !important;
+  gap: 32px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  margin-left: 24px !important;
+  flex: 0 0 auto !important;
+}
+
+.nav a {
+  text-decoration: none !important;
+  color: #222 !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  padding-bottom: 2px !important;
+  text-align: center !important;
+}
+
+.nav a.active {
+  color: #3dbfc3 !important;
+  border-bottom: 2px solid #3dbfc3 !important;
+}
+
+.header-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+}
+
+.search-box {
+  display: flex !important;
+  align-items: center !important;
+  background: #f5f5f5 !important;
+  border-radius: 30px !important;
+  padding: 4px 12px !important;
+  height: auto !important;
+  box-shadow: 7px 5px rgba(0, 0, 0, 0.15) !important;
+}
+
+.search-box input {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  font-size: 15px !important;
+  width: 120px !important;
+  height: auto !important;
+}
+
+.search-btn {
+  border: none !important;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 28px !important;
+  width: 28px !important;
+  cursor: pointer !important;
+}
+
+.hidden { display: none !important; }
+
+.auth-links {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  font-size: 16px !important;
+}
+.auth-links a { color: #222 !important; text-decoration: none !important; font-weight: 500 !important; }
+.auth-links a:hover { color: #3dbfc3 !important; }
+.auth-links span { color: #888 !important; }
+
+@keyframes ht-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.skeleton-overlay { position: fixed; inset: 0; z-index: 999; background: #e9ecef; display: none; padding: 24px 16px; }
+.loading .skeleton-overlay { display: block; } .loading .page-content { visibility: hidden; }
+.skeleton-line { height: 14px; border-radius: 6px; background: #e0e0e0; margin-bottom: 12px; }
+.skeleton-line.shimmer { background: linear-gradient(90deg, #e0e0e0 0, #f5f5f5 50%, #e0e0e0 100%); background-size: 200% 100%; animation: ht-shimmer 1.4s linear infinite; }
+.skeleton-circle { width: 40px; height: 40px; border-radius: 50%; background: #e0e0e0; margin-right: 12px; }
+.skeleton-block { height: 24px; width: 60%; background: #e0e0e0; border-radius: 6px; margin-bottom: 12px; }
+.skeleton-grid { display: grid; gap: 12px; max-width: 960px; margin: 0 auto; }
+.skeleton-row { display: flex; align-items: center; gap: 12px; }
+.spinner { width: 24px; height: 24px; border: 3px solid #cfd8dc; border-top-color: #212529; border-radius: 50%; animation: ht-spin .8s linear infinite; }
+@keyframes ht-spin { to { transform: rotate(1turn); } }

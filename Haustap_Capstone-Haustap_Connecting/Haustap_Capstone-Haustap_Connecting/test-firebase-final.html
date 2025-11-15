@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test - HausTap</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        input { margin: 5px; padding: 8px; width: 250px; }
+        button { padding: 8px 15px; margin: 5px; cursor: pointer; }
+        #output { margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Firebase Authentication Test</h1>
+    
+    <div class="test-section">
+        <h3>Configuration Test</h3>
+        <button onclick="testFirebaseConfig()">Test Firebase Configuration</button>
+        <div id="config-output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Authentication Test</h3>
+        <input type="email" id="test-email" placeholder="Enter test email">
+        <input type="password" id="test-password" placeholder="Enter test password">
+        <button onclick="testLogin()">Test Login</button>
+        <button onclick="testPasswordReset()">Test Password Reset</button>
+        <div id="auth-output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Current Status</h3>
+        <div id="status-output"></div>
+    </div>
+
+    <!-- Firebase SDK v9 - Use modular SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+        
+        // Make Firebase available globally
+        window.firebaseModular = {
+            initializeApp,
+            getAuth,
+            signInWithEmailAndPassword,
+            sendPasswordResetEmail
+        };
+        
+        // Firebase configuration - using your correct config
+        window.firebaseConfig = {
+            apiKey: "AIzaSyCfhR1vIh8_z4TAmdaQRESHB459CsVqJ9M",
+            authDomain: "haustap-booking-system.firebaseapp.com",
+            projectId: "haustap-booking-system",
+            storageBucket: "haustap-booking-system.firebasestorage.app",
+            messagingSenderId: "515769404711",
+            appId: "1:515769404711:web:ddf0b32df0498eb18aad02"
+        };
+        
+        // Update status
+        document.getElementById('status-output').innerHTML = '<div class="info">Firebase SDK loaded and ready</div>';
+    </script>
+
+    <script>
+        let firebaseApp = null;
+        let firebaseAuth = null;
+        
+        function log(outputId, message, type = 'info') {
+            const output = document.getElementById(outputId);
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.appendChild(div);
+        }
+        
+        function testFirebaseConfig() {
+            const output = document.getElementById('config-output');
+            output.innerHTML = '';
+            
+            try {
+                log('config-output', 'Testing Firebase configuration...', 'info');
+                
+                if (!window.firebaseConfig) {
+                    log('config-output', 'Firebase configuration not found', 'error');
+                    return;
+                }
+                
+                log('config-output', 'Configuration found:', 'info');
+                log('config-output', `Project ID: ${window.firebaseConfig.projectId}`, 'info');
+                log('config-output', `Auth Domain: ${window.firebaseConfig.authDomain}`, 'info');
+                
+                // Test initialization
+                firebaseApp = window.firebaseModular.initializeApp(window.firebaseConfig);
+                firebaseAuth = window.firebaseModular.getAuth(firebaseApp);
+                
+                log('config-output', 'Firebase initialized successfully!', 'success');
+                log('config-output', 'Ready for authentication tests', 'success');
+                
+            } catch (error) {
+                log('config-output', `Firebase initialization failed: ${error.message}`, 'error');
+                console.error('Firebase initialization error:', error);
+            }
+        }
+        
+        async function testLogin() {
+            const output = document.getElementById('auth-output');
+            output.innerHTML = '';
+            
+            const email = document.getElementById('test-email').value.trim();
+            const password = document.getElementById('test-password').value;
+            
+            if (!email || !password) {
+                log('auth-output', 'Please enter both email and password', 'error');
+                return;
+            }
+            
+            if (!firebaseAuth) {
+                log('auth-output', 'Firebase not initialized. Click "Test Firebase Configuration" first.', 'error');
+                return;
+            }
+            
+            try {
+                log('auth-output', `Attempting login for: ${email}`, 'info');
+                
+                const userCredential = await window.firebaseModular.signInWithEmailAndPassword(
+                    firebaseAuth, email, password
+                );
+                
+                const user = userCredential.user;
+                const token = await user.getIdToken();
+                
+                log('auth-output', 'Login successful!', 'success');
+                log('auth-output', `User UID: ${user.uid}`, 'success');
+                log('auth-output', `Email: ${user.email}`, 'success');
+                log('auth-output', `Token: ${token.substring(0, 20)}...`, 'success');
+                
+                // Store token and user data (similar to your login.php)
+                localStorage.setItem('haustap_token', token);
+                const userData = { 
+                    uid: user.uid, 
+                    email: user.email || email, 
+                    name: (user.displayName || (email.split('@')[0])) 
+                };
+                localStorage.setItem('haustap_user', JSON.stringify(userData));
+                
+                log('auth-output', 'User data saved to localStorage', 'success');
+                
+            } catch (error) {
+                log('auth-output', `Login failed: ${error.message}`, 'error');
+                log('auth-output', `Error code: ${error.code}`, 'error');
+                console.error('Login error:', error);
+            }
+        }
+        
+        async function testPasswordReset() {
+            const output = document.getElementById('auth-output');
+            output.innerHTML = '';
+            
+            const email = document.getElementById('test-email').value.trim();
+            
+            if (!email) {
+                log('auth-output', 'Please enter an email address', 'error');
+                return;
+            }
+            
+            if (!firebaseAuth) {
+                log('auth-output', 'Firebase not initialized. Click "Test Firebase Configuration" first.', 'error');
+                return;
+            }
+            
+            try {
+                log('auth-output', `Sending password reset email to: ${email}`, 'info');
+                
+                await window.firebaseModular.sendPasswordResetEmail(firebaseAuth, email);
+                
+                log('auth-output', 'Password reset email sent successfully!', 'success');
+                log('auth-output', 'Please check your inbox and spam folder', 'success');
+                
+            } catch (error) {
+                log('auth-output', `Password reset failed: ${error.message}`, 'error');
+                log('auth-output', `Error code: ${error.code}`, 'error');
+                console.error('Password reset error:', error);
+            }
+        }
+        
+        // Auto-test configuration on page load
+        window.addEventListener('load', function() {
+            setTimeout(testFirebaseConfig, 1000);
+        });
+    </script>
+</body>
+</html>

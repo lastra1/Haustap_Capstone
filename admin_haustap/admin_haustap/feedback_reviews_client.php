@@ -20,7 +20,7 @@
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
-            <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
+            <button id="userDropdownBtn" class="user-dropdown-btn"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼</button>
             <div class="user-dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>
@@ -33,8 +33,8 @@
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab">Service Provider</button>
-        <button class="tab active">Client</button>
+        <button class="tab" id="tabProvider">Service Provider</button>
+        <button class="tab active" id="tabClient">Client</button>
       </div>
 
       <!-- Search and Filter -->
@@ -68,7 +68,7 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th>Provider</th>
+              <th>Client</th>
               <th>Service</th>
               <th>Rating</th>
               <th>Date</th>
@@ -177,6 +177,16 @@
 filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
     });
 
+    // === TAB NAVIGATION ===
+    (function(){
+      const tabProvider = document.getElementById('tabProvider');
+      if(tabProvider){
+        tabProvider.addEventListener('click', () => {
+          window.location.href = 'feedback_reviews.php';
+        });
+      }
+    })();
+  
     // === FEEDBACK MODAL ===
     const modal = document.getElementById("feedbackModal");
     const closeBtn = document.querySelector(".close-btn");

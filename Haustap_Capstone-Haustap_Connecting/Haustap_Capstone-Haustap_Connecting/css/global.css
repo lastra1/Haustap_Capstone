@@ -196,6 +196,8 @@ footer { background: #fafafa; border-top: 1px solid #e5e7eb; margin-top: 24px; }
 .footer-left a { text-decoration: none; color: #374151; }
 .footer-left a:hover { color: #009999; }
 .footer-center img { width: 140px; height: auto; display: block; margin-bottom: 8px; }
+/* Center the logo horizontally */
+.footer-center img { margin-left: auto; margin-right: auto; }
 .footer-center p { color: #6b7280; margin: 0; }
 .contact-info p { color: #6b7280; font-size: 14px; line-height: 1.5; }
 .footer-bottom { text-align: center; padding: 10px 16px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }

@@ -1,11 +1,12 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { flowStore } from '../src/services/flowStore';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function TermsAndAgreement() {
   const { services, email } = useLocalSearchParams();
   const router = useRouter();
-  const selectedServices = services ? JSON.parse(decodeURIComponent(services as string)) : [];
+  
   const [accepted, setAccepted] = useState(false);
 
   const handleAccept = () => {
@@ -14,12 +15,7 @@ export default function TermsAndAgreement() {
     // Decode the incoming email (if present) and re-encode to avoid double-encoding
     const decodedEmail = email ? decodeURIComponent(email as string) : '';
     // store email as a fallback for downstream screens
-    try {
-      const { flowStore } = require('../src/services/flowStore');
-      if (decodedEmail) flowStore.setEmail(decodedEmail);
-    } catch (e) {
-      // ignore if require fails in this environment
-    }
+    if (decodedEmail) flowStore.setEmail(decodedEmail);
     const encodedEmail = decodedEmail ? encodeURIComponent(decodedEmail) : '';
     const servicesParam = services ? `services=${services}` : '';
     const emailParam = encodedEmail ? `&email=${encodedEmail}` : '';
@@ -33,7 +29,7 @@ export default function TermsAndAgreement() {
       <Text style={styles.header}>HausTap Service Provider Terms & Conditions</Text>
 
       <Text style={styles.paragraph}>
-        This Agreement is entered into by and between HausTap ("the Platform") and the undersigned Service Provider ("the Provider"). By signing below, the Provider agrees to the following Terms & Conditions:
+        This Agreement is entered into by and between HausTap (&quot;the Platform&quot;) and the undersigned Service Provider (&quot;the Provider&quot;). By signing below, the Provider agrees to the following Terms & Conditions:
       </Text>
 
       <Text style={styles.sectionTitle}>1. Verification & Eligibility</Text>
@@ -46,7 +42,7 @@ export default function TermsAndAgreement() {
 
       <Text style={styles.sectionTitle}>3. Service Standards</Text>
       <Text style={styles.bullet}>• The Provider shall render services with professionalism, integrity, and safety.</Text>
-      <Text style={styles.bullet}>• Tools, equipment, and materials are the Provider's responsibility unless otherwise agreed with the client.</Text>
+      <Text style={styles.bullet}>• Tools, equipment, and materials are the Provider&apos;s responsibility unless otherwise agreed with the client.</Text>
       <Text style={styles.bullet}>• Client privacy and confidentiality must always be respected.</Text>
 
       <Text style={styles.sectionTitle}>4. Payments</Text>

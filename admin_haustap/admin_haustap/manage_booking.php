@@ -6,7 +6,9 @@
   <title>Manage Bookings</title>
   <link rel="stylesheet" href="css/manage_booking.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<script src="js/lazy-images.js" defer></script></head>
+<script src="js/lazy-images.js" defer></script>
+<script src="js/app.js" defer></script>
+</head>
 <body>
    <div class="dashboard-container">
     <!-- Sidebar -->
@@ -20,7 +22,7 @@
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
-            <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
+            <button id="userDropdownBtn" class="user-dropdown-btn"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼</button>
             <div class="user-dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>
@@ -42,17 +44,17 @@
 
        <!-- Search and Filter -->
 <div class="search-filter">
-  <input type="text" placeholder="Search">
+  <input id="searchInput" type="text" placeholder="Search">
 
   <div class="filter-dropdown">
 <button class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter ▼</button>
     <div class="dropdown-content">
             <p class="filter-title">Filter by Status</p>
-            <label><input type="checkbox"> Pending</label>
-            <label><input type="checkbox"> Ongoing</label>
-            <label><input type="checkbox"> Completed</label>
-            <label><input type="checkbox"> Cancelled</label>
-            <label><input type="checkbox"> Return</label>
+            <label><input type="checkbox" value="pending"> Pending</label>
+            <label><input type="checkbox" value="ongoing"> Ongoing</label>
+            <label><input type="checkbox" value="complete"> Completed</label>
+            <label><input type="checkbox" value="cancelled"> Cancelled</label>
+            <label><input type="checkbox" value="return"> Return</label>
             <button class="apply-btn">Apply</button>
           </div>
         </div>
@@ -72,31 +74,16 @@
               <th></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="bookingTableBody">
             <tr>
-              <td>1</td>
-              <td>Juan Ewan Dela Cruz</td>
-              <td>Ramon Ang</td>
-              <td>Home Cleaning</td>
-              <td>2025-06-07 14:30</td>
-              <td><span class="status complete">Complete</span></td>
-              <td class="arrow">›</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Ramon Ang</td>
-              <td>Juan Dela Cruz</td>
-              <td>Home Cleaning</td>
-              <td>2025-06-07 14:30</td>
-              <td><span class="status cancelled">Cancelled</span></td>
-              <td class="arrow">›</td>
+              <td colspan="7" style="text-align:center">Loading bookings…</td>
             </tr>
           </tbody>
         </table>
        <div class="pagination">
-          <span>[ ◀ Prev ]</span>
-          <span>Showing 2–10 of 120 Clients</span>
-          <span>[ Next ▶ ]</span>
+          <button id="prevPage">◀ Prev</button>
+          <span id="paginationInfo"></span>
+          <button id="nextPage">Next ▶</button>
         </div>
       </div>
       </div>
@@ -115,7 +102,59 @@
     window.addEventListener("click", (e) => {
       if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
     });
+
+    // Filter dropdown toggle
+    (function(){
+      const filterBtn = document.querySelector('.filter-btn');
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!filterBtn || !dropdownContent) return;
+      filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.classList.toggle('show');
+        filterBtn.innerHTML = dropdownContent.classList.contains('show')
+          ? '<i class="fa-solid fa-sliders"></i> Filter ▲'
+          : '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      });
+      window.addEventListener('click', () => {
+        dropdownContent.classList.remove('show');
+        filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
+      });
+    })();
+
+    // Status filter: show rows matching selected statuses
+    (function(){
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!dropdownContent) return;
+      const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]');
+      const applyBtn = dropdownContent.querySelector('.apply-btn');
+
+      function rowStatus(badge){
+        if (!badge) return '';
+        const cls = badge.classList;
+        if (cls.contains('complete')) return 'complete';
+        if (cls.contains('completed')) return 'completed';
+        if (cls.contains('ongoing')) return 'ongoing';
+        if (cls.contains('pending')) return 'pending';
+        if (cls.contains('cancelled')) return 'cancelled';
+        if (cls.contains('return')) return 'return';
+        return '';
+      }
+
+      function applyFilter(){
+        const selected = new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          const badge = row.querySelector('.status');
+          const s = rowStatus(badge);
+          row.style.display = (selected.size === 0 || selected.has(s)) ? '' : 'none';
+        });
+      }
+
+      checkboxes.forEach(cb => cb.addEventListener('change', applyFilter));
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyFilter(); });
+    })();
   </script>
+  <script src="js/app.js"></script>
 </body>
 </html>
 

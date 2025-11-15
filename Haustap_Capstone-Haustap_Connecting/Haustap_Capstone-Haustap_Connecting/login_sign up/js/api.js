@@ -1,4 +1,5 @@
 // Minimal API base configuration for web pages
+// Minimal API base configuration for web pages
 (function () {
   if (!window.API_BASE) {
     // Allow overriding via globals for easy env switching
@@ -9,11 +10,13 @@
       return;
     }
 
-    // Target can be 'backend' or 'mock' (default: mock)
-    var target = ((window.API_TARGET || '') + '').toLowerCase();
+    // Target can be 'backend' or 'mock' (default: backend)
+    var target = ((window.API_TARGET || 'backend') + '').toLowerCase();
     if (target === 'backend') {
-      var backend = (window.BACKEND_BASE || 'http://127.0.0.1:8001').replace(/\/+$/, '');
-      window.API_BASE = backend;
+      var origin = (window.location && window.location.origin) || '';
+      var backend = origin ? origin + '/api' : '/api';
+      window.API_BASE = String(backend).replace(/\/+$/, '');
+      window.FIREBASE_API_BASE = window.API_BASE + '/firebase';
       return;
     }
 

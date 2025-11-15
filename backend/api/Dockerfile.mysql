@@ -1,0 +1,54 @@
+FROM php:8.2-fpm
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install system dependencies and PHP extensions for MySQL
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    libzip-dev \
+    default-mysql-client \
+    && docker-php-ext-install pdo_mysql pdo mysqli mbstring exif pcntl bcmath gd zip
+
+# Get latest Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Copy the Laravel application
+COPY . .
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache
+
+# Create environment file from MySQL template
+RUN if [ ! -f .env ]; then cp .env.mysql.production .env; fi
+
+# Generate application key
+RUN php artisan key:generate --ansi
+
+# Start the application with MySQL wait script
+RUN echo '#!/bin/bash\n\
+echo "Waiting for MySQL to be ready..."\n\
+while ! mysqladmin ping -h host.docker.internal -P 3307 -u haustap_user -p\'haustap_password\' --silent; do\n\
+    echo "MySQL is not ready yet, waiting..."\n\
+    sleep 2\n\
+done\n\
+echo "MySQL is ready!"\n\
+php artisan migrate --force\n\
+php artisan serve --host=0.0.0.0 --port=8080' > /usr/local/bin/start-app.sh && chmod +x /usr/local/bin/start-app.sh
+
+# Expose port 8080 for Google Cloud Run
+EXPOSE 8080
+
+# Start the application with MySQL wait script
+CMD ["/usr/local/bin/start-app.sh"]

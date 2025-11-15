@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Firebase Connection</title>
+</head>
+<body>
+  <h1>Firebase Connection Test</h1>
+  <div id="status">Testing...</div>
+  <div id="result"></div>
+  
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <!-- Removed Firestore to avoid connection issues -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script> -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCfhR1vIh8_z4TAmdaQRESHB459CsVqJ9M",
+      authDomain: "haustap-booking-system.firebaseapp.com",
+      projectId: "haustap-booking-system",
+      storageBucket: "haustap-booking-system.firebasestorage.app",
+      messagingSenderId: "515769404711",
+      appId: "1:515769404711:web:ddf0b32df0498eb18aad02"
+    };
+    
+    try {
+      console.log('Attempting to initialize Firebase...');
+      firebase.initializeApp(firebaseConfig);
+      console.log('Firebase initialized successfully');
+      
+      document.getElementById('status').innerHTML = '<span style="color: green;">✓ Firebase Connected</span>';
+      
+      // Test authentication
+      const auth = firebase.auth();
+      console.log('Firebase Auth object created:', auth);
+      
+      // Try to sign in with the demo account
+      console.log('Testing sign in with demo account...');
+      auth.signInWithEmailAndPassword('markjoshuapunzalan2@gmail.com', 'demo123')
+        .then((userCredential) => {
+          console.log('Login successful:', userCredential);
+          document.getElementById('result').innerHTML = '<span style="color: green;">✓ Login successful! User: ' + userCredential.user.email + '</span>';
+        })
+        .catch((error) => {
+          console.error('Login failed:', error);
+          document.getElementById('result').innerHTML = '<span style="color: red;">✗ Login failed: ' + error.code + ' - ' + error.message + '</span>';
+          
+          // If login fails with invalid credential, suggest password reset
+          if (error.code === 'auth/invalid-credential') {
+            console.log('Invalid credential - password might be wrong');
+            document.getElementById('result').innerHTML += '<br><span style="color: orange;">⚠ Try using the password reset button below to reset the password.</span>';
+          }
+        });
+        
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+      document.getElementById('status').innerHTML = '<span style="color: red;">✗ Firebase Failed: ' + error.message + '</span>';
+    }
+    
+    // Add password reset test functionality
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Send Password Reset Email';
+    resetButton.onclick = async function() {
+      try {
+        const auth = firebase.auth();
+        await auth.sendPasswordResetEmail('markjoshuapunzalan2@gmail.com');
+        document.getElementById('result').innerHTML += '<br><span style="color: green;">✓ Password reset email sent!</span>';
+      } catch (err) {
+        console.error('Password reset error:', err);
+        document.getElementById('result').innerHTML += '<br><span style="color: red;">✗ Password reset failed: ' + err.message + '</span>';
+      }
+    };
+    document.body.appendChild(resetButton);
+  </script>
+</body>
+</html>

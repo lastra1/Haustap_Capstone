@@ -1,6 +1,5 @@
-import React from "react";
-import HausTap from "./HausTap";
+import LogInScreen from "./auth/log-in";
 
-export default function Index() {
-  return <HausTap />;
+export default function App() {
+  return <LogInScreen />;
 }

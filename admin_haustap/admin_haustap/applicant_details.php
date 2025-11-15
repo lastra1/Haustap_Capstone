@@ -6,6 +6,7 @@
   <title>Admin | Applicant Details</title>
   <link rel="stylesheet" href="css/applicant_details.css" />
   <script src="js/lazy-images.js" defer></script>
+  <script src="js/app.js" defer></script>
 </head>
 <body>
   <div class="dashboard-container">
@@ -19,7 +20,7 @@
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
-            <button id="userDropdownBtn" class="user-dropdown-btn">Mj Punzalan ▼</button>
+            <button id="userDropdownBtn" class="user-dropdown-btn"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼</button>
             <div class="user-dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>

@@ -169,8 +169,10 @@ body {
 }
 
 .filter-btn {
-  background: none;
-  border: none;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 6px 12px;
   font-size: 14px;
   display: flex;
   align-items: center;

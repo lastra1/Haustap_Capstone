@@ -1,9 +1,9 @@
-import { Image } from 'expo-image';
+import { Image } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import logo from '../assets/images/logo.png';
 import { flowStore } from '../src/services/flowStore';
+const logo = require('../assets/images/logo.png');
 
 const SERVICES = [
   {
@@ -63,7 +63,7 @@ export default function PartnerServicesScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={logo} style={styles.logo} contentFit="contain" />
+      <Image source={logo} style={styles.logo} resizeMode="contain" />
       <Text style={styles.header}>What Services do you offer?</Text>
       {SERVICES.map((section) => (
         <View key={section.category} style={styles.section}>

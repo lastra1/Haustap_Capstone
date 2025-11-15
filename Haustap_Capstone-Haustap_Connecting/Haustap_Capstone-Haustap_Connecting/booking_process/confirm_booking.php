@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/booking_process/css/confirm_booking.css" />
   <link rel="stylesheet" href="/client/css/homepage.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script>window.API_BASE_OVERRIDE = ((window.location && window.location.origin) || '') + '/mock-api';</script>
+  <script>window.API_BASE_OVERRIDE = ((window.location && window.location.origin) || '') + '/api/firebase';</script>
   <script src="/login_sign up/js/api.js"></script>
   <script src="/client/js/booking-api.js"></script>
 </head>
@@ -64,6 +64,9 @@
       var scheduledDate = localStorage.getItem('selected_date') || null;
       var scheduledTime = localStorage.getItem('selected_time') || null;
       var serviceName = localStorage.getItem('selected_service_name') || 'General Service';
+      var serviceItems = (function(){
+        try { var raw = localStorage.getItem('selected_services_names'); return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
+      })();
       var address = localStorage.getItem('booking_address') || null;
 
       // Minimal guardrails
@@ -99,6 +102,7 @@
       var payload = {
         provider_id: providerId,
         service_name: serviceName,
+        service_items: serviceItems,
         scheduled_date: scheduledDate,
         scheduled_time: scheduledTime,
         address: (function(){

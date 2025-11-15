@@ -10,8 +10,8 @@ final class ApplicantsController {
 
     private function loadStore(): array {
         if (is_file($this->storeFile)) {
-            $raw = file_get_contents($this->storeFile);
-            $data = json_decode($raw, true);
+            $raw = @file_get_contents($this->storeFile);
+            $data = json_decode($raw ?: '[]', true);
             if (is_array($data)) { return $data; }
         }
         return [];
@@ -33,34 +33,79 @@ final class ApplicantsController {
 
     // GET /api/admin/applicants?status=...&search=...&page=1&limit=10
     public function index(): void {
-        $items = $this->loadStore();
-
         $status = isset($_GET['status']) ? strtolower(trim((string)$_GET['status'])) : 'all';
-        $search = isset($_GET['search']) ? strtolower(trim((string)$_GET['search'])) : '';
+        $search = isset($_GET['search']) ? trim((string)$_GET['search']) : '';
         $page   = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit  = isset($_GET['limit']) ? max(1, min(100, (int)$_GET['limit'])) : 10;
-
-        $filtered = array_values(array_filter($items, function($it) use ($status, $search) {
-            $itStatus = self::normalizeStatus($it['status'] ?? 'pending_review');
-            if ($status !== 'all' && $itStatus !== $status) { return false; }
-            if ($search !== '') {
-                $hay = strtolower(($it['name'] ?? '') . ' ' . ($it['email'] ?? '') . ' ' . ($it['phone'] ?? ''));
-                if (strpos($hay, $search) === false) { return false; }
-            }
-            return true;
-        }));
-
-        $total = count($filtered);
         $offset = ($page - 1) * $limit;
-        $paged = array_slice($filtered, $offset, $limit);
 
-        $this->json([
-            'success' => true,
-            'items' => $paged,
-            'page' => $page,
-            'limit' => $limit,
-            'total' => $total,
-        ]);
+        // Try DB first
+        try {
+            require_once \BASE_PATH . DIRECTORY_SEPARATOR . 'admin_haustap' . DIRECTORY_SEPARATOR . 'admin_haustap' . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . '_lib' . DIRECTORY_SEPARATOR . 'db.php';
+            $pdo = \db_connect();
+            \ensure_applicants_schema($pdo);
+
+            $clauses = [];
+            $params = [];
+            if ($status !== 'all') {
+                $clauses[] = 'LOWER(REPLACE(status, " ", "_")) = :status';
+                $params[':status'] = strtolower($status);
+            }
+            if ($search !== '') {
+                $clauses[] = '(LOWER(name) LIKE :q OR LOWER(email) LIKE :q OR LOWER(phone) LIKE :q)';
+                $params[':q'] = '%' . strtolower($search) . '%';
+            }
+            $where = $clauses ? ('WHERE ' . implode(' AND ', $clauses)) : '';
+
+            $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM admin_applicants {$where}");
+            foreach ($params as $k => $v) { $stmtCount->bindValue($k, $v); }
+            $stmtCount->execute();
+            $total = (int)($stmtCount->fetchColumn() ?: 0);
+
+            $stmt = $pdo->prepare("SELECT id, name, email, phone, applied_at, status
+                                     FROM admin_applicants {$where}
+                                     ORDER BY id ASC
+                                     LIMIT :limit OFFSET :offset");
+            foreach ($params as $k => $v) { $stmt->bindValue($k, $v); }
+            $stmt->bindValue(':limit', (int)$limit, \PDO::PARAM_INT);
+            $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
+            $stmt->execute();
+            $items = $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+
+            $this->json([
+                'success' => true,
+                'items'   => $items,
+                'page'    => $page,
+                'limit'   => $limit,
+                'total'   => $total,
+            ]);
+            return;
+        } catch (\Throwable $e) {
+            // Fallback to JSON store
+            $items = $this->loadStore();
+
+            $filtered = array_values(array_filter($items, function($it) use ($status, $search) {
+                $itStatus = self::normalizeStatus($it['status'] ?? 'pending_review');
+                if ($status !== 'all' && $itStatus !== $status) { return false; }
+                if ($search !== '') {
+                    $hay = strtolower(($it['name'] ?? '') . ' ' . ($it['email'] ?? '') . ' ' . ($it['phone'] ?? ''));
+                    if (strpos($hay, strtolower($search)) === false) { return false; }
+                }
+                return true;
+            }));
+
+            $total = count($filtered);
+            $paged = array_slice($filtered, $offset, $limit);
+
+            $this->json([
+                'success' => true,
+                'items'   => $paged,
+                'page'    => $page,
+                'limit'   => $limit,
+                'total'   => $total,
+                'fallback' => 'json_store',
+            ]);
+        }
     }
 }
 

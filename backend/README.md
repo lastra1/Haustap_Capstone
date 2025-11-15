@@ -160,3 +160,23 @@ From `backend/laravel-app`:
 ---
 
 This document adds backend setup instructions. No changes to the existing PHP admin UI are required to use Filament.
+This folder will host the unified Laravel API for Admin, Client (web), and the Expo application. The Laravel app is scaffolded under `backend/api`.
+
+Dev quickstart:
+- Serve Admin: `php -S localhost:5000 -t admin_haustap/admin_haustap`
+- Serve Client: `php -S localhost:5001 router.php`
+- Serve Laravel API: from `backend/api`, run `php artisan serve --host 127.0.0.1 --port 8001`
+- Expo (web): `npx expo start --web`
+
+API base for web client:
+- In the browser console on client pages, run:
+  `window.API_TARGET = 'backend'; window.BACKEND_BASE = 'http://127.0.0.1:8001/api';`
+  This keeps UI unchanged while switching data calls to the Laravel backend.
+
+Endpoints (initial):
+- `POST /api/auth/otp/send`, `POST /api/auth/otp/verify`
+- `GET/POST /api/bookings`, `POST /api/bookings/{id}/cancel`, `POST /api/bookings/{id}/status`, `POST /api/bookings/{id}/rate`, `POST /api/bookings/{id}/return`, `GET /api/bookings/returns`
+- `POST /api/chat/open`, `GET/POST /api/chat/{booking_id}/messages`
+- `GET/POST /api/admin/settings`
+
+These endpoints will initially use file-backed storage for dev parity with `mock-api` and can be migrated to DB models incrementally.

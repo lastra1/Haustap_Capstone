@@ -18,7 +18,7 @@
         <div class="user">
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
-            <button class="user-btn" id="userDropdownBtn">Mj Punzalan ▼</button>
+            <button class="user-btn" id="userDropdownBtn"><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼</button>
             <div class="dropdown" id="userDropdown">
               <a href="#">View Profile</a>
               <a href="#">Change Password</a>
@@ -76,6 +76,8 @@
     const inputs = document.querySelectorAll(".code-inputs input");
     inputs.forEach((input, index) => {
       input.addEventListener("input", () => {
+        // keep only digits
+        input.value = input.value.replace(/\D/g, "");
         if (input.value && index < inputs.length - 1) {
           inputs[index + 1].focus();
         }
@@ -86,6 +88,23 @@
         }
       });
     });
+
+    // Handle Next: proceed to create password after code entry
+    const nextBtn = document.querySelector('.next-btn');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        const code = Array.from(document.querySelectorAll('.code-inputs input'))
+          .map(i => i.value.trim())
+          .join('');
+        if (code.length === inputs.length) {
+          // In a real flow, verify OTP via API before proceeding.
+          window.location.href = 'create_password.php';
+        } else {
+          alert('Please enter the full verification code.');
+        }
+      });
+    }
   </script>
 </body>
 </html>
