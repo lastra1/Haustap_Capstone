@@ -82,6 +82,17 @@
         dropdown.classList.remove("show");
       }
     });
+
+    // Save: after setting new password, return to profile page
+    const saveBtn = document.querySelector('.save-btn');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        // In a real flow, you would submit to an API and handle response.
+        // For now, navigate to Admin Profile to complete the UX flow.
+        window.location.href = 'admin_profile.php';
+      });
+    }
   </script>
 </body>
 </html>

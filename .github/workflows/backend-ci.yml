@@ -1,0 +1,49 @@
+name: Backend CI (Laravel API)
+
+on:
+  push:
+    branches: [Haustap_Updated]
+  workflow_dispatch:
+
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/api
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql, pdo_sqlite, zip
+          coverage: none
+
+      - name: Cache Composer
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/files
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/api/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare environment
+        run: |
+          cp -n .env.example .env || true
+          php -r "file_put_contents('.env.testing', 'APP_ENV=testing\nAPP_DEBUG=false\nAPP_KEY=' . (getenv('APP_KEY') ?: 'base64:'.base64_encode(random_bytes(32))) . "\nDB_CONNECTION=sqlite\nDB_DATABASE=:memory:\nCACHE_DRIVER=array\nSESSION_DRIVER=array\nQUEUE_CONNECTION=sync\n");"
+          php artisan key:generate --force || true
+          php artisan config:cache -q || true
+
+      - name: Run tests
+        run: |
+          if [ -f vendor/bin/phpunit ]; then vendor/bin/phpunit --testdox --colors=never || (echo "PHPUnit failed" && exit 1); else php -v && php -m; fi

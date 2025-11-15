@@ -70,6 +70,17 @@
       const type = password.getAttribute("type") === "password" ? "text" : "password";
       password.setAttribute("type", type);
     });
+
+    // Confirm button: after entering password, go to OTP verification
+    const confirmBtn = document.querySelector('.confirm-btn');
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        // In a real flow, you would validate the current password first.
+        // For now, navigate to the Verification Code page (OTP step).
+        window.location.href = 'verification_code.php';
+      });
+    }
   </script>
 </body>
 </html>

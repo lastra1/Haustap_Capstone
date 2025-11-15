@@ -1,0 +1,279 @@
+name: Build Android APKs (Client & Provider)
+
+on:
+  push:
+    branches: [Haustap_Updated]
+  workflow_dispatch:
+
+concurrency:
+  group: android-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mode: [client, provider]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: android-capstone-main/HausTap/package-lock.json
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android licenses and install packages
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        working-directory: android-capstone-main/HausTap
+        run: |
+          npm ci || npm install
+
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('android-capstone-main/HausTap/android/**/gradle-wrapper.properties', 'android-capstone-main/HausTap/android/**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Prebuild Android (Expo)
+        working-directory: android-capstone-main/HausTap
+        env:
+          EXPO_PUBLIC_USER_MODE: ${{ matrix.mode }}
+          EXPO_PUBLIC_API_BASE: http://26.242.103.174:8001
+          CI: false
+        run: |
+          npx expo prebuild -p android --clean
+
+      - name: Tune Gradle for speed
+        working-directory: android-capstone-main/HausTap/android
+        run: |
+          echo "org.gradle.daemon=true" >> gradle.properties
+          echo "org.gradle.parallel=true" >> gradle.properties
+          echo "org.gradle.configureondemand=true" >> gradle.properties
+          echo "org.gradle.caching=true" >> gradle.properties
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "kotlin.compiler.execution.strategy=daemon" >> gradle.properties
+          echo "org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" >> gradle.properties
+
+      - name: Assemble Debug APK
+        working-directory: android-capstone-main/HausTap/android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleDebug
+
+      - name: Rename APK with mode
+        working-directory: android-capstone-main/HausTap/android/app/build/outputs/apk/debug
+        run: |
+          ls -la
+          if [ -f "app-debug.apk" ]; then mv app-debug.apk haustap-${{ matrix.mode }}-debug.apk; fi
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: haustap-${{ matrix.mode }}-debug-apk
+          path: android-capstone-main/HausTap/android/app/build/outputs/apk/debug/haustap-${{ matrix.mode }}-debug.apk
+
+  publish-release:
+    needs: build-apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download APK artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: haustap-*-debug-apk
+          merge-multiple: true
+          path: apk-artifacts
+
+      - name: Publish GitHub Release with APKs
+        uses: ncipollo/release-action@v1
+        with:
+          tag: android-debug
+          name: Android Debug (Client & Provider)
+          body: |
+            Auto-built Client and Provider debug APKs.
+            API base: http://26.242.103.174:8001
+          allowUpdates: true
+          artifacts: apk-artifacts/**/*.apk
+          artifactErrorsFailBuild: true
+
+  publish-pages:
+    needs: build-apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download APK artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: haustap-*-debug-apk
+          merge-multiple: true
+          path: apk-artifacts
+
+      - name: Create index page with download links
+        run: |
+          mkdir -p apk-artifacts
+          cat > apk-artifacts/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Haustap Android APKs</title>
+            <style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;padding:24px;max-width:700px;margin:auto}h1{margin-top:0}a{color:#0b5fff;text-decoration:none}a:hover{text-decoration:underline}code{background:#f2f4f7;padding:2px 6px;border-radius:4px}</style>
+          </head>
+          <body>
+            <h1>Haustap Android Debug APKs</h1>
+            <p>Direct download links:</p>
+            <ul>
+              <li><a href="./haustap-client-debug.apk">Client Debug APK</a></li>
+              <li><a href="./haustap-provider-debug.apk">Provider Debug APK</a></li>
+            </ul>
+            <p>API base: <code>http://26.242.103.174:8001</code></p>
+            <p>If a link doesn’t start downloading, refresh the page after a minute.</p>
+          </body>
+          </html>
+          HTML
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apk-artifacts
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  build-release-apk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mode: [client, provider]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: android-capstone-main/HausTap/package-lock.json
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android licenses and install packages
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        working-directory: android-capstone-main/HausTap
+        run: |
+          npm ci || npm install
+
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('android-capstone-main/HausTap/android/**/gradle-wrapper.properties', 'android-capstone-main/HausTap/android/**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Prebuild Android (Expo)
+        working-directory: android-capstone-main/HausTap
+        env:
+          EXPO_PUBLIC_USER_MODE: ${{ matrix.mode }}
+          EXPO_PUBLIC_API_BASE: http://26.242.103.174:8001
+          CI: false
+        run: |
+          npx expo prebuild -p android --clean
+
+      - name: Enable shrink & minify for release
+        working-directory: android-capstone-main/HausTap/android/app
+        run: |
+          sed -i "s/minifyEnabled false/minifyEnabled true\n            shrinkResources true/g" build.gradle || true
+
+      - name: Tune Gradle for speed
+        working-directory: android-capstone-main/HausTap/android
+        run: |
+          echo "org.gradle.daemon=true" >> gradle.properties
+          echo "org.gradle.parallel=true" >> gradle.properties
+          echo "org.gradle.configureondemand=true" >> gradle.properties
+          echo "org.gradle.caching=true" >> gradle.properties
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "kotlin.compiler.execution.strategy=daemon" >> gradle.properties
+          echo "org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" >> gradle.properties
+
+      - name: Assemble Release APK
+        working-directory: android-capstone-main/HausTap/android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease
+
+      - name: Rename release APK with mode
+        working-directory: android-capstone-main/HausTap/android/app/build/outputs/apk/release
+        run: |
+          ls -la
+          if [ -f "app-release.apk" ]; then mv app-release.apk haustap-${{ matrix.mode }}-release.apk; fi
+
+      - name: Upload release APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: haustap-${{ matrix.mode }}-release-apk
+          path: android-capstone-main/HausTap/android/app/build/outputs/apk/release/haustap-${{ matrix.mode }}-release.apk
+
+  publish-release-apks:
+    needs: build-release-apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release APK artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: haustap-*-release-apk
+          merge-multiple: true
+          path: release-apk-artifacts
+
+      - name: Publish GitHub Release with Release APKs
+        uses: ncipollo/release-action@v1
+        with:
+          tag: android-release
+          name: Android Release (Client & Provider)
+          body: |
+            Auto-built Client and Provider release APKs.
+            Minified and resource-shrunk for smaller size.
+            API base: http://26.242.103.174:8001
+          allowUpdates: true
+          artifacts: release-apk-artifacts/**/*.apk
+          artifactErrorsFailBuild: true

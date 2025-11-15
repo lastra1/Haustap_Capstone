@@ -44,9 +44,9 @@
             <!-- ✅ Filter Dropdown -->
             <div class="filter-dropdown" id="filterBox">
                 <p>Filter by Status</p>
-                <label><input type="checkbox" > Active</label>
-                <label><input type="checkbox" > Inactive</label>
-                <label><input type="checkbox" > Suspended</label>
+                <label><input type="checkbox" value="active"> Active</label>
+                <label><input type="checkbox" value="inactive"> Inactive</label>
+                <label><input type="checkbox" value="suspended"> Suspended</label>
 
                 <button class="apply-btn">Apply</button>
             </div>
@@ -129,6 +129,40 @@ document.addEventListener('click', (event) => {
         filterBox.style.display = "none";
     }
 });
+
+// Clients filter: show rows matching selected statuses
+(function(){
+  const dropdown = document.getElementById('filterBox');
+  if (!dropdown) return;
+  const applyBtn = dropdown.querySelector('.apply-btn');
+  const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+
+  function applyClientFilter(){
+    const selected = new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
+    const rows = document.querySelectorAll('.table-wrapper tbody tr');
+    rows.forEach(row => {
+      const badge = row.querySelector('.status');
+      let status = '';
+      if (badge) {
+        if (badge.classList.contains('active')) status = 'active';
+        else if (badge.classList.contains('inactive')) status = 'inactive';
+        else if (badge.classList.contains('suspended')) status = 'suspended';
+      }
+      row.style.display = (selected.size === 0 || selected.has(status)) ? '' : 'none';
+    });
+  }
+
+  // Apply filter immediately and enforce single-select behavior
+  // Clicking any status keeps only that status checked and filters rows
+  checkboxes.forEach(cb => cb.addEventListener('change', (e) => {
+    // Force the clicked checkbox to remain checked
+    if (!cb.checked) cb.checked = true;
+    // Uncheck all other statuses (single-select)
+    checkboxes.forEach(other => { if (other !== cb) other.checked = false; });
+    applyClientFilter();
+  }));
+  if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyClientFilter(); });
+})();
 </script>
 
 </body>

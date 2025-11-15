@@ -35,9 +35,10 @@ Create local `.env` files from the provided examples and fill credentials as nee
    - Open Admin: `http://localhost:8001/admin/dashboard.php`
    - Mock API: available under `http://localhost:8001/mock-api/*` (no separate server needed)
 2. Mobile app:
-   - `cd android-capstone-main/HausTap`
-   - `npm install`
-   - `npm run start` (or `npx expo start`)
+  - `cd android-capstone-main/HausTap`
+  - `npm install`
+  - `npm run start` (or `npx expo start`)
+  - APK build (Unified): trigger GitHub Actions workflow "Build Android APK (Unified)"; download the single artifact after the run completes.
 3. Backend libraries (optional):
    - `cd backend`
    - `composer install`
@@ -71,6 +72,41 @@ If authentication is required, use a Personal Access Token (PAT) with `repo` sco
 - If `localhost` refuses to connect, try `http://127.0.0.1:8001/`.
 - After pulling, run `composer install` (for PHP) and `npm install` (for JS) on each relevant project.
 - Review `docs/environment-setup.md` for machine-specific setup notes.
+
+## APK Build & Download Link
+
+- The workflow `.github/workflows/android-apk.yml` builds a single unified debug APK.
+- To generate download links:
+  - Go to GitHub → Actions → "Build Android APK (Unified)" → Run workflow.
+  - After it finishes, open the run and download artifacts named:
+    - `haustap-debug-apk`
+- The debug APK is unsigned but installable on most Android devices when "Install from unknown sources" is enabled.
+- The mobile app’s API base (`EXPO_PUBLIC_API_BASE`) is wired to `http://26.242.103.174:8001`.
+
+### Build APK Locally (Android Studio / CLI)
+
+- Requirements: Android Studio (SDK 34), JDK 17, Node 18, npm.
+- Scripted build (recommended):
+  - From repo root, run: `./build-apks.ps1 -ApiBase "http://26.242.103.174:8001" -Mode single -Clean`
+  - Output: `dist/android/haustap-debug.apk`.
+- Android Studio path:
+  - Run `./build-apks.ps1 -Mode single -Clean` to generate the `android/` folder.
+  - Open `Haustap_Application/HausTap/android` in Android Studio.
+  - Build → Build APK(s). Artifacts appear under `android/app/build/outputs/apk/debug/`.
+- Notes:
+  - The script wires `EXPO_PUBLIC_API_BASE` during prebuild; no UI/UX changes.
+  - If an emulator/device cannot reach `http://26.242.103.174:8001`, ensure same network or use a public HTTPS URL.
+
+## Docker API & Database
+
+- Start stack: `docker compose up -d`.
+- The API container auto-initializes on first start:
+  - Copies `backend/api/.env.docker.example` to `.env` if missing.
+  - Runs `composer install`.
+  - Generates `APP_KEY` if empty.
+  - Runs `php artisan migrate --force`.
+- Database credentials (inside Docker): host `db`, user `haustap`, pass `haustap`, db `haustap`.
+- Adminer: `http://localhost:8080/` for inspecting tables and data.
 
 ## Notes
 

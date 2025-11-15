@@ -83,8 +83,9 @@
             } catch {}
           }
 
-          // Role-based redirect
-          const roleName = (data?.user?.role?.name || '').toLowerCase();
+          // Role-based redirect (support string or object role)
+          const rawRole = data?.user?.role;
+          const roleName = (typeof rawRole === 'string' ? rawRole : (rawRole?.name || '')).toLowerCase();
           let redirect = '../client/homepage.php'; // default for client/admin
           if (roleName === 'client') {
             redirect = '../client/homepage.php';

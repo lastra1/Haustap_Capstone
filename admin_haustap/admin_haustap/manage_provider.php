@@ -41,28 +41,15 @@
 
           <!-- Filter Dropdown -->
           <div class="filter-dropdown">
-            <button class="filter-btn" id="filterBtn">
-<div class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</div>
-            </button>
+            <button class="filter-btn" id="filterBtn"><i class="fa-solid fa-sliders"></i> Filter</button>
 
             <div class="dropdown-content" id="filterDropdown">
               <div class="filter-section">
                 <label>Filter by Status</label>
                 <div class="checkbox-group">
-                  <label><input type="checkbox" checked> Active</label>
-                  <label><input type="checkbox" checked> Inactive</label>
-                  <label><input type="checkbox" checked> Suspended</label>
-                </div>
-              </div>
-
-              <div class="filter-section">
-                <label>Filter by Rating</label>
-                <div class="stars">
-                  <div>★★★★★</div>
-                  <div>★★★★☆</div>
-                  <div>★★★☆☆</div>
-                  <div>★★☆☆☆</div>
-                  <div>★☆☆☆☆</div>
+                  <label><input type="checkbox" value="active" checked> Active</label>
+                  <label><input type="checkbox" value="inactive" checked> Inactive</label>
+                  <label><input type="checkbox" value="suspend" checked> Suspended</label>
                 </div>
               </div>
 
@@ -142,6 +129,38 @@
     window.addEventListener("click", (e) => {
       if (!filterDropdown.contains(e.target)) filterDropdown.classList.remove("show");
     });
+
+    // Providers filter: show rows matching selected statuses
+    (function(){
+      const checkboxes = filterDropdown.querySelectorAll('input[type="checkbox"]');
+      const applyBtn = filterDropdown.querySelector('.apply-btn');
+
+      function applyProviderFilter(){
+        const selected = new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          const badge = row.querySelector('.status');
+          let status = '';
+          if (badge) {
+            if (badge.classList.contains('active')) status = 'active';
+            else if (badge.classList.contains('inactive')) status = 'inactive';
+            else if (badge.classList.contains('suspend')) status = 'suspend';
+          }
+          row.style.display = (selected.size === 0 || selected.has(status)) ? '' : 'none';
+        });
+      }
+
+      // Apply filter immediately and enforce single-select behavior
+      // Clicking any status keeps only that status checked and filters rows
+      checkboxes.forEach(cb => cb.addEventListener('change', (e) => {
+        // Force the clicked checkbox to remain checked
+        if (!cb.checked) cb.checked = true;
+        // Uncheck all other statuses (single-select)
+        checkboxes.forEach(other => { if (other !== cb) other.checked = false; });
+        applyProviderFilter();
+      }));
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyProviderFilter(); });
+    })();
   </script>
 </body>
 </html>

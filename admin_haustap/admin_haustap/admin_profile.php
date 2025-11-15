@@ -1,3 +1,4 @@
+<?php include __DIR__ . '/includes/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - View Profile</title>
   <link rel="stylesheet" href="css/profile_admin.css">
-<script src="js/lazy-images.js" defer></script></head>
+  <script src="js/api-base.js"></script>
+  <script src="js/user-mode.js"></script>
+  <script src="js/lazy-images.js" defer></script>
+  <style>
+    .mode-toggle { margin-top: 12px; padding: 10px; background: #f8fafb; border-radius: 8px; }
+    .mode-toggle label { margin-right: 12px; }
+    .mode-hint { font-size: 12px; color: #6b7280; margin-top: 6px; }
+  </style>
+  </head>
 <body>
   <div class="dashboard-container">
     <!-- Sidebar -->
@@ -18,7 +27,7 @@
           <button class="notif-btn">🔔</button>
           <div class="user-menu">
             <button class="user-btn" id="userDropdownBtn">
-              Mj Punzalan ▼
+              <?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?> ▼
             </button>
             <div class="dropdown" id="userDropdown">
               <a href="#">View Profile</a>
@@ -68,6 +77,13 @@
               <label>Date of Birth</label>
               <a href="#" class="add-link">Add</a>
 
+              <label>Active Mode</label>
+              <div class="mode-toggle">
+                <label><input type="radio" name="user_mode" value="client" checked> Client (buying)</label>
+                <label><input type="radio" name="user_mode" value="provider"> Service Provider (selling)</label>
+                <div class="mode-hint">Switch your role for features and access. This syncs to backend.</div>
+              </div>
+
               <div class="buttons">
                 <button type="button" class="change-password">Change Password</button>
                 <button type="submit" class="save-btn">Save</button>
@@ -106,6 +122,34 @@
         dropdown.classList.remove("show");
       }
     });
+
+    // Sync admin email into localStorage for backend mirroring
+    (function() {
+      var email = "<?php echo htmlspecialchars($_SESSION['admin_email'] ?? ''); ?>";
+      if (email) {
+        localStorage.setItem('HT_USER_EMAIL', email);
+        window.currentUser = Object.assign({}, window.currentUser || {}, { email: email });
+      }
+    })();
+
+    // Initialize and wire mode toggle to backend
+    (async function() {
+      try {
+        var current = await (window.AdminUserMode && window.AdminUserMode.sync ? window.AdminUserMode.sync() : { mode: 'client' });
+        var radios = document.querySelectorAll('input[name="user_mode"]');
+        radios.forEach(function(r) { r.checked = (r.value === (current.mode || 'client')); });
+
+        radios.forEach(function(radio) {
+          radio.addEventListener('change', async function(e) {
+            var val = e.target.value === 'provider' ? 'provider' : 'client';
+            var res = await window.AdminUserMode.setMode(val);
+            var ok = res && res.success !== false; // tolerate offline
+            var msg = ok ? ('Mode set to ' + val) : ('Saved locally. Enter email to sync.');
+            try { console.log('[Mode]', msg); } catch (_) {}
+          });
+        });
+      } catch (err) { try { console.warn('Mode init failed', err); } catch (_) {} }
+    })();
   </script>
 </body>
 </html>

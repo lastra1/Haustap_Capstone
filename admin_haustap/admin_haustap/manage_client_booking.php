@@ -46,11 +46,11 @@
 <div class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</div>
           <div class="dropdown-content">
             <p class="filter-title">Filter by Status</p>
-            <label><input type="checkbox"> Pending</label>
-            <label><input type="checkbox"> Ongoing</label>
-            <label><input type="checkbox"> Completed</label>
-            <label><input type="checkbox"> Cancelled</label>
-            <label><input type="checkbox"> Return</label>
+            <label><input type="checkbox" value="pending"> Pending</label>
+            <label><input type="checkbox" value="ongoing"> Ongoing</label>
+            <label><input type="checkbox" value="completed"> Completed</label>
+            <label><input type="checkbox" value="cancelled"> Cancelled</label>
+            <label><input type="checkbox" value="return"> Return</label>
             <button class="apply-btn">Apply</button>
           </div>
         </div>
@@ -110,6 +110,53 @@
     window.addEventListener("click", (e) => {
       if (!dropdown.contains(e.target)) dropdown.classList.remove("show");
     });
+
+    // Filter dropdown toggle
+    (function(){
+      const filterBtn = document.querySelector('.filter-btn');
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!filterBtn || !dropdownContent) return;
+      filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.classList.toggle('show');
+      });
+      window.addEventListener('click', () => {
+        dropdownContent.classList.remove('show');
+      });
+    })();
+
+    // Status filter: show rows matching selected statuses
+    (function(){
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!dropdownContent) return;
+      const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]');
+      const applyBtn = dropdownContent.querySelector('.apply-btn');
+
+      function rowStatus(badge){
+        if (!badge) return '';
+        const cls = badge.classList;
+        if (cls.contains('completed')) return 'completed';
+        if (cls.contains('complete')) return 'complete';
+        if (cls.contains('ongoing')) return 'ongoing';
+        if (cls.contains('pending')) return 'pending';
+        if (cls.contains('cancelled')) return 'cancelled';
+        if (cls.contains('return')) return 'return';
+        return '';
+      }
+
+      function applyFilter(){
+        const selected = new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          const badge = row.querySelector('.status');
+          const s = rowStatus(badge);
+          row.style.display = (selected.size === 0 || selected.has(s)) ? '' : 'none';
+        });
+      }
+
+      checkboxes.forEach(cb => cb.addEventListener('change', applyFilter));
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyFilter(); });
+    })();
   </script>
 
 </body>

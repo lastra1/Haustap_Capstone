@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 3.15.0"
+  },
+  "build": {
+    "client": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_USER_MODE": "client",
+        "EXPO_PUBLIC_API_BASE": "http://26.242.103.174:8001"
+      }
+    },
+    "provider": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_USER_MODE": "provider",
+        "EXPO_PUBLIC_API_BASE": "http://26.242.103.174:8001"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

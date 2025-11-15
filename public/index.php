@@ -6,16 +6,12 @@ require __DIR__ . '/../bootstrap.php';
 error_log('[router] request: ' . ($_SERVER['REQUEST_URI'] ?? '')); 
 
 use Core\Router;
-use App\Controllers\Guest\HomeController;
-use App\Controllers\Admin\DashboardController;
-use App\Controllers\Admin\ApplicantsController;
-use App\Controllers\Admin\AnalyticsController;
 
 $router = new Router();
 
 // Friendly routes using controllers
-$router->get('/', fn() => (new HomeController())->index());
-$router->get('/admin', fn() => (new DashboardController())->index());
+$router->get('/', fn() => (new \App\Controllers\Guest\HomeController())->index());
+$router->get('/admin', fn() => (new \App\Controllers\Admin\DashboardController())->index());
 // Health check
 $router->get('/health', function() {
     header('Content-Type: text/plain');
@@ -73,10 +69,19 @@ $router->get('/admin_haustap/admin_haustap/*', function() {
 });
 
 // Admin JSON API routes
-$router->get('/api/admin/applicants', fn() => (new ApplicantsController())->index());
-$router->get('/api/admin/analytics/summary', fn() => (new AnalyticsController())->summary());
+$router->get('/api/admin/applicants', fn() => (new \App\Controllers\Admin\ApplicantsController())->index());
+$router->get('/api/admin/analytics/summary', fn() => (new \App\Controllers\Admin\AnalyticsController())->summary());
 // Trailing-slash tolerant route for analytics summary
-$router->get('/api/admin/analytics/summary/', fn() => (new AnalyticsController())->summary());
+$router->get('/api/admin/analytics/summary/', fn() => (new \App\Controllers\Admin\AnalyticsController())->summary());
+// System-wide aggregated data endpoints
+$router->get('/api/admin/system/all', fn() => (new \App\Controllers\Admin\SystemController())->all());
+$router->get('/api/admin/system/summary', fn() => (new \App\Controllers\Admin\SystemController())->summary());
+$router->get('/api/admin/system/summary/', fn() => (new \App\Controllers\Admin\SystemController())->summary());
+// Bookings list for admin tables
+$router->get('/api/admin/bookings', fn() => (new \App\Controllers\Admin\BookingsController())->index());
+// Clients and Providers list for admin tables
+$router->get('/api/admin/clients', fn() => (new \App\Controllers\Admin\ClientsController())->index());
+$router->get('/api/admin/providers', fn() => (new \App\Controllers\Admin\ProvidersController())->index());
 
 // Mock API: route requests under /mock-api/* to project-root mock-api directory
 $router->get('/mock-api/*', function() {

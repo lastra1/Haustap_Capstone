@@ -39,9 +39,9 @@
 <div class="filter-btn"><i class="fa-solid fa-sliders"></i> Filter</div>
           <div class="dropdown-content">
             <p class="filter-title">Filter by Status</p>
-            <label><input type="checkbox"> Active</label>
-            <label><input type="checkbox"> Expired</label>
-            <label><input type="checkbox"> Inactive</label>
+            <label><input type="checkbox" value="active"> Active</label>
+            <label><input type="checkbox" value="expired"> Expired</label>
+            <label><input type="checkbox" value="inactive"> Inactive</label>
             <button class="apply-btn">Apply</button>
           </div>
         </div>
@@ -211,6 +211,58 @@
         dropdown.classList.remove("show");
       }
     });
+
+    // Filter dropdown toggle
+    (function(){
+      const filterBtn = document.querySelector('.filter-btn');
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!filterBtn || !dropdownContent) return;
+      filterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownContent.classList.toggle('show');
+      });
+      window.addEventListener('click', (e) => {
+        if (!dropdownContent.contains(e.target) && !filterBtn.contains(e.target)) {
+          dropdownContent.classList.remove('show');
+        }
+      });
+    })();
+
+    // Status filter: single-select, immediate apply
+    (function(){
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!dropdownContent) return;
+      const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]');
+      const applyBtn = dropdownContent.querySelector('.apply-btn');
+
+      function rowStatus(badge){
+        if (!badge) return '';
+        const cls = badge.classList;
+        if (cls.contains('active')) return 'active';
+        if (cls.contains('expired')) return 'expired';
+        if (cls.contains('inactive')) return 'inactive';
+        return '';
+      }
+
+      function applyFilter(){
+        const selected = new Set(Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value));
+        const rows = document.querySelectorAll('.subscription-table tbody tr');
+        rows.forEach(row => {
+          const badge = row.querySelector('.status');
+          const s = rowStatus(badge);
+          row.style.display = (selected.size === 0 || selected.has(s)) ? '' : 'none';
+        });
+      }
+
+      // Single-select behavior and immediate filter
+      checkboxes.forEach(cb => cb.addEventListener('change', () => {
+        if (!cb.checked) cb.checked = true;
+        checkboxes.forEach(other => { if (other !== cb) other.checked = false; });
+        applyFilter();
+      }));
+
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyFilter(); });
+    })();
 
     // Modals
     const activeModal = document.getElementById("subscriptionModal");

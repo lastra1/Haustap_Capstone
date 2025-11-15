@@ -120,12 +120,15 @@
         const birthDay = document.getElementById('birthDay').value;
         const birthYear = document.getElementById('birthYear').value;
 
+        const name = `${firstName} ${lastName}`.trim();
         const payload = {
-          firstName,
-          lastName,
+          name,
           email,
           password,
           confirmPassword,
+          // Keep extra fields for client-side use (ignored by backend)
+          firstName,
+          lastName,
           mobile,
           birthMonth,
           birthDay,
@@ -185,7 +188,7 @@
             const sendRes = await fetch(`${window.API_BASE}/auth/otp/send`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, mobile })
+              body: JSON.stringify({ email })
             });
             let sendData;
             const sendCt = sendRes.headers.get('content-type') || '';
@@ -196,10 +199,9 @@
               alert(sendData?.message || 'Failed to send OTP');
               return;
             }
-            currentOtpId = sendData.otpId;
-            const masked = sendData.masked || email || mobile || '';
+            const masked = email || mobile || '';
             otpDesc.textContent = `Enter the 6-digit code sent to ${masked}.`;
-            otpHint.textContent = sendData.devCode ? `(For testing, use ${sendData.devCode})` : '';
+            otpHint.textContent = sendData.dev_code ? `(For testing, use ${sendData.dev_code})` : '';
             otpCodeEl.value = '';
             otpOverlay.style.display = 'flex';
             otpCodeEl.focus();
@@ -207,7 +209,27 @@
           }
 
           console.error('Registration failed:', data);
-          alert('Registration failed. Please check your details.');
+          var errMap = (data && data.errors && typeof data.errors === 'object') ? data.errors : {};
+          var messages = [];
+          for (var key in errMap) {
+            if (!Object.prototype.hasOwnProperty.call(errMap, key)) continue;
+            var arr = errMap[key];
+            if (Array.isArray(arr)) {
+              for (var i = 0; i < arr.length; i++) {
+                messages.push((key + ': ' + String(arr[i])).trim());
+              }
+            } else if (typeof arr === 'string') {
+              messages.push((key + ': ' + arr).trim());
+            }
+          }
+          var msgText = (data && data.message) ? String(data.message) : (messages.length ? messages.join('\n') : 'Registration failed. Please check your details.');
+          alert(msgText);
+          var lowerText = msgText.toLowerCase();
+          if (lowerText.includes('already registered')) {
+            if (confirm('This email is already registered. Go to Login page now?')) {
+              window.location.href = '/login';
+            }
+          }
         } catch (err) {
           console.error('Network error:', err);
           alert('Network error. Please try again.');
@@ -221,12 +243,11 @@
           const sendRes = await fetch(`${window.API_BASE}/auth/otp/send`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: pendingUser.email, mobile: pendingUser.mobile })
+            body: JSON.stringify({ email: pendingUser.email })
           });
           let sendData = await sendRes.json().catch(async () => { const t = await sendRes.text(); try { return JSON.parse(t); } catch { return { message: t }; } });
           if (!sendRes.ok || !sendData?.success) { alert(sendData?.message || 'Failed to resend OTP'); return; }
-          currentOtpId = sendData.otpId;
-          otpHint.textContent = sendData.devCode ? `(For testing, use ${sendData.devCode})` : '';
+          otpHint.textContent = sendData.dev_code ? `(For testing, use ${sendData.dev_code})` : '';
           alert('OTP resent. Please check again.');
         } catch (err) {
           console.error('Resend OTP error:', err);
@@ -242,13 +263,14 @@
           const vRes = await fetch(`${window.API_BASE}/auth/otp/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ otpId: currentOtpId, code })
+            body: JSON.stringify({ email: pendingUser?.email || '', code })
           });
           let vData = await vRes.json().catch(async () => { const t = await vRes.text(); try { return JSON.parse(t); } catch { return { message: t }; } });
           if (!vRes.ok || !vData?.success) { alert(vData?.message || 'Invalid OTP'); return; }
 
           // Persist after successful verification
-          if (pendingToken) localStorage.setItem('haustap_token', pendingToken);
+          const token = vData?.token || pendingToken;
+          if (token) localStorage.setItem('haustap_token', token);
           if (pendingUser) {
             try { localStorage.setItem('haustap_user', JSON.stringify(pendingUser)); } catch {}
           }

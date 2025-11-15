@@ -228,11 +228,17 @@
       fd.append('system_name', name);
       fd.append('contact_email', email);
 
+      // If a unified backend is configured, try it first
+      const backendBase = (function(){
+        const raw = (window.BACKEND_BASE || window.API_BASE || '').toString().trim();
+        return raw ? raw.replace(/\/+$/, '') : '';
+      })();
       const candidates = [
+        backendBase ? backendBase + '/admin/settings' : null,
         'api/save_settings.php',
         '/admin/api/save_settings.php',
         '/admin_haustap/admin_haustap/api/save_settings.php'
-      ];
+      ].filter(Boolean);
 
       let lastError = 'Save failed';
       for (const url of candidates) {
@@ -243,7 +249,7 @@
             credentials: 'same-origin'
           });
           const data = await resp.json().catch(() => ({}));
-          if (resp.ok && data && data.ok) {
+          if (resp.ok && data && (data.ok || data.success)) {
             showToast('Settings saved', 'success');
             // Refresh to rehydrate inputs from persisted JSON
             setTimeout(() => { try { location.reload(); } catch (_) {} }, 600);

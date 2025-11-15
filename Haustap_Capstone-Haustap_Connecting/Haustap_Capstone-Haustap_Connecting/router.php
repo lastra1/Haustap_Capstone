@@ -3,12 +3,38 @@ $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $docRoot = __DIR__;
 $normalized = str_replace('/', DIRECTORY_SEPARATOR, $uri);
 $fullPath = $docRoot . $normalized;
+// Resolve project root and admin app path for cross-app routing
+$projectRoot = dirname(__DIR__, 2);
+$ADMIN_APP_PATH = $projectRoot . DIRECTORY_SEPARATOR . 'admin_haustap' . DIRECTORY_SEPARATOR . 'admin_haustap';
 
 // Ensure UTF-8 Content-Type for dynamic HTML responses
 function ensureUtf8HtmlHeader() {
   if (!headers_sent()) {
     header('Content-Type: text/html; charset=UTF-8');
   }
+}
+
+// Stream static files with appropriate Content-Type
+function serveStatic($file) {
+  $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+  $types = [
+    'css' => 'text/css',
+    'js' => 'application/javascript',
+    'png' => 'image/png',
+    'jpg' => 'image/jpeg',
+    'jpeg' => 'image/jpeg',
+    'gif' => 'image/gif',
+    'svg' => 'image/svg+xml',
+    'ico' => 'image/x-icon',
+    'woff' => 'font/woff',
+    'woff2' => 'font/woff2',
+    'ttf' => 'font/ttf',
+    'map' => 'application/json'
+  ];
+  if (isset($types[$ext]) && !headers_sent()) {
+    header('Content-Type: ' . $types[$ext]);
+  }
+  readfile($file);
 }
 
 // Friendly route aliases to legacy PHP files for local dev
@@ -56,6 +82,44 @@ if (isset($aliases[$uri])) {
 // If the requested file exists (including .php), let the server handle it
 if (is_file($fullPath)) {
   return false;
+}
+
+// Admin alias: serve admin app under /admin/* even from site router
+if (strpos($uri, '/admin/') === 0) {
+  $prefix = '/admin/';
+  $rel = substr($uri, strlen($prefix));
+  if ($rel === false || $rel === '') { $rel = 'dashboard.php'; }
+  $candidate = $ADMIN_APP_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $rel);
+
+  // Direct file
+  if (is_file($candidate)) {
+    $ext = strtolower(pathinfo($candidate, PATHINFO_EXTENSION));
+    if ($ext === 'php') {
+      ensureUtf8HtmlHeader();
+      @chdir(dirname($candidate));
+      require $candidate;
+      return true;
+    }
+    serveStatic($candidate);
+    return true;
+  }
+  // Clean path to PHP file (e.g., /admin/login)
+  if (is_file($candidate . '.php')) {
+    ensureUtf8HtmlHeader();
+    @chdir(dirname($candidate . '.php'));
+    require $candidate . '.php';
+    return true;
+  }
+  // Directory index
+  if (is_dir($candidate)) {
+    $index = $candidate . DIRECTORY_SEPARATOR . 'index.php';
+    if (is_file($index)) {
+      ensureUtf8HtmlHeader();
+      @chdir(dirname($index));
+      require $index;
+      return true;
+    }
+  }
 }
 
 // Explicit routing for mock-api: map directories to their index.php

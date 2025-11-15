@@ -143,6 +143,45 @@
       dropdownContent.classList.remove('show');
 filterBtn.innerHTML = '<i class="fa-solid fa-sliders"></i> Filter ▼';
     });
+
+    // Date filter: show rows within selected date range
+    (function(){
+      const fromInput = document.getElementById('from-date');
+      const toInput = document.getElementById('to-date');
+      const applyBtn = document.querySelector('.apply-btn');
+
+      function parseRowDate(text){
+        if (!text) return null;
+        const m = text.match(/(\d{4})\s*-\s*(\d{2})\s*-\s*(\d{2})/);
+        if (!m) return null;
+        const iso = `${m[1]}-${m[2]}-${m[3]}`;
+        const d = new Date(iso);
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      function applyDateFilter(){
+        const fromVal = fromInput ? fromInput.value : '';
+        const toVal = toInput ? toInput.value : '';
+        const fromDate = fromVal ? new Date(fromVal) : null;
+        const toDate = toVal ? new Date(toVal) : null;
+
+        const rows = document.querySelectorAll('.table-container tbody tr');
+        rows.forEach(row => {
+          const dateCell = row.querySelector('td:nth-child(5)');
+          const rowDate = parseRowDate(dateCell ? dateCell.textContent.trim() : '');
+          if (!rowDate) {
+            row.style.display = '';
+            return;
+          }
+          const within = (!fromDate || rowDate >= fromDate) && (!toDate || rowDate <= toDate);
+          row.style.display = within ? '' : 'none';
+        });
+      }
+
+      if (fromInput) fromInput.addEventListener('change', applyDateFilter);
+      if (toInput) toInput.addEventListener('change', applyDateFilter);
+      if (applyBtn) applyBtn.addEventListener('click', (e) => { e.preventDefault(); applyDateFilter(); });
+    })();
   </script>
 </body>
 </html>
