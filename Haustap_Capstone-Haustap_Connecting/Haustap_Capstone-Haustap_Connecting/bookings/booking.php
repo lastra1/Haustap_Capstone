@@ -103,8 +103,7 @@
   <?php include dirname(__DIR__) . "/client/includes/footer.php"; ?>
   </div>
   <script>
-    // Use current origin so preview works locally (serves /mock-api via the same server).
-    window.API_BASE_OVERRIDE = (window.location.origin || '') + '/mock-api';
+    window.API_BASE_OVERRIDE = (window.location.origin || '') + '/api/firebase';
   </script>
   <script src="/login_sign up/js/api.js"></script>
   <script src="/client/js/booking-api.js"></script>

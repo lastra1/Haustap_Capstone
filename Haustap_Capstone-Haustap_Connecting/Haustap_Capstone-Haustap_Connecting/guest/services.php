@@ -82,7 +82,7 @@
         };
       }
       function load(){
-        fetch('/api/system/categories').then(function(r){ return r.json(); }).then(function(data){
+        fetch('/api/firebase/categories').then(function(r){ return r.json(); }).then(function(data){
           if (data && data.success && Array.isArray(data.categories)) { render(data.categories); }
         }).catch(function(){
           render([

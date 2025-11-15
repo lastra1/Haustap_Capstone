@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/booking_process/css/confirm_booking.css" />
   <link rel="stylesheet" href="/client/css/homepage.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script>window.API_BASE_OVERRIDE = ((window.location && window.location.origin) || '') + '/mock-api';</script>
+  <script>window.API_BASE_OVERRIDE = ((window.location && window.location.origin) || '') + '/api/firebase';</script>
   <script src="/login_sign up/js/api.js"></script>
   <script src="/client/js/booking-api.js"></script>
 </head>

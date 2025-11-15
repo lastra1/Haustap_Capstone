@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "515769404711",
+    "project_id": "haustap-booking-system",
+    "storage_bucket": "haustap-booking-system.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515769404711:android:aa14196524a087128aad02",
+        "android_client_info": {
+          "package_name": "haustap.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArZpiSzgZo1wQEf7TFj-fYXXgHgOY9V4c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

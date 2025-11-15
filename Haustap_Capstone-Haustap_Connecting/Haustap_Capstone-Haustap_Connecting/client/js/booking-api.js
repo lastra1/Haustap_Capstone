@@ -1,7 +1,9 @@
 // Lightweight Booking API helper for the legacy UI
 // Relies on window.API_BASE configured by /login_sign up/js/api.js
 (function() {
-  const API_BASE = (window.API_BASE || '').replace(/\/+$/, '') || 'http://127.0.0.1:8001';
+  const API_BASE = (
+    (window.FIREBASE_API_BASE || (((window.API_BASE||'').replace(/\/+$/, '')) + '/firebase'))
+  ).replace(/\/+$/, '') || 'http://127.0.0.1:8000/api/firebase';
 
   function getToken() {
     return localStorage.getItem('haustap_token') || '';
@@ -38,14 +40,14 @@
   }
 
   async function createBooking(payload) {
-    // Trailing slash ensures PHP dev server serves directory index
-    return request('/bookings/', { method: 'POST', body: JSON.stringify(payload) });
+    // Trailing slash optional; Laravel handles both
+    return request('/bookings', { method: 'POST', body: JSON.stringify(payload) });
   }
 
   async function listBookings(query) {
     const qs = query ? `?${new URLSearchParams(query).toString()}` : '';
-    // Trailing slash ensures PHP dev server serves directory index
-    return request('/bookings/' + qs, { method: 'GET' });
+    // Trailing slash optional; Laravel handles both
+    return request('/bookings' + qs, { method: 'GET' });
   }
 
   // Fetch a single booking by ID (used to ensure fresh pending shows)

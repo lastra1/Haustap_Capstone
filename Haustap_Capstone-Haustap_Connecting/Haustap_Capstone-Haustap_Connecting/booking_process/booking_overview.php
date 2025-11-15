@@ -256,7 +256,8 @@
 
       async function fetchVouchers(){
         var email = currentEmail();
-        var url = (window.API_BASE || ((window.location.origin||'')+'/mock-api')) + '/vouchers?email=' + encodeURIComponent(email);
+        var base = (window.FIREBASE_API_BASE || ((window.API_BASE||'') + '/firebase'));
+        var url = base + '/vouchers?email=' + encodeURIComponent(email);
         var res = await fetch(url);
         var json = await res.json();
         if (!json.success) throw new Error(json.message||'Failed to fetch vouchers');

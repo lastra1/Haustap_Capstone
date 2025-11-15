@@ -47,7 +47,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => {
     extra: {
       ...config.extra,
       USER_MODE: mode,
-      apiBase: process.env.EXPO_PUBLIC_API_BASE ?? 'http://127.0.0.1:8001',
+      apiBase: process.env.EXPO_PUBLIC_API_BASE ?? 'https://us-central1-haustap-booking-system.cloudfunctions.net/api',
     },
   };
 };

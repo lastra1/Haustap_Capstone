@@ -151,6 +151,9 @@ final class SystemController {
                     $env[$key] = $val;
                 }
             }
+            if (!getenv('GOOGLE_APPLICATION_CREDENTIALS') && !empty($env['GOOGLE_APPLICATION_CREDENTIALS'])) {
+                @putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $env['GOOGLE_APPLICATION_CREDENTIALS']);
+            }
             $projectId = $env['FIREBASE_PROJECT_ID'] ?? getenv('FIREBASE_PROJECT_ID') ?? null;
             if ($projectId && class_exists('Google\\Auth\\ApplicationDefaultCredentials')) {
                 $scopes = ['https://www.googleapis.com/auth/datastore'];

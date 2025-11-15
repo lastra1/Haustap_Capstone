@@ -17,15 +17,17 @@
         try {
           var host = (window.location && window.location.hostname) || '';
           if (host && host !== 'localhost' && host !== '127.0.0.1') {
-            backend = 'http://' + host + ':8001/api';
+            backend = 'http://' + host + ':8000/api';
           } else {
-            backend = 'http://127.0.0.1:8001/api';
+            backend = 'http://127.0.0.1:8000/api';
           }
         } catch (e) {
-          backend = 'http://127.0.0.1:8001/api';
+          backend = 'http://127.0.0.1:8000/api';
         }
       }
       window.API_BASE = String(backend).replace(/\/+$/, '');
+      // Provide Firebase-specific base for booking UI
+      window.FIREBASE_API_BASE = window.API_BASE + '/firebase';
       return;
     }
 

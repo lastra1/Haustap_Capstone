@@ -1,0 +1,52 @@
+# Google Cloud Run Configuration
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: haustap-laravel-api
+  annotations:
+    run.googleapis.com/execution-environment: gen2
+    run.googleapis.com/cpu-throttling: "false"
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/cpu: "2"
+        run.googleapis.com/memory: "2Gi"
+        run.googleapis.com/vpc-access-connector: haustap-vpc-connector
+    spec:
+      containerConcurrency: 1000
+      containers:
+      - name: haustap-laravel-api
+        image: gcr.io/YOUR_PROJECT_ID/haustap-laravel-api:latest
+        ports:
+        - containerPort: 8000
+          name: http1
+        env:
+        - name: APP_ENV
+          value: "production"
+        - name: APP_DEBUG
+          value: "false"
+        - name: DB_CONNECTION
+          value: "mysql"
+        - name: DB_HOST
+          value: "YOUR_CLOUD_SQL_CONNECTION_NAME"
+        - name: REDIS_HOST
+          value: "YOUR_REDIS_HOST"
+        - name: FIREBASE_PROJECT_ID
+          value: "haustap-booking-system"
+        - name: FIREBASE_CREDENTIALS_PATH
+          value: "/secrets/firebase/service-account.json"
+        volumeMounts:
+        - name: firebase-service-account
+          mountPath: /secrets/firebase
+          readOnly: true
+        resources:
+          limits:
+            cpu: "2"
+            memory: "2Gi"
+      volumes:
+      - name: firebase-service-account
+        secret:
+          secretName: firebase-service-account

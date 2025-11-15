@@ -1,0 +1,39 @@
+# Railway Configuration
+build:
+  dockerfile: Dockerfile.production
+  context: .
+
+services:
+  - name: haustap-laravel-api
+    env:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: ${RAILWAY_STATIC_URL}
+      DB_CONNECTION: mysql
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      FIREBASE_PROJECT_ID: haustap-booking-system
+      FIREBASE_CREDENTIALS_PATH: storage/app/firebase/service-account.json
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      APP_KEY: ${APP_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+    healthcheck:
+      path: /api/health
+      interval: 30s
+      timeout: 10s
+    volumes:
+      - name: haustap-storage
+        mountPath: /var/www/html/storage
+        size: 10GB
+
+deploy:
+  startCommand: php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+  healthcheckPath: /api/health
+  healthcheckTimeout: 300
+  restartPolicyType: ON_FAILURE
+  restartPolicyMaxRetries: 10

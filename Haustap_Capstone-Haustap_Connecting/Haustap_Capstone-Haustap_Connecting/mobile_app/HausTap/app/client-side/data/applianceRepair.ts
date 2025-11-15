@@ -1,0 +1,23 @@
+import { Category } from "./types";
+
+export const applianceRepairCategories: Category[] = [
+  { title: "Inspection Fee", price: "₱300", desc: "Applies if service did not proceed\nInclusions:\nOn-site visit by technician, Basic checking & assessment of appliance, Diagnosis of issues & repair needs, Estimate/quotation for actual repair" },
+  { title: "Refrigerator Repair", price: "₱800 per unit", desc: "Inclusions:\nOn-site visit by technician, Diagnostic check of cooling system, thermostat, compressor, Cleaning of condenser coils (if needed), Basic troubleshooting & recommendations, Replacement parts not included" },
+  { title: "Commercial Freezer Repair", price: "₱1,000 per unit", desc: "Inclusions:\nOn-site visit by technician, Inspection of freezer motor & compressor, Check for leaks, thermostat, fan & wiring issues, Temperature test & calibration, Replacement parts not included" },
+  { title: "TV Repair (Up to 50\")", price: "₱500 per unit", desc: "Inclusions:\nOn-site visit by technician, Panel & circuit board check, Diagnosis of screen, sound, or power issues, Basic cleaning of internal board & vents, Replacement parts not included" },
+  { title: "TV Repair (51\" to 70\")", price: "₱800 per unit", desc: "Inclusions:\nOn-site visit by technician, Panel & circuit board check, Diagnosis of screen, sound, or power issues, Basic cleaning of internal board & vents, Replacement parts not included" },
+  { title: "TV Repair (71\" to 90\")", price: "₱1,000 per unit", desc: "Inclusions:\nOn-site visit by technician, Panel & circuit board check, Diagnosis of screen, sound, or power issues, Basic cleaning of internal board & vents, Replacement parts not included" },
+  { title: "TV Installation", price: "₱300 per unit", desc: "Inclusions:\nWall mounting or stand setup, Secure wiring & cable management, Testing & demo for client, Bracket not included" },
+  { title: "Washing Machine Repair", price: "₱800 per unit", desc: "Inclusions:\nOn-site visit by technician, Diagnostic check of motor, pump, & wiring, Spin, rinse, and water inlet test, Cleaning of accessible filters, Replacement parts not included" },
+  { title: "Washing Machine Cleaning Top Load", price: "₱500 per unit", desc: "Inclusions:\nDrum cleaning & descaling, Removal of dirt, lint, & soap residue, Exterior wipe-down" },
+  { title: "Washing Machine Cleaning Front Load", price: "₱700 per unit", desc: "Inclusions:\nDrum cleaning & descaling, Removal of dirt, lint, & soap residue, Exterior wipe-down" },
+  { title: "Stand Fan Repair", price: "₱500 per unit", desc: "Inclusions:\nOn-site visit by technician, Motor & wiring inspection, Bearing & blade cleaning, Switch & speed test, Replacement parts not included" },
+  { title: "Tower Fan Repair", price: "₱700 per unit", desc: "Inclusions:\nOn-site visit by technician, Motor and electronic panel check, Cleaning & lubrication of fan mechanism, Speed & oscillation test, Replacement parts not included" },
+  { title: "Range Hood Repair", price: "₱600 per unit", desc: "Inclusions:\nOn-site visit by technician, Motor, filter, and switch inspection, Cleaning of grease & dirt buildup, Basic troubleshooting, Replacement parts not included" },
+  { title: "Range Hood Installation", price: "₱800 per unit", desc: "Inclusions:\nOn-site visit by technician, Proper mounting & setup, Electrical connection & testing, Smoke test for suction function" },
+  { title: "Microwave Repair – Small", price: "₱450 per unit", desc: "Inclusions:\nOn-site visit by technician, Inspection of magnetron, fuse, & panel, Door seal & safety check, Heating function test, Replacement parts not included" },
+  { title: "Microwave Repair – Medium", price: "₱700 per unit", desc: "Inclusions:\nOn-site visit by technician, Inspection of magnetron, fuse, & panel, Door seal & safety check, Heating function test, Replacement parts not included" },
+  { title: "Microwave Repair – Large", price: "₱850 per unit", desc: "Inclusions:\nOn-site visit by technician, Inspection of magnetron, fuse, & panel, Door seal & safety check, Heating function test, Replacement parts not included" },
+  { title: "Oven Repair", price: "₱750 per unit", desc: "Inclusions:\nOn-site visit by technician, Check heating elements, thermostat, & wiring, Panel inspection & temperature test, Basic cleaning of accessible parts, Replacement parts not included" },
+  { title: "Rice Cooker Repair", price: "₱400 per unit", desc: "Inclusions:\nOn-site visit by technician, Basic checking & assessment of appliance, Diagnosis of issues & repair needs, Estimate/quotation for actual repair, Replacement parts not included" },
+];

@@ -16,7 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useRouter } from 'expo-router';
-import { authService } from '../src/services/auth.service';
+import { accountsStore } from '../src/services/accountsStore';
 
 export default function HausTap() {
   const router = useRouter();
@@ -105,26 +105,49 @@ console.log('Platform:', Platform.OS);
 console.log('API URL:', API_URL);
 
 const generateNewOtp = async () => {
-  const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
-  setGeneratedOtp(newOtp);
-  setOtpError("");
-  setOtp("");
-  try {
-    const result = await authService.sendOTP(email, newOtp);
-    const ok = (typeof result === "boolean") ? result : !!(result && (result as any).success);
-    if (ok) {
-      startOtpTimer();
-    } else {
+    const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(newOtp);
+    setOtpError("");
+    setOtp("");
+    
+    try {
+      console.log('Sending OTP to:', email);
+      console.log('Making request to:', `${API_URL}/api/send-otp`);
+      
+      // Add timeout and error handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      
+      const response = await fetch(`${API_URL}/api/send-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          otp: newOtp,
+        }),
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+
+      const data = await response.json();
+      
+      if (data.success) {
+        startOtpTimer();
+      } else {
+        setOtpError("Failed to send OTP email. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
       setOtpError("Failed to send OTP email. Please try again.");
     }
-  } catch (error) {
-    console.error("Error sending OTP:", error);
-    setOtpError("Failed to send OTP email. Please try again.");
-  }
-};
+  };
 
   // Verify OTP
-  const verifyOtp = async () => {
+  const verifyOtp = () => {
     if (!otp) {
       setOtpError("Please enter the OTP");
       return;
@@ -142,34 +165,19 @@ const generateNewOtp = async () => {
 
     // OTP is valid
     setOtpError("");
-    // Register the account in the unified Laravel backend
-    const payload = {
-      firstName,
-      lastName,
-      name: `${firstName} ${lastName}`.trim(),
-      email,
-      password,
-      confirmPassword,
-      mobile: mobileNumber,
-      birthMonth: month,
-      birthDay: day,
-      birthYear: year,
-    };
-
-    const result = await authService.registerWithBackend(payload);
-if (!result?.success || !result?.token) {
-  alert('Registration failed. Please try again.');
-  return;
-}
-authService.setToken(result.token);
-try {
-  const me = await authService.me();
-  console.log('Auto-login success:', me);
-} catch (e) {
-  console.warn('Auto-login me() failed:', e);
-}
-alert("Email verified successfully!");
-setShowEmailVerification(false);
+    // Create account in local accounts store (do NOT auto-login)
+    (async () => {
+      try {
+        await accountsStore.addAccount({ email, password, isHausTapPartner: false });
+        alert('Email verified and account created. Please sign in using your credentials.');
+      } catch (e) {
+        console.error('Failed to save account', e);
+        alert('Account created but failed to persist locally.');
+      } finally {
+        setShowEmailVerification(false);
+  try { router.push('/auth/log-in'); } catch (_) {}
+      }
+    })();
   };
 
   const handleSignUp = async () => {
@@ -343,7 +351,7 @@ setShowEmailVerification(false);
               <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
 
-            <Text style={styles.agreement}>By signing up, you agree to HausTap's</Text>
+            <Text style={styles.agreement}>By signing up, you agree to HausTap&apos;s</Text>
 
             <View style={styles.termsContainer}>
               <TouchableOpacity onPress={() => setShowTerms(true)}>
@@ -360,13 +368,6 @@ setShowEmailVerification(false);
             </Text>
 
             <View style={styles.line} />
-
-            <TouchableOpacity 
-              style={styles.buttonAlt}
-              onPress={() => router.push('/partner')}
-            >
-              <Text style={styles.buttonText}>Become a HausTap Partner</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -387,7 +388,7 @@ setShowEmailVerification(false);
           <ScrollView contentContainerStyle={styles.modalContent}>
             <Text style={styles.modalText}>
               Last Updated: October 2025{"\n\n"}
-              These Terms and Conditions ("Terms") govern your access to and use of the HausTap mobile and web platform ("HausTap", "we", "our", or "the Platform") for booking home services. By creating an account or using HausTap, you acknowledge that you have read, understood, and agreed to these Terms.{"\n\n"}
+              These Terms and Conditions (&quot;Terms&quot;) govern your access to and use of the HausTap mobile and web platform (&quot;HausTap&quot;, &quot;we&quot;, &quot;our&quot;, or &quot;the Platform&quot;) for booking home services. By creating an account or using HausTap, you acknowledge that you have read, understood, and agreed to these Terms.{"\n\n"}
               If you do not agree with these Terms, please do not continue using the Platform.{"\n\n"}
               1. ELIGIBILITY & ACCOUNT REGISTRATION{"\n"}
               You must be at least 18 years old to use the platform.{"\n"}
@@ -427,7 +428,7 @@ setShowEmailVerification(false);
               Violate these Terms{"\n"}
               Engage in abusive or fraudulent behavior{"\n"}
               Harass or disrespect service providers{"\n"}
-              Attempt to bypass or exploit HausTap's system{"\n\n"}
+              Attempt to bypass or exploit HausTap&apos;s system{"\n\n"}
               8. COMMUNICATION CONSENT{"\n"}
               By creating a HausTap account, you consent to receive booking updates, notifications, and important alerts via SMS, email, or in-app messages. You may disable promotional messages anytime.{"\n\n"}
               9. AMENDMENTS{"\n"}
@@ -459,7 +460,7 @@ setShowEmailVerification(false);
           <ScrollView contentContainerStyle={styles.modalContent}>
             <Text style={styles.modalText}>
               Last Updated: October 2025{"\n\n"}
-              This Privacy Policy explains how HausTap ("we", "our", or "the Platform") collects, uses, stores, and protects your personal information when you create an account or use our services.{"\n\n"}
+              This Privacy Policy explains how HausTap (&quot;we&quot;, &quot;our&quot;, or &quot;the Platform&quot;) collects, uses, stores, and protects your personal information when you create an account or use our services.{"\n\n"}
               By using HausTap, you confirm that you have read and understood this Privacy Policy.{"\n\n"}
               1. INFORMATION WE COLLECT{"\n"}
               We only collect information that is necessary for account creation, booking, and communication, including:{"\n"}
@@ -490,7 +491,7 @@ setShowEmailVerification(false);
               • Update or correct your information{"\n"}
               • Request account deletion (subject to verification and pending transactions){"\n"}
               • Decline promotional messages (but essential system alerts cannot be disabled){"\n\n"}
-              Requests may be sent through HausTap's official support channels.{"\n\n"}
+              Requests may be sent through HausTap&apos;s official support channels.{"\n\n"}
               6. DATA RETENTION{"\n"}
               Your data will be stored only as long as necessary for your account usage, legal compliance, or dispute resolution. Terminated accounts may be securely archived or permanently deleted as needed.{"\n\n"}
               7. POLICY UPDATES{"\n"}
@@ -725,5 +726,3 @@ const styles = StyleSheet.create({
     margin: 16,
   },
 });
-
-

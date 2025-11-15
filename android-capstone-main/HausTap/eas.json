@@ -9,7 +9,7 @@
       },
       "env": {
         "EXPO_PUBLIC_USER_MODE": "client",
-        "EXPO_PUBLIC_API_BASE": "http://26.242.103.174:8001"
+        "EXPO_PUBLIC_API_BASE": "https://us-central1-haustap-booking-system.cloudfunctions.net/api"
       }
     },
     "provider": {
@@ -18,7 +18,7 @@
       },
       "env": {
         "EXPO_PUBLIC_USER_MODE": "provider",
-        "EXPO_PUBLIC_API_BASE": "http://26.242.103.174:8001"
+        "EXPO_PUBLIC_API_BASE": "https://us-central1-haustap-booking-system.cloudfunctions.net/api"
       }
     }
   },

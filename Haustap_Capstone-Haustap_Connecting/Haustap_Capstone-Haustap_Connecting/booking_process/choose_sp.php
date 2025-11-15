@@ -19,37 +19,7 @@
   <main class="choose-provider-page">
   <h1 class="page-title">Choose Provider</h1>
 
-  <section class="providers-container">
-    <!-- Provider 1 -->
-    <div class="provider-box" data-provider-id="1" data-provider-name="Ana Santos">
-      <div class="profile-icon"><i class="fa-solid fa-user"></i></div>
-      <div class="provider-info">
-        <h3>Ana Santos</h3>
-        <p><i class="fa-solid fa-star"></i> Rate: 4.5</p>
-        <p><i class="fa-solid fa-location-dot"></i> 2.5 km away</p>
-      </div>
-    </div>
-
-    <!-- Provider 2 -->
-    <div class="provider-box" data-provider-id="2" data-provider-name="Maria Lopez">
-      <div class="profile-icon"><i class="fa-solid fa-user"></i></div>
-      <div class="provider-info">
-        <h3>Maria Lopez</h3>
-        <p><i class="fa-solid fa-star"></i> Rate: 4.5</p>
-        <p><i class="fa-solid fa-location-dot"></i> 2.6 km away</p>
-      </div>
-    </div>
-
-    <!-- Provider 3 -->
-    <div class="provider-box" data-provider-id="3" data-provider-name="Lisa Deleon">
-      <div class="profile-icon"><i class="fa-solid fa-user"></i></div>
-      <div class="provider-info">
-        <h3>Lisa Deleon</h3>
-        <p><i class="fa-solid fa-star"></i> Rate: 4.5</p>
-        <p><i class="fa-solid fa-location-dot"></i> 2.8 km away</p>
-      </div>
-    </div>
-  </section>
+  <section class="providers-container"></section>
 
   <!-- Filter Box -->
   <section class="filter-box">
@@ -84,7 +54,7 @@
     (function(){
       // Persist selected provider in localStorage for the confirm step
       var selected = null;
-      var boxes = document.querySelectorAll('.provider-box');
+      var container = document.querySelector('.providers-container');
       var overlay = document.getElementById('sp-details-overlay');
       var overlayContent = overlay ? overlay.querySelector('.sp-overlay-content') : null;
       var overlayBackdrop = overlay ? overlay.querySelector('.sp-overlay-backdrop') : null;
@@ -124,20 +94,53 @@
       if (overlayBackdrop) overlayBackdrop.addEventListener('click', closeDetailsPopup);
       if (overlayClose) overlayClose.addEventListener('click', closeDetailsPopup);
       document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeDetailsPopup(); });
-      boxes.forEach(function(box){
-        box.addEventListener('click', function(){
-          selected = {
-            id: parseInt(box.getAttribute('data-provider-id') || '0', 10),
-            name: box.getAttribute('data-provider-name') || ''
-          };
-          // Minimal visual cue via outline (non-disruptive)
-          boxes.forEach(function(b){ b.style.outline = 'none'; });
-          box.style.outline = '2px solid #009999';
-
-          // Show provider details popup after selection
-          openDetailsPopup();
+      function renderProviders(list){
+        if (!container) return;
+        container.innerHTML = '';
+        list.forEach(function(p){
+          var div = document.createElement('div');
+          div.className = 'provider-box';
+          div.setAttribute('data-provider-id', String(p.id || ''));
+          div.setAttribute('data-provider-name', p.name || '');
+          var icon = document.createElement('div');
+          icon.className = 'profile-icon';
+          icon.innerHTML = '<i class="fa-solid fa-user"></i>';
+          var info = document.createElement('div');
+          info.className = 'provider-info';
+          var h3 = document.createElement('h3');
+          h3.textContent = p.name || 'Provider';
+          var rate = document.createElement('p');
+          rate.innerHTML = '<i class="fa-solid fa-star"></i> Rate: ' + (p.rating || 0);
+          var dist = document.createElement('p');
+          var km = (typeof p.distanceKm === 'number') ? p.distanceKm : parseFloat(p.distanceKm || '0');
+          dist.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + (isNaN(km) ? '0' : km.toFixed(1)) + ' km away';
+          info.appendChild(h3);
+          info.appendChild(rate);
+          info.appendChild(dist);
+          div.appendChild(icon);
+          div.appendChild(info);
+          div.addEventListener('click', function(){
+            selected = { id: parseInt(String(p.id || '0'), 10) || 0, name: p.name || '' };
+            var boxes = container.querySelectorAll('.provider-box');
+            boxes.forEach(function(b){ b.style.outline = 'none'; });
+            div.style.outline = '2px solid #009999';
+            openDetailsPopup();
+          });
+          container.appendChild(div);
         });
-      });
+      }
+      function loadProviders(){
+        fetch('/api/firebase/providers').then(function(r){ return r.json(); }).then(function(d){
+          if (d && d.success && Array.isArray(d.providers)) { renderProviders(d.providers); }
+        }).catch(function(){
+          renderProviders([
+            { id: 1, name: 'Ana Santos', rating: 4.5, distanceKm: 2.5 },
+            { id: 2, name: 'Maria Lopez', rating: 4.5, distanceKm: 2.6 },
+            { id: 3, name: 'Lisa Deleon', rating: 4.5, distanceKm: 2.8 }
+          ]);
+        });
+      }
+      loadProviders();
 
       var cancelBtn = document.querySelector('.cancel-btn');
       if (cancelBtn) {
