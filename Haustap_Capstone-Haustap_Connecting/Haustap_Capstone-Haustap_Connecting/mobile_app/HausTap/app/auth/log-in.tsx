@@ -178,6 +178,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
   loginButtonText: {
     color: '#fff',
     fontSize: 16,

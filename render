@@ -139,7 +139,7 @@ services:
       
       # Install PHP extensions
       docker-php-ext-configure gd --with-freetype --with-jpeg
-      docker-php-ext-install pdo pdo_mysql pdo_pgsql gd mbstring exif pcntl bcmath zip
+      docker-php-ext-install pdo pdo_mysql pdo_pgsql gd mbstring exif pcntl bcmath
       
       # Install Composer
       curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -152,14 +152,6 @@ services:
       
       # Generate application key
       php artisan key:generate --ansi
-      
-      # Set environment variables for Render
-      export RENDER_EXTERNAL_URL=$APP_URL
-      export RENDER_DB_HOST=$DB_HOST
-      export RENDER_DB_PORT=$DB_PORT
-      export RENDER_DB_NAME=$DB_DATABASE
-      export RENDER_DB_USER=$DB_USERNAME
-      export RENDER_DB_PASSWORD=$DB_PASSWORD
       
       # Optimize Laravel for production
       php artisan config:cache
@@ -174,14 +166,6 @@ services:
       php artisan storage:link
     
     startCommand: |
-      # Set environment variables for Render
-      export RENDER_EXTERNAL_URL=$APP_URL
-      export RENDER_DB_HOST=$DB_HOST
-      export RENDER_DB_PORT=$DB_PORT
-      export RENDER_DB_NAME=$DB_DATABASE
-      export RENDER_DB_USER=$DB_USERNAME
-      export RENDER_DB_PASSWORD=$DB_PASSWORD
-      
       # Run database migrations
       php artisan migrate --force
       
