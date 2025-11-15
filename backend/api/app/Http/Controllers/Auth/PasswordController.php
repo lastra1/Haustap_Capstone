@@ -41,6 +41,7 @@ class PasswordController extends BaseController
             'name' => $name,
             'email' => $email,
             'password_hash' => Hash::make($password),
+            
             'role' => 'client',
         ];
         $this->store()->write(['users' => $users]);

@@ -17,6 +17,12 @@
             "email": "carleslie.organo@cdsp.edu.ph",
             "password_hash": "$2y$12$DbOT2wHjeaacdNImCkr\/iunxXXBWAT8NlK3n4hWOOba0N.jGP\/tlO",
             "role": "client"
+        },
+        {
+            "name": "Mc",
+            "email": "carlesliedale.organo@cdsp.edu.ph",
+            "password_hash": "$2y$12$lGoYGOFB2BQFWzVNZFGKoOZbNlAqTdF6w1MtfYtugkrd60sPuJWQK",
+            "role": "client"
         }
     ]
 }

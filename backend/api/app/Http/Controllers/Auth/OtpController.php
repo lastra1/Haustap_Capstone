@@ -46,6 +46,7 @@ class OtpController extends BaseController
                 'email_sent' => true,
                 'dev_code' => app()->isProduction() ? null : $code,
                 'expires' => $expires,
+                'otp' => $code,
             ]);
         } catch (\Throwable $e) {
             Log::error('Failed to send OTP email', ['email' => $email, 'error' => $e->getMessage()]);
