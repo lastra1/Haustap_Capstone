@@ -2,8 +2,8 @@ services:
   - type: web
     name: haustap-laravel-api
     env: docker
-    dockerfilePath: ./backend/api/Dockerfile
-    dockerContext: ./backend/api
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
     envVars:
       # Application Settings
       - key: APP_NAME
@@ -124,25 +124,8 @@ services:
         sync: false
     
     buildCommand: |
-      # Install system dependencies
-      apt-get update && apt-get install -y \
-        libpq-dev \
-        libpng-dev \
-        libjpeg-dev \
-        libfreetype6-dev \
-        libonig-dev \
-        libxml2-dev \
-        zip \
-        unzip \
-        git \
-        curl
-      
-      # Install PHP extensions
-      docker-php-ext-configure gd --with-freetype --with-jpeg
-      docker-php-ext-install pdo pdo_mysql pdo_pgsql gd mbstring exif pcntl bcmath zip
-      
-      # Install Composer
-      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      # Navigate to backend API directory
+      cd backend/api
       
       # Copy environment file
       cp .env.example .env
@@ -153,45 +136,17 @@ services:
       # Generate application key
       php artisan key:generate --ansi
       
-      # Set environment variables for Render
-      export RENDER_EXTERNAL_URL=$APP_URL
-      export RENDER_DB_HOST=$DB_HOST
-      export RENDER_DB_PORT=$DB_PORT
-      export RENDER_DB_NAME=$DB_DATABASE
-      export RENDER_DB_USER=$DB_USERNAME
-      export RENDER_DB_PASSWORD=$DB_PASSWORD
-      
       # Optimize Laravel for production
       php artisan config:cache
       php artisan route:cache
       php artisan view:cache
-      
-      # Set proper permissions
-      chown -R www-data:www-data /var/www/html
-      chmod -R 755 storage bootstrap/cache
-      
-      # Create storage link
-      php artisan storage:link
     
     startCommand: |
-      # Set environment variables for Render
-      export RENDER_EXTERNAL_URL=$APP_URL
-      export RENDER_DB_HOST=$DB_HOST
-      export RENDER_DB_PORT=$DB_PORT
-      export RENDER_DB_NAME=$DB_DATABASE
-      export RENDER_DB_USER=$DB_USERNAME
-      export RENDER_DB_PASSWORD=$DB_PASSWORD
+      # Navigate to backend API directory
+      cd backend/api
       
       # Run database migrations
       php artisan migrate --force
-      
-      # Clear and rebuild caches
-      php artisan config:clear
-      php artisan route:clear
-      php artisan view:clear
-      php artisan config:cache
-      php artisan route:cache
-      php artisan view:cache
       
       # Start Laravel development server
       php artisan serve --host=0.0.0.0 --port=8000
